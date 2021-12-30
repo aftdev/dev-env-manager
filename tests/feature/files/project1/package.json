@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "scripts": {
+    "script a": "script a",
+    "scriptB": "script b"
+  }
+}

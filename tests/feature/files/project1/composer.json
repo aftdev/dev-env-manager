@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "composerA": "script a from composer",
+    "scriptB": "script b from composer"
+  }
+}

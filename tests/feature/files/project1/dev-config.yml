@@ -1,0 +1,17 @@
+# Where to find the project custom commands.
+commands_dir: ./commands
+# Auto discover scripts from
+autodiscover:
+  'package.json': 'yarn'
+  'composer.json': 'composer'
+  'unknown.json': 'unknown'
+# How and where to run your project executables
+executables:
+  docker-compose: docker compose
+  yarn: yarn
+  composer:
+    command: composer
+    # Where should the command be executed?
+    use:
+      target: docker-compose
+      with: ['exec', 'php']
