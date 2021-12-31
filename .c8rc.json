@@ -1,5 +1,8 @@
 {
   "all": true,
   "include": ["src/**"],
-  "useSpawnWrap": true
+  "useSpawnWrap": true,
+  "lines": 100,
+  "branches": "96",
+  "statements": "100"
 }
