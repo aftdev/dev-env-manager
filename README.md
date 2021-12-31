@@ -1,7 +1,6 @@
 # Dev Environment Manager
 
 [![codecov](https://codecov.io/gh/aftdev/dev-env-manager/branch/main/graph/badge.svg?token=GX4KFM3ASR)](https://codecov.io/gh/aftdev/dev-env-manager)
-[![Main Workflow](https://github.com/aftdev/dev-env-manager/actions/workflows/main.yml/badge.svg)](https://github.com/aftdev/dev-env-manager/actions/workflows/main.yml)
 
 Command line tools and shortcuts to help make your development life easier.
 
