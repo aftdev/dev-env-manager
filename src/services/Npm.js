@@ -6,7 +6,7 @@ import AbstractFilebasedService from './AbstractFilebasedService.js'
  */
 export default class Npm extends AbstractFilebasedService {
   static FILE = 'package.json'
-  static DEFAULT_COMMAND = 'npm'
+  static COMMAND = 'npm'
 }
 
 // DI info.
