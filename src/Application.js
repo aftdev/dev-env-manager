@@ -4,7 +4,7 @@ import process from 'process'
 import { RESOLVER, Lifetime, asFunction } from 'awilix'
 
 export default class Application {
-  static CONFIG_FILE = 'dev-config.yml'
+  static CONFIG_FILE = 'dev-env-config.yml'
 
   #container
   #rootPath
@@ -90,7 +90,7 @@ export default class Application {
     }
 
     const commands = [...projectCommands, ...defaultCommands].filter(
-      (el) => ['.js', '.mjs', 'cjs', '.ts'].indexOf(path.extname(el)) !== false,
+      (el) => ['.js', '.mjs', '.cjs', '.ts'].indexOf(path.extname(el)) !== -1,
     )
 
     for (const file of commands) {

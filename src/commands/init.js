@@ -7,7 +7,6 @@ import Application from '../Application.js'
  * Initialization related commands.
  */
 export default (cli, outputFormatter, commandExecuter) => {
-  // Create the dev-config.yml file at the root of the project running the command.
   cli
     .command('init')
     .enablePositionalOptions()
@@ -33,17 +32,10 @@ export default (cli, outputFormatter, commandExecuter) => {
 
       // Create config file.
       const config = {
-        name: 'Name',
+        name: 'Application Name',
         commands_dir: './commands',
-        autodiscover: {
-          'package.json': 'npm',
-          'composer.json': 'composer',
-        },
-        executables: {
-          'docker-compose': 'docker compose',
-          npm: 'yarn',
-          composer: 'composer',
-        },
+        autodiscover: {},
+        executables: {},
       }
 
       let yamlStr = yaml.stringify(config)
