@@ -1,6 +1,6 @@
 {
   "name": "@aftdev/dev-env-manager",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Command line utilities to manage your projects development environment",
   "type": "module",
   "engines": {
