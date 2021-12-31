@@ -1,45 +1,58 @@
-name: Pull Requests
+name: Main Workflow
 
 on:
+  push:
+    branches: [main]
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches:
-      - main
+    branches: [main]
 
 env:
   COVER_REPORT_PATH: ./coverage/clover.xml
 jobs:
   test:
+    if: ${{ github.event_name == 'pull_request' }}
+    name: Test on node version ${{ matrix.node }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['14', '16', '17']
-    name: Test on node version ${{ matrix.node }}
+        node: ['16', '17']
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-          cache: 'npm'
+          cache: 'yarn'
       - run: yarn install
-      - name: Lint
+      - name: Lint commit
+        run:
+          yarn commitlint --from ${{ github.event.pull_request.base.sha }} --to
+          ${{ github.event.pull_request.head.sha }} --verbose
+      - name: Lint js
         run: yarn lint
-      - name: Test
+      - name: Tests
         run: yarn test-all
   coverage:
-    needs: [test]
     runs-on: ubuntu-latest
     name: Coverage
+    needs: [test]
+    if: always()
     steps:
+      - name: fail if conditional job failed
+        if: ${{ needs.*.result == 'failure' }}
+        run: exit 1
       - uses: actions/checkout@v2
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: lts/*
+          cache: 'yarn'
       - run: yarn install
       - name: Test with coverage
-        run: c8 --reporter=clover yarn test-all
+        run: yarn c8 --reporter=clover yarn test-all
       - name: Send coverage info to codecoverage
         uses: codecov/codecov-action@v2
         with:
