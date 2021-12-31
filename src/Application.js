@@ -75,7 +75,9 @@ export default class Application {
 
     // From our folder.
     const commandDir = `${this.#rootPath}/commands`
-    const defaultCommands = fs.readdirSync(commandDir).map((file) => `${commandDir}/${file}`)
+    const defaultCommands = fs
+      .readdirSync(commandDir)
+      .map((file) => `${commandDir}/${file}`)
 
     // From project folder.
     let projectCommands = []

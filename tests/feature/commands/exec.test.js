@@ -29,7 +29,11 @@ describe('Exec command tests', () => {
     sandbox.stub(dockerCompose, 'hasContainer').returns(false)
 
     mock.expects('execute').callsFake().never()
-    mock.expects('execute').withArgs('unknown script or container').once().callsFake()
+    mock
+      .expects('execute')
+      .withArgs('unknown script or container')
+      .once()
+      .callsFake()
 
     application.run(['unknown script or container'])
   })
@@ -40,7 +44,11 @@ describe('Exec command tests', () => {
 
     mock.expects('execute').callsFake().never()
     mock.expects('execute').withArgs('yarn', ['script a']).once().callsFake()
-    mock.expects('execute').withArgs('composer', ['composerA']).once().callsFake()
+    mock
+      .expects('execute')
+      .withArgs('composer', ['composerA'])
+      .once()
+      .callsFake()
     mock.expects('execute').withArgs('composer', ['scriptB']).once().callsFake()
 
     application.run(['script a'])

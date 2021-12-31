@@ -23,10 +23,10 @@ export default class DockerCompose extends AbstractFilebasedService {
     this.#containers = []
 
     if (this.isEnabled()) {
-      const services = this._commandExecuter.backgroundExecute(DockerCompose.COMMAND, [
-        'ps',
-        '--services',
-      ])
+      const services = this._commandExecuter.backgroundExecute(
+        DockerCompose.COMMAND,
+        ['ps', '--services'],
+      )
 
       this.#containers = services
         .toString()

@@ -1,3 +1,8 @@
+/**
+ * EsLint configuration file.
+ *
+ * @see https://eslint.org/docs/user-guide/configuring/
+ */
 const configs = [
   'eslint:recommended',
   'plugin:import/recommended',

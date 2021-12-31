@@ -36,7 +36,9 @@ export default class CommandExecuter {
     const commandConfig = this.#executables[executable] || executable
 
     const command =
-      typeof commandConfig === 'string' ? commandConfig : commandConfig.command || executable
+      typeof commandConfig === 'string'
+        ? commandConfig
+        : commandConfig.command || executable
 
     const targetConfiguration = commandConfig.use || null
 
@@ -59,7 +61,9 @@ export default class CommandExecuter {
 
         targetCommand = this.getCommandFor(
           target,
-          targetArguments instanceof Array ? targetArguments : [targetArguments],
+          targetArguments instanceof Array
+            ? targetArguments
+            : [targetArguments],
           commandAlreadyParsed,
         )
       }

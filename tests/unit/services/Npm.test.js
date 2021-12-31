@@ -20,9 +20,10 @@ describe('Npm unit tests', () => {
     const npm = new Npm(commandExecuterStub)
     npm.execute(['test command'])
 
-    expect(commandExecuterStub.execute.withArgs(Npm.COMMAND, ['test command']).callCount).to.be.eq(
-      1,
-    )
+    expect(
+      commandExecuterStub.execute.withArgs(Npm.COMMAND, ['test command'])
+        .callCount,
+    ).to.be.eq(1)
   })
 
   it('should properly check if enabled or not', () => {

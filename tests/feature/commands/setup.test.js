@@ -17,7 +17,10 @@ describe('Setup command tests', () => {
     sandbox = sinon.createSandbox()
     sandbox.stub(container.resolve('outputFormatter'), 'output')
 
-    stubs.dockerCompose = sandbox.stub(container.resolve('dockerCompose'), 'execute')
+    stubs.dockerCompose = sandbox.stub(
+      container.resolve('dockerCompose'),
+      'execute',
+    )
     stubs.composer = sandbox.stub(container.resolve('composer'), 'execute')
     stubs.npm = sandbox.stub(container.resolve('npm'), 'execute')
   })
@@ -29,7 +32,8 @@ describe('Setup command tests', () => {
   it('should setup environment', async () => {
     application.run(['setup'])
 
-    expect(stubs.dockerCompose.calledTwice, 'should setup docker-compose').to.be.true
+    expect(stubs.dockerCompose.calledTwice, 'should setup docker-compose').to.be
+      .true
     expect(stubs.composer.calledOnce, 'should setup composer').to.be.true
     expect(stubs.npm.calledOnce, 'should setup npm').to.be.true
   })

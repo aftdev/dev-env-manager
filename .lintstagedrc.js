@@ -1,3 +1,9 @@
+/**
+ * Lint-Staged Configuration.
+ *
+ * @see https://github.com/okonet/lint-staged#configuration
+ */
+
 import { ESLint } from 'eslint'
 
 const removeIgnoredFiles = async (files) => {
@@ -12,8 +18,8 @@ const removeIgnoredFiles = async (files) => {
 }
 
 export default {
-  '*.{js,json,md,mjs,yaml,yml}': 'prettier --write',
-  '*.{js,mjs}': async (files) => {
+  '*.{js,mjs,cjs,ts,md,json,yaml,yml}': 'prettier --write',
+  '*.{js,mjs,cjs}': async (files) => {
     // https://github.com/okonet/lint-staged#how-can-i-ignore-files-from-eslintignore
     const filesToLint = await removeIgnoredFiles(files)
     return [`eslint --cache --fix --max-warnings 0 ${filesToLint}`]

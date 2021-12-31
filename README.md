@@ -9,13 +9,13 @@ guesswork out of remembering long strings of commonly used development commands.
 
 - [Installation](#installation)
 - [Usage: default commands](#usage-default-commands)
-    - [init](#init)
-    - [setup](#setup)
-    - [start and down](#start-and-down)
-    - [connect](#connect)
-    - [Scripts auto-discovery](#scripts-auto-discovery)
+  - [init](#init)
+  - [setup](#setup)
+  - [start and down](#start-and-down)
+  - [connect](#connect)
+  - [Scripts auto-discovery](#scripts-auto-discovery)
 - [Custom commands](#custom-commands)
-    - [Services that can be used by your custom commands](#services-that-can-be-used-by-your-custom-commands)
+  - [Services that can be used by your custom commands](#services-that-can-be-used-by-your-custom-commands)
 - [Configuration](#configuration)
 
 <!-- /TOC -->
@@ -47,8 +47,8 @@ docker composer exec <container_name> composer install
 
 🎉
 
-Day-to-day and custom developer commands can be easily defined via the [commands
-directory](#configuration).
+Day-to-day and custom developer commands can be easily defined via the
+[commands directory](#configuration).
 
 ## Installation
 
@@ -193,10 +193,7 @@ Project commands will always take precedence over application default commands.
 
 ```yaml
 # @file ./dev-env-config.yml
-
-...
 commands_dir: ./commands
-...
 ```
 
 ```js

@@ -20,7 +20,9 @@ export default function (configuration, packageManagerScripts) {
       let help = ''
       if (scripts.length > 0) {
         help = chalk.cyan('\nPackage manager commands:')
-        help += chalk.grey('\nCommands found in package manager configuration files')
+        help += chalk.grey(
+          '\nCommands found in package manager configuration files',
+        )
         for (const s in scripts) {
           help += `\n  ${scripts[s]}`
         }

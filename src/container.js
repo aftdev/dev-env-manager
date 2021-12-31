@@ -1,6 +1,13 @@
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { Lifetime, InjectionMode, asValue, asClass, aliasTo, createContainer } from 'awilix'
+import {
+  Lifetime,
+  InjectionMode,
+  asValue,
+  asClass,
+  aliasTo,
+  createContainer,
+} from 'awilix'
 import Application from './Application.js'
 
 const __filename = fileURLToPath(import.meta.url)

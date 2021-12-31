@@ -17,8 +17,12 @@ describe('Environment command tests', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox()
 
-    stubs.dockerCompose = sandbox.stub(container.resolve('dockerCompose'), 'execute').callsFake()
-    stubs.outputFormatter = sandbox.stub(container.resolve('outputFormatter'), 'output').callsFake()
+    stubs.dockerCompose = sandbox
+      .stub(container.resolve('dockerCompose'), 'execute')
+      .callsFake()
+    stubs.outputFormatter = sandbox
+      .stub(container.resolve('outputFormatter'), 'output')
+      .callsFake()
   })
 
   afterEach(() => {
@@ -27,14 +31,18 @@ describe('Environment command tests', () => {
 
   it('should start env', () => {
     application.run(['start'])
-    expect(stubs.dockerCompose.withArgs(sinon.match.array.startsWith(['up'])).callCount).to.equal(1)
+    expect(
+      stubs.dockerCompose.withArgs(sinon.match.array.startsWith(['up']))
+        .callCount,
+    ).to.equal(1)
   })
 
   it('should stop env', () => {
     application.run(['stop'])
-    expect(stubs.dockerCompose.withArgs(sinon.match.array.startsWith(['down'])).callCount).to.equal(
-      1,
-    )
+    expect(
+      stubs.dockerCompose.withArgs(sinon.match.array.startsWith(['down']))
+        .callCount,
+    ).to.equal(1)
   })
 
   it('should display status message', () => {
@@ -46,7 +54,9 @@ describe('Environment command tests', () => {
     let dockerCompose, containerExecuteStub
     beforeEach(() => {
       dockerCompose = container.resolve('dockerCompose')
-      containerExecuteStub = sandbox.stub(dockerCompose, 'containerExecute').callsFake()
+      containerExecuteStub = sandbox
+        .stub(dockerCompose, 'containerExecute')
+        .callsFake()
     })
 
     it('should exit if no container up', async () => {
@@ -58,7 +68,9 @@ describe('Environment command tests', () => {
     })
 
     it('should connect to container after being prompted', async () => {
-      sandbox.stub(dockerCompose, 'getContainers').returns(['app1', 'app2', 'app3'])
+      sandbox
+        .stub(dockerCompose, 'getContainers')
+        .returns(['app1', 'app2', 'app3'])
       sandbox.stub(inquirer, 'prompt').resolves({ container: 'app1' })
 
       await application.run(['connect'])
@@ -66,14 +78,18 @@ describe('Environment command tests', () => {
     })
 
     it('should connect to container from arg', async () => {
-      sandbox.stub(dockerCompose, 'getContainers').returns(['app1', 'app2', 'app3'])
+      sandbox
+        .stub(dockerCompose, 'getContainers')
+        .returns(['app1', 'app2', 'app3'])
 
       await application.run(['connect', 'app5'])
       expect(containerExecuteStub.withArgs('app5').callCount).to.equal(1)
 
       // As root
       await application.run(['connect', 'app5', '-r'])
-      expect(containerExecuteStub.withArgs('app5', sinon.match.any, true).callCount).to.equal(1)
+      expect(
+        containerExecuteStub.withArgs('app5', sinon.match.any, true).callCount,
+      ).to.equal(1)
     })
   })
 })

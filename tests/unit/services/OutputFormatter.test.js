@@ -30,7 +30,9 @@ describe('Outputformatter', () => {
       const outputFormatter = new OutputFormatter(mockBuffer)
 
       outputFormatter[functionName]('test ', color)
-      expect(mockBuffer.write.withArgs(sinon.match('test')).callCount).to.be.equal(1)
+      expect(
+        mockBuffer.write.withArgs(sinon.match('test')).callCount,
+      ).to.be.equal(1)
     })
   })
 })

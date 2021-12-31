@@ -62,12 +62,18 @@ describe('CommandExecute Tests', () => {
   })
 
   const data = [
-    ['commandWithTargetSimpleNotation', 'simple target command commandWithTargetSimpleNotation'],
+    [
+      'commandWithTargetSimpleNotation',
+      'simple target command commandWithTargetSimpleNotation',
+    ],
     ['commandWithTarget', 'target command commandWithTarget'],
     ['editedCommandSimpleNotation', 'edited command'],
     ['editedCommand', 'edited command'],
     ['editedCommandWithTarget', 'target command edited command'],
-    ['editedCommandWithTargetAndOptions', "target command '[target options]' edited command"],
+    [
+      'editedCommandWithTargetAndOptions',
+      "target command '[target options]' edited command",
+    ],
     ['cycleDependency', new RangeError('Circular dependency error !')],
     ['cycleDependencyOk', 'target command commandWithTarget cycleDependencyOk'],
     ['commandWithInvalidTarget', 'commandWithInvalidTarget'],

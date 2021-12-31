@@ -21,7 +21,8 @@ describe('Composer unit tests', () => {
     composer.execute(['test command'])
 
     expect(
-      commandExecuterStub.execute.withArgs(Composer.COMMAND, ['test command']).callCount,
+      commandExecuterStub.execute.withArgs(Composer.COMMAND, ['test command'])
+        .callCount,
     ).to.be.eq(1)
   })
 

@@ -34,7 +34,10 @@ describe('Applications Feature Tests', () => {
       const stub = sandbox.stub(outputFormatter, 'output')
 
       application.run(['project1_command'])
-      expect(stub.calledWith('Hello from Project 1'), 'Should execute project command').to.be.true
+      expect(
+        stub.calledWith('Hello from Project 1'),
+        'Should execute project command',
+      ).to.be.true
     })
 
     it('should display help message with information about package commands.', () => {
@@ -42,11 +45,16 @@ describe('Applications Feature Tests', () => {
 
       application.run([])
 
-      expect(outputStub.calledWith(sinon.match('Package manager commands:'))).to.be.true
-      expect(outputStub.calledWith(sinon.match('script a')), 'Should find script a command').to.be
-        .true
-      expect(outputStub.calledWith(sinon.match('scriptB')), 'Should find scriptB command').to.be
-        .true
+      expect(outputStub.calledWith(sinon.match('Package manager commands:'))).to
+        .be.true
+      expect(
+        outputStub.calledWith(sinon.match('script a')),
+        'Should find script a command',
+      ).to.be.true
+      expect(
+        outputStub.calledWith(sinon.match('scriptB')),
+        'Should find scriptB command',
+      ).to.be.true
     })
   })
 
@@ -69,7 +77,8 @@ describe('Applications Feature Tests', () => {
 
       application.run([])
 
-      expect(outputStub.calledWith(sinon.match('Package manager commands:'))).to.be.false
+      expect(outputStub.calledWith(sinon.match('Package manager commands:'))).to
+        .be.false
     })
   })
 
@@ -94,8 +103,11 @@ describe('Applications Feature Tests', () => {
         await application.bootstrap()
         expect.fail('should have thrown an error')
       } catch (err) {
-        expect(stub.calledWith(sinon.match('Not all command files could be bootstrapped'))).to.be
-          .true
+        expect(
+          stub.calledWith(
+            sinon.match('Not all command files could be bootstrapped'),
+          ),
+        ).to.be.true
       }
     })
   })
