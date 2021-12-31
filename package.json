@@ -10,6 +10,10 @@
     "dev": "./bin/index.js"
   },
   "author": "Christophe G",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aftdev/dev-env-manager"
+  },
   "license": "MIT",
   "dependencies": {
     "awilix": "^6.0.0",
