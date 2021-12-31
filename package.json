@@ -30,7 +30,6 @@
     "@commitlint/config-conventional": "^16.0.0",
     "c8": "^7.10.0",
     "chai": "^4.3.4",
-    "commitizen": "^4.2.4",
     "eslint": "^8.3.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.3.0",
@@ -51,8 +50,7 @@
     "format": "prettier --write ./**/*.{js,mjs,cjs,ts,md,json,yaml,yml}",
     "test": "mocha",
     "test-all": "mocha --reporter=dot --recursive './tests/**/*.test.js'",
-    "coverage": "c8 --reporter=html --reporter=text --reporter=html yarn test-all",
-    "commit": "cz"
+    "coverage": "c8 --reporter=html --reporter=text --reporter=html yarn test-all"
   },
   "config": {
     "commitizen": {
