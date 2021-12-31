@@ -1,6 +1,6 @@
 {
   "name": "@aftdev/dev-env-manager",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Command line utilities to manage your projects development environment",
   "type": "module",
   "engines": {
@@ -45,8 +45,7 @@
     "format": "pretty-quick",
     "test": "mocha",
     "test-all": "mocha --reporter=dot --recursive './tests/**/*.test.js'",
-    "coverage": "c8 --reporter=html --reporter=text --reporter=html yarn test-all",
-    "publish": "npm publish --access public"
+    "coverage": "c8 --reporter=html --reporter=text --reporter=html yarn test-all"
   },
   "husky": {
     "hooks": {
