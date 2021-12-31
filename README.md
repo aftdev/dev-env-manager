@@ -1,103 +1,140 @@
-# Dev environment Manager - command line utilities.
+# Dev Environment Manager
 
-A command line application build with [commander](https://github.com/tj/commander.js) that provides
-developers goodies/shortcuts to manage their development environments.
+Command line tools and shortcuts to help make your development life easier.
 
-The main goal of this application is to give you shortcuts for your most utilized commands and to
-define where those commands should be executed (locally or on a docker container?)
+Dev Environment Manager executes your most utilized commands and takes the
+guesswork out of remembering long strings of commonly used development commands.
 
-For example if you want all your composer (php) scripts to be executed on a specific docker
-container.
+<!-- TOC -->
+
+- [Installation](#installation)
+- [Usage: default commands](#usage-default-commands)
+    - [init](#init)
+    - [setup](#setup)
+    - [start and down](#start-and-down)
+    - [connect](#connect)
+    - [Scripts auto-discovery](#scripts-auto-discovery)
+- [Custom commands](#custom-commands)
+    - [Services that can be used by your custom commands](#services-that-can-be-used-by-your-custom-commands)
+- [Configuration](#configuration)
+
+<!-- /TOC -->
+
+We can define where our commands are executed (locally or inside our Docker
+containers). For example, if we'd like all of our Composer (PHP) scripts to be
+executed inside a specific Docker container, we add this configuration inside
+`dev-env-config.yml`:
 
 ```yaml
 executables:
   composer:
     use:
       target: docker-compose
-      with: ['exec', '[container_name]']
+      with: ['exec', '<container_name>']
 ```
+
+Now, we can simply run:
 
 ```bash
 dev composer install
 ```
 
-will execute
+Behind the scenes, Dev Environment Manager runs:
 
 ```bash
-docker composer exec [container_name] composer install
+docker composer exec <container_name> composer install
 ```
 
-It also gives you access to common commands to help with day to day activities and allows you to
-define custom commands very easily. (via the [commands_dir](#configuration) configuration)
+🎉
+
+Day-to-day and custom developer commands can be easily defined via the [commands
+directory](#configuration).
 
 ## Installation
 
 ```bash
-$ npm install -g "@aftdev/dev-env-manager"
+npm install -g @aftdev/dev-env-manager
 ```
 
-This will gives you global access to the "dev" executable.
+This installs `dev` globally.
 
 ```
-$ dev --help
+dev --help
 ```
 
-**Note:** `dev` might be already in use by your system or any other npm packages - And we might have
-change this bin name without notices if we discover such conflict. Ideally we would want to come up
-with a better name.
+**Note/TODO:** `dev` may already be in use by your system or another npm
+package. In this case, there would be a naming collision in the case of `dev`.
 
-## Default Commands
+Future versions of Dev Environment Manager may change `dev` to something else
+and _without notice_.
 
-### Init
+## Usage: default commands
 
-Generate the `dev-env-config.yml` file where [configuration](#configuration) can be edited.
+Run these commands from the root of your project.
 
-### Connect / SSH
-
-Use your docker-compose.yml file to return list of running containers, just select one to ssh to it.
+### `init`
 
 ```bash
-$ dev connect
+dev init
+```
 
-Select what container to connect to
+Generates the `dev-env-config.yml` [configuration file](#configuration). Add
+your configurations and customizations inside this file.
+
+### `setup`
+
+```bash
+dev setup
+```
+
+Sets up the develop environment. Useful for getting started quickly inside a
+freshly cloned project.
+
+This command will execute:
+
+- `docker compose build` (if a `docker-compose.yml` file is found)
+- `docker compose up -d`
+- `composer install` (if a `composer.json` exists inside the project)
+- `npm install` (if a `docker-compose.yml` file is found)
+
+### `start` and `down`
+
+```bash
+dev [start|stop]
+```
+
+Starts or stops Docker containers. This is basically a shortcut for
+`docker-compose [up|down]`
+
+### `connect`
+
+Uses your project's `docker-compose.yml` file to return list of currently
+running containers. Select a container in order to open an SSH connection to it.
+
+```bash
+dev connect
+
+Select a container to connect to:
 - app1
 - app2
 - app3
 - mysql
 - redis
 
-# Ssh to one container directly
-$ dev connect app1
+# Or, SSH directly to a specific container
+dev connect app1
 
-# Ssh as root
+# SSH as root
 $ dev connect app1 --root
 ```
 
-### Setup
+### Scripts auto-discovery
 
-```bash
-$ dev setup
-```
+Sometimes typing `dev composer <script-name>` can be repetitive. Dev Environment
+Manager will auto-discover scripts from your `composer.json` or `package.json`
+files for you.
 
-Setup the environment. Useful when someone just cloned the project and want to get started quickly.
-
-This command will execute
-
-- docker compose build (if a docker-compose.yml file is found)
-- docker compose up -d
-- composer install (if a composer.json exists)
-- npm install (if a docker-compose.yml file is found)
-
-### Start - Down
-
-Start and stop containers. Basically a shortcut for docker-compose up/down
-
-### Scripts Auto discovery
-
-Sometimes typing `dev composer script-name` can be repetitive. This is why this application will
-autodiscover the scripts from the composer.json or package.json files for you.
-
-`composer.json`
+For example, using Composer and `composer.json`:
 
 ```json
 {
@@ -110,7 +147,7 @@ autodiscover the scripts from the composer.json or package.json files for you.
 }
 ```
 
-`package.json`
+Using `yarn` and `package.json`:
 
 ```json
 {
@@ -122,12 +159,14 @@ autodiscover the scripts from the composer.json or package.json files for you.
 }
 ```
 
+Now we can run:
+
 ```bash
-$ dev other-script # will execute `dev composer other-script`
-$ dev build # will execute `dev yarn build`
+dev other-script # will execute `dev composer other-script`
+dev build # will execute `dev yarn build`
 ```
 
-To enable this feature add in your `dev-env-config.yml` file
+Enable auto discovery by adding the following in your `dev-env-config.yml` file:
 
 ```yaml
 autodiscover:
@@ -135,33 +174,34 @@ autodiscover:
   'composer.json': 'composer'
 ```
 
-**Note:** If the same script exists in both file, the command from the first file will be used (in
-our example the package.json script will be used)
+**Note:** If the same script exists in both files, the command from the first
+file will be used (in our example the `package.json` script will be used).
 
-```json
-$ dev test
-```
+Commands registered at the application level (such as via Commander) will always
+take precedence over `scripts` commands. For example, if you created a custom
+`build` command Dev Environment Manager will always run the custom command and
+not `yarn build`.
 
-Also, commands registered at the application level (via commander) will always take priority over
-those `scripts` commands. So if you created a custom `build` command it will always use that command
-and not yarn build
+## Custom commands
 
-## Custom Commands
+Each project can set its own custom commands:
 
-Each project you own can hook their own commands. You just need to set your command folder in the
-dev-env-config.yml and add some command files in there.
+1. Set the command folder path in the `dev-env-config.yml` file
+2. Add command files to the commands directory
 
-The project commands will always take precedence over this application default commands
-
-`./dev-env-config.yml`
+Project commands will always take precedence over application default commands.
 
 ```yaml
+# @file ./dev-env-config.yml
+
+...
 commands_dir: ./commands
+...
 ```
 
-`./commands/mycool-command.js`
-
 ```js
+// @file ./commands/my-command.js
+
 export default (cli) => {
   cli
     .command('your-command-name')
@@ -172,21 +212,24 @@ export default (cli) => {
 }
 ```
 
-**Note**: If you want to use a npm package from your project they will need to be added to that
-project package.json
+**Note**: If you want to use an NPM package from your project, the package will
+need to be added to that project's `package.json` file.
 
-**Important**: please use extension **.mjs** if your project package.json is not setup as
-type:"module" (or you dont have a package.json file)
+**Important**: please use the **`.mjs`** extension if your project's
+`package.json` is not setup as `type: "module"` (or if you do not have a
+`package.json` file).
 
-### Services that can be used by your commands
+### Services that can be used by your custom commands
 
-- `dockerCompose` : execute command on a container
+- `dockerCompose`: execute a command on a container
 - `composer`: execute composer commands
 - `npm`: execute npm commands
 - `outputFormatter`: helpers to style output
 - `commandExecuter`: execute commands
 
-Those services are automatically injected in your command "module"
+The above services are automatically injected into your command "module".
+
+Example:
 
 ```js
 export default (cli, dockerCompose, outputFormatter, composer) => {
@@ -203,20 +246,22 @@ export default (cli, dockerCompose, outputFormatter, composer) => {
 
 ## Configuration
 
+Configuration values are set inside the `dev-env-config.yml` file.
+
 ```yaml
-# Where to find the project custom commands. (.js/.cjs/.mjs)
+# Where to find the project's custom commands (.js/.cjs/.mjs)?
 commands_dir: null
-# Auto discover scripts from
+# Auto discover scripts from these package manager files:
 autodiscover:
-  # package manager file: command to use to execute its scripts
+  # <package manager file>:<command used to execute its scripts>
   'package.json': 'yarn'
   'composer.json': 'composer'
 # How and where to run your project executables
 executables:
-  # simple format
+  # Simple format
   docker-compose: docker compose
   npm: yarn
-  # With Target
+  # With target
   composer:
     # Where should the command be executed?
     use:

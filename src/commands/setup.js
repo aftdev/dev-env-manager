@@ -3,7 +3,7 @@ export default (cli, outputFormatter, dockerCompose, composer, npm) => {
   if (!cli._findCommand('setup')) {
     cli
       .command('setup')
-      .description('Initial Setup')
+      .description('Initial setup')
       .action(() => {
         outputFormatter.title('Project Setup')
 

@@ -30,7 +30,7 @@ export default (cli, commandExecuter, outputFormatter, dockerCompose) => {
       .command('ssh [container]')
       .alias('connect')
       .option('-r, --root', 'Connect as ROOT')
-      .description('Connect to one of the docker service')
+      .description('Connect to one of the docker services')
       .action(async (container, options) => {
         outputFormatter.title('Connect to a container')
 
@@ -43,7 +43,7 @@ export default (cli, commandExecuter, outputFormatter, dockerCompose) => {
           const choice = await inquirer.prompt({
             type: 'list',
             name: 'container',
-            message: 'Select container to connect to',
+            message: 'Select a container to connect to:',
             choices: containers,
           })
 
