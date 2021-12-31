@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-    if: ${{ github.event_name == 'pull_request' }}
     name: Test on node version ${{ matrix.node }}
     runs-on: ubuntu-latest
     strategy:
@@ -17,7 +16,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.base.sha }}
       - name: Setup node
         uses: actions/setup-node@v2
         with:
