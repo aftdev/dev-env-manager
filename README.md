@@ -117,7 +117,7 @@ autodiscover the scripts from the composer.json or package.json files for you.
   ...
   "scripts": {
     "build": "yarn build",
-    "test": "node --unhandled-rejections=strict node_modules/.bin/jest",
+    "test": "mocha",
   ...
 }
 ```
@@ -177,6 +177,29 @@ project package.json
 
 **Important**: please use extension **.mjs** if your project package.json is not setup as
 type:"module" (or you dont have a package.json file)
+
+### Services that can be used by your commands
+
+- `dockerCompose` : execute command on a container
+- `composer`: execute composer commands
+- `npm`: execute npm commands
+- `outputFormatter`: helpers to style output
+- `commandExecuter`: execute commands
+
+Those services are automatically injected in your command "module"
+
+```js
+export default (cli, dockerCompose, outputFormatter, composer) => {
+  cli.command('auto-injection').action(() => {
+    outputFormatter.title('Auto Injection example')
+
+    const containers = dockerCompose.getContainers()
+    console.log(containers)
+
+    composer.execute(['install'])
+  })
+}
+```
 
 ## Configuration
 
