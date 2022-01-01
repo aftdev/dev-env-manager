@@ -29,7 +29,7 @@ describe('Setup command tests', () => {
     sandbox.restore()
   })
 
-  it('should setup environment', async () => {
+  it('should setup environment', () => {
     application.run(['setup'])
 
     expect(stubs.dockerCompose.calledTwice, 'should setup docker-compose').to.be
