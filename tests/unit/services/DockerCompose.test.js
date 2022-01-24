@@ -16,14 +16,21 @@ describe('DockerCompose unit tests', () => {
     sandbox.restore()
   })
 
-  it('should properly check if enabled or not', () => {
-    sandbox.stub(fs, 'existsSync').returns(false).onFirstCall().returns(true)
-
+  it('should execute commands properly with different config file', () => {
     const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
-    const dockerCompose = new DockerCompose(commandExecuterStub)
+    const dockerCompose = new DockerCompose(commandExecuterStub, [
+      'differentCompose.json',
+      'differentCompose2.json',
+    ])
 
-    expect(dockerCompose.isEnabled()).to.be.true
-    expect(dockerCompose.isEnabled()).to.be.false
+    dockerCompose.execute(['test command'])
+
+    expect(
+      commandExecuterStub.execute.withArgs(DockerCompose.COMMAND, [
+        { '--file': ['differentCompose.json', 'differentCompose2.json'] },
+        'test command',
+      ]).callCount,
+    ).to.be.eq(1)
   })
 
   it('should return list of containers', () => {
@@ -37,7 +44,7 @@ app2
 `
 
     commandExecuterStub.backgroundExecute.returns(serviceStub)
-    const dockerCompose = new DockerCompose(commandExecuterStub, fs)
+    const dockerCompose = new DockerCompose(commandExecuterStub)
 
     expect(dockerCompose.hasContainer('app1')).to.be.true
     expect(dockerCompose.hasContainer('app_not_found')).to.be.false
@@ -61,7 +68,7 @@ app2
     expect(
       commandExecuterStub.execute.withArgs(DockerCompose.COMMAND, [
         'exec',
-        '-u=root',
+        { '--user': 'root' },
         'app1',
         'do',
         'something',

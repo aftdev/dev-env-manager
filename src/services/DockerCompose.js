@@ -1,12 +1,12 @@
-import { RESOLVER, Lifetime } from 'awilix'
 import AbstractFilebasedService from './AbstractFilebasedService.js'
 
 /**
  * Docker composer goodies.
  */
 export default class DockerCompose extends AbstractFilebasedService {
-  static FILE = 'docker-compose.yml'
   static COMMAND = 'docker-compose'
+  static CONFIG_ARGUMENT = '--file'
+  static CONFIG_FILE = 'docker-compose.yml'
 
   #containers
 
@@ -59,14 +59,9 @@ export default class DockerCompose extends AbstractFilebasedService {
    * @returns
    */
   containerExecute(container, command = [], root = false) {
-    const rootParam = root ? '-u=root' : ''
+    const rootParam = root ? { '--user': 'root' } : ''
     const args = ['exec', rootParam, container].filter((n) => n)
 
     return this.execute([...args, ...command])
   }
-}
-
-// DI info
-DockerCompose[RESOLVER] = {
-  lifetime: Lifetime.SCOPED,
 }

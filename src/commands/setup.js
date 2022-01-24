@@ -1,4 +1,4 @@
-export default (cli, outputFormatter, dockerCompose, composer, npm) => {
+export default (cli, outputFormatter, dockerCompose, composer, node) => {
   // Don"t add function if it has been defined by the current project.
   if (!cli._findCommand('setup')) {
     cli
@@ -19,8 +19,8 @@ export default (cli, outputFormatter, dockerCompose, composer, npm) => {
         }
 
         // packages.json (npm / yarn / pnpm)
-        if (npm.isEnabled()) {
-          npm.execute(['install'])
+        if (node.isEnabled()) {
+          node.execute(['install'])
         }
       })
   }

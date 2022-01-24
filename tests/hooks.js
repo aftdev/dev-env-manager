@@ -4,11 +4,11 @@ const oldCwd = process.cwd()
 
 export const mochaHooks = {
   /**
-   * Always reset the chdir as feature test might have messed that up.
+   * Always reset the chdir as feature tests might have messed that up.
    *
    * @param {Function} done
    */
-  afterEach(done) {
+  afterAll(done) {
     process.chdir(oldCwd)
     done()
   },

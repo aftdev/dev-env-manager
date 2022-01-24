@@ -5,10 +5,10 @@ import {
   InjectionMode,
   asValue,
   asClass,
-  aliasTo,
   createContainer,
 } from 'awilix'
 import Application from './Application.js'
+import OutputFormatter from './services/OutputFormatter.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -31,14 +31,16 @@ export default async function (projectPath) {
     formatName: 'camelCase',
   }
 
-  // From service folder.
+  // Automatically register services
+  // - from service folder
   await container.loadModules(['services/**/*.js'], opts)
 
-  // Override each service if they have a factory.
+  // - from factories (will override above)
   await container.loadModules(['factories/**/*.js'], {
     ...opts,
     resolverOptions: {
       lifetime: Lifetime.SINGLETON,
+      injector: (c) => ({ container: c }),
     },
     formatName: (name) => name.replace('Factory', ''),
   })
@@ -50,7 +52,7 @@ export default async function (projectPath) {
     application: asClass(Application)
       .singleton()
       .inject((c) => ({ container: c })),
-    config: aliasTo('configuration'),
+    outputFormatter: asClass(OutputFormatter),
   })
 
   return container

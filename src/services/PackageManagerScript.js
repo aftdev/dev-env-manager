@@ -1,56 +1,54 @@
-import fs from 'fs'
-
 /**
  * Helper for scripts commands coming from package managers.
+ * Gather all scripts from the managers.
  */
 export default class PackageManagerScript {
-  #commandExecuter
-  #scripts
+  #managers
 
   /**
-   *
-   * @param {CommandExecuter} commandExecuter
-   * @param {Array} files
+   * @param {Array<AbstractPackageManager>} managers
    */
-  constructor(commandExecuter, files) {
-    this.#commandExecuter = commandExecuter
-    this.#initScriptFromFiles(files)
+  constructor(managers) {
+    this.#managers = managers
   }
 
+  /**
+   * Returns true if any package manager can handle the given script.
+   *
+   * @param {string} script
+   * @returns {boolean}
+   */
   hasScript(script) {
-    return script in this.#scripts
-  }
-
-  executeScript(script, args = []) {
-    const command = this.#scripts[script]
-    args.unshift(script)
-
-    this.#commandExecuter.execute(command, args)
-  }
-
-  getScripts() {
-    return Object.keys(this.#scripts)
+    return this.#managers.some((manager) => manager.hasScript(script))
   }
 
   /**
-   * Set scripts from list of paths.
+   * Return all the managers that can execute Script.
    *
-   * @param {Array} files
+   * @param {string} script
+   * @returns {Array}
    */
-  #initScriptFromFiles(files) {
-    this.#scripts = {}
+  getManagersForScript(script) {
+    return this.#managers.filter((manager) => manager.hasScript(script))
+  }
 
-    for (const filePath in files) {
-      if (!fs.existsSync(filePath)) {
-        continue
-      }
+  /**
+   * Return map of the scripts from the package managers.
+   *
+   * @returns {Map}
+   */
+  getScripts() {
+    const scripts = new Map()
 
-      // Check if they have a script json property.
-      const jsonValue = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+    this.#managers.forEach((manager) => {
+      const managerScripts = manager.getScripts()
+      const managerName = manager.constructor.name
+      scripts.set(managerName, new Set())
+      managerScripts.forEach((scriptName) => {
+        scripts.get(managerName).add(scriptName)
+      })
+    })
 
-      for (const script in jsonValue?.scripts) {
-        this.#scripts[script] = files[filePath]
-      }
-    }
+    return scripts
   }
 }

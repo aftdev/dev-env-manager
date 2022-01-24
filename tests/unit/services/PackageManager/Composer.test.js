@@ -1,9 +1,8 @@
-import fs from 'fs'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
-import CommandExecuter from '../../../src/services/CommandExecuter.js'
-import Composer from '../../../src/services/Composer.js'
+import CommandExecuter from '../../../../src/services/CommandExecuter.js'
+import Composer from '../../../../src/services/PackageManager/Composer.js'
 
 describe('Composer unit tests', () => {
   let sandbox
@@ -24,15 +23,5 @@ describe('Composer unit tests', () => {
       commandExecuterStub.execute.withArgs(Composer.COMMAND, ['test command'])
         .callCount,
     ).to.be.eq(1)
-  })
-
-  it('should properly check if enabled or not', () => {
-    sandbox.stub(fs, 'existsSync').returns(false).onFirstCall().returns(true)
-
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
-    const composer = new Composer(commandExecuterStub)
-
-    expect(composer.isEnabled()).to.be.true
-    expect(composer.isEnabled()).to.be.false
   })
 })

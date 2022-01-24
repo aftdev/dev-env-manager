@@ -99,10 +99,12 @@ This command will execute:
 - `composer install` (if a `composer.json` exists inside the project)
 - `npm install` (if a `docker-compose.yml` file is found)
 
-### `start` and `down`
+### `start` and `stop`
 
 ```bash
 dev [start|stop]
+# or
+dev [up|down]
 ```
 
 Starts or stops Docker containers. This is basically a shortcut for
@@ -133,8 +135,7 @@ $ dev connect app1 --root
 ### Scripts auto-discovery
 
 Sometimes typing `dev composer <script-name>` can be repetitive. Dev Environment
-Manager will auto-discover scripts from your `composer.json` or `package.json`
-files for you.
+Manager will auto-discover scripts from your package managers for you.
 
 For example, using Composer and `composer.json`:
 
@@ -171,18 +172,32 @@ dev build # will execute `dev yarn build`
 Enable auto discovery by adding the following in your `dev-env-config.yml` file:
 
 ```yaml
-autodiscover:
-  'package.json': 'yarn'
-  'composer.json': 'composer'
+# @file ./dev-env-config.yml
+package_managers:
+  node:
+    autodiscover: true
+  composer:
+    autodiscover: true
+    priority: 200
 ```
 
-**Note:** If the same script exists in both files, the command from the first
-file will be used (in our example the `package.json` script will be used).
+**Note:** If the same script exists in both files, like `test` in the example, a
+prompt will be displayed asking you to pick which manager to use.
 
-Commands registered at the application level (such as via Commander) will always
-take precedence over `scripts` commands. For example, if you created a custom
-`build` command Dev Environment Manager will always run the custom command and
-not `yarn build`.
+```bash
+❯ dev test
+? Select which package manager to use: (Use arrow keys)
+  Composer
+  Npm
+```
+
+You can change the order of that list by using the `priority` configuration for
+each manager.
+
+**_Important:_** Commands registered at the application level (such as via
+Commander) will always take precedence over `scripts` commands. For example, if
+you created a custom `build` command Dev Environment Manager will always run the
+custom command and not `yarn build`.
 
 ## Custom commands
 
@@ -221,8 +236,8 @@ need to be added to that project's `package.json` file.
 ### Services that can be used by your custom commands
 
 - `dockerCompose`: execute a command on a container
-- `composer`: execute composer commands
-- `npm`: execute npm commands
+- `composer`: execute composer scripts
+- `node`: execute npm, yarn or pnpm commands (depending on the configuration)
 - `outputFormatter`: helpers to style output
 - `commandExecuter`: execute commands
 
@@ -250,16 +265,22 @@ Configuration values are set inside the `dev-env-config.yml` file.
 ```yaml
 # Where to find the project's custom commands (.js/.cjs/.mjs)?
 commands_dir: null
-# Auto discover scripts from these package manager files:
-autodiscover:
-  # <package manager file>:<command used to execute its scripts>
-  'package.json': 'yarn'
-  'composer.json': 'composer'
+# Package manager configuration
+package_managers:
+  node:
+    # Which Node package manager to use (Npm / Yarn / Pnpm)
+    manager: 'npm',
+    # Auto discover scripts from these package manager files
+    auto_discover: true,
+    # Priority in case of script name collision with other managers
+    priority: 1
+  composer:
+    auto_discover: true
+    priority: 1
 # How and where to run your project executables
 executables:
   # Simple format
   docker-compose: docker compose
-  npm: yarn
   # With target
   composer:
     # Where should the command be executed?

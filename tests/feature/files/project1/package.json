@@ -2,6 +2,7 @@
   "type": "module",
   "scripts": {
     "script a": "script a",
-    "scriptB": "script b"
+    "scriptB": "script b",
+    "setup": "Should be ignored"
   }
 }

@@ -40,7 +40,7 @@ describe('Applications Feature Tests', () => {
       ).to.be.true
     })
 
-    it('should display help message with information about package commands.', () => {
+    it('should display help message with information about package commands', () => {
       const outputStub = mockCliOutput(container)
 
       application.run([])

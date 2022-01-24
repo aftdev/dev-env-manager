@@ -5,14 +5,17 @@ import createContainer from '../../src/container.js'
 // Init path before any files can change current path.
 const testPath = resolve('./tests/feature/files')
 
+/**
+ * @returns {AwilixContainer}
+ */
 export default async function createTestContainer(projectFolder) {
   const folderPath = resolve(testPath, projectFolder)
 
   return await createContainer(folderPath)
 }
 
-/**.
- * Mock the output from the cli service in the given container
+/**
+ * Mock the output from the cli service in the given container.
  *
  * @param {AwilixContainer} container
  * @returns {SinonFake}
