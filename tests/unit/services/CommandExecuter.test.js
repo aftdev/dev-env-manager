@@ -96,18 +96,27 @@ describe('CommandExecute Tests', () => {
   it('should quote command parameters properly', () => {
     const executer = new CommandExecuter({}, sinon.fake())
 
-    const command = executer.getCommandFor('test', [
-      'sdfsdfb',
-      '--option=1 2 3',
-      '-s',
-      '--test',
-      '--withQuotes="test test test"',
-      "--withSingleQuotes='test test'",
-    ])
+    const args = [
+      'something',
+      { '--long': 'configA' },
+      { '--longSpace': 'configB with space' },
+      { '--longArray': ['a with space', 'b'] },
+      { '-z': 'z' },
+      { s: 'something' },
+      { a: ['a', 'b with space'] },
+      { withQuote: 'Quote"Me' },
+      '-l',
+      '--lonelyLong',
+      '--',
+      'other',
+      ['a', 'b'],
+    ]
 
-    expect(command).to.equal(
-      "test sdfsdfb '--option=1 2 3' -s --test '--withQuotes=\"test test test\"' '--withSingleQuotes='test test''",
-    )
+    const expected =
+      "test something --long=configA --longSpace='configB with space' --longArray='a with space' --longArray=b -z z -s something -a a -a 'b with space' -withQuote 'Quote\"Me' -l --lonelyLong -- other a b"
+
+    const command = executer.getCommandFor('test', args)
+    expect(command).to.equal(expected)
   })
 
   it('should execute command properly', () => {

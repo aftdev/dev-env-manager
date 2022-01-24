@@ -7,7 +7,10 @@ import runApp from '../../src/index.js'
 describe('Index Feature Tests', () => {
   let sandbox, stdoutStub
 
+  const oldCwd = process.cwd()
+
   beforeEach(() => {
+    process.chdir(oldCwd)
     sandbox = sinon.createSandbox()
     sandbox.stub(process, 'argv').value(['a', 'b'])
     stdoutStub = sandbox.stub(process.stdout, 'write').callsFake()

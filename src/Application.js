@@ -81,8 +81,8 @@ export default class Application {
 
     // From project folder.
     let projectCommands = []
-    const projectCommandDir = configuration.commands_dir
-      ? path.resolve(this.#projectPath, configuration.commands_dir)
+    const projectCommandDir = configuration.get('commands_dir')
+      ? path.resolve(this.#projectPath, configuration.get('commands_dir'))
       : false
 
     if (projectCommandDir && fs.existsSync(projectCommandDir)) {

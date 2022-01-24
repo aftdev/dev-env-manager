@@ -1,6 +1,7 @@
 import child_process from 'child_process'
 import { RESOLVER, Lifetime } from 'awilix'
 import chalk from 'chalk'
+import { sh, unquoted } from 'puka'
 import Output from './OutputFormatter.js'
 
 export default class CommandExecuter {
@@ -13,15 +14,37 @@ export default class CommandExecuter {
   }
 
   /**
-   * Properly quote command arguments.
+   * Properly quote command arguments using puka library.
    *
    * @param {Array} args
+   *
+   * @returns {string}
+   *
+   * @see https://www.npmjs.com/package/puka#arrays-and-iterables
    */
   quoteCommandArgs(args) {
-    return args
-      .map((arg) => (arg.includes(' ') ? `'${arg}'` : arg))
-      .join(' ')
-      .trim()
+    const quotableArgs = []
+    args.forEach((arg) => {
+      // If object take go through each key and each value
+      if (arg instanceof Array || typeof arg === 'string') {
+        quotableArgs.push(sh`${arg}`)
+      } else if (arg instanceof Object) {
+        for (const key in arg) {
+          const isLongKey = key.startsWith('--')
+          const values = arg[key] instanceof Array ? arg[key] : [arg[key]]
+          const formattedKey = isLongKey
+            ? `${key}=`
+            : !key.startsWith('-')
+            ? `-${key} `
+            : `${key} `
+
+          quotableArgs.push(sh`${unquoted(formattedKey)}${values}`)
+        }
+      }
+    })
+
+    //console.log(quotableArgs)
+    return quotableArgs.join(' ')
   }
 
   /**

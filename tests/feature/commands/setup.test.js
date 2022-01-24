@@ -22,7 +22,7 @@ describe('Setup command tests', () => {
       'execute',
     )
     stubs.composer = sandbox.stub(container.resolve('composer'), 'execute')
-    stubs.npm = sandbox.stub(container.resolve('npm'), 'execute')
+    stubs.npm = sandbox.stub(container.resolve('node'), 'execute')
   })
 
   afterEach(() => {

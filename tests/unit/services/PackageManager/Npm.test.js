@@ -1,9 +1,8 @@
-import fs from 'fs'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
-import CommandExecuter from '../../../src/services/CommandExecuter.js'
-import Npm from '../../../src/services/Npm.js'
+import CommandExecuter from '../../../../src/services/CommandExecuter.js'
+import Npm from '../../../../src/services/PackageManager/Npm.js'
 
 describe('Npm unit tests', () => {
   let sandbox
@@ -26,13 +25,14 @@ describe('Npm unit tests', () => {
     ).to.be.eq(1)
   })
 
-  it('should properly check if enabled or not', () => {
-    sandbox.stub(fs, 'existsSync').returns(false).onFirstCall().returns(true)
-
+  it('should properly execute script', () => {
     const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
     const npm = new Npm(commandExecuterStub)
+    npm.executeScript('script')
 
-    expect(npm.isEnabled()).to.be.true
-    expect(npm.isEnabled()).to.be.false
+    expect(
+      commandExecuterStub.execute.withArgs(Npm.COMMAND, ['run', 'script'])
+        .callCount,
+    ).to.be.eq(1)
   })
 })

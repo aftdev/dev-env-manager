@@ -1,3 +1,4 @@
+import inquirer from 'inquirer'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
 import DockerCompose from '../../../src/services/DockerCompose.js'
@@ -43,18 +44,30 @@ describe('Exec command tests', () => {
     const mock = sandbox.mock(commandExecuter)
 
     mock.expects('execute').callsFake().never()
-    mock.expects('execute').withArgs('yarn', ['script a']).once().callsFake()
+    mock
+      .expects('execute')
+      .withArgs('npm', ['run', 'script a'])
+      .once()
+      .callsFake()
     mock
       .expects('execute')
       .withArgs('composer', ['composerA'])
       .once()
       .callsFake()
-    mock.expects('execute').withArgs('composer', ['scriptB']).once().callsFake()
 
     application.run(['script a'])
     application.run(['composerA'])
-    // In both composer and package.json file
-    application.run(['scriptB'])
+  })
+
+  it('should show a prompt when script is in several managers', async () => {
+    const commandExecuter = container.resolve('commandExecuter')
+    const mock = sandbox.mock(commandExecuter)
+
+    mock.expects('execute').withArgs('composer', ['scriptB']).once().callsFake()
+
+    sandbox.stub(inquirer, 'prompt').resolves({ manager: 'Composer' })
+
+    await application.run(['scriptB'])
   })
 
   it('should execute correct docker-compose command', () => {
