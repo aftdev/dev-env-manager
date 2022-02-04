@@ -21,10 +21,14 @@ export default class AbstractPackageManager extends AbstractFilebasedService {
    * Execute Script.
    *
    * @param {string} script
+   * @param {Array} args
+   *
    * @returns
    */
-  executeScript(script) {
-    return this.execute([script])
+  executeScript(script, args = []) {
+    args = [script, ...args]
+
+    return this.execute(args)
   }
 
   /**
