@@ -44,10 +44,13 @@ describe('AbstractPackageManager unit tests', () => {
     expect(manager.hasScript('scriptA')).to.be.true
     expect(manager.hasScript('unknown')).to.be.false
 
-    manager.executeScript('scriptB')
+    manager.executeScript('scriptB', ['a', 'b', 'c'])
     expect(
       commandExecuterStub.execute.withArgs(AbstractPackageManager.COMMAND, [
         'scriptB',
+        'a',
+        'b',
+        'c',
       ]).callCount,
     ).to.be.eq(1)
   })
