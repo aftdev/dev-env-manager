@@ -71,25 +71,18 @@ export default class Application {
   async #fetchProjectCommands() {
     const commandsFiles = []
 
-    const configuration = this.#container.resolve('configuration')
-
     // From our folder.
     const commandDir = `${this.#rootPath}/commands`
     const defaultCommands = fs
       .readdirSync(commandDir)
       .map((file) => `${commandDir}/${file}`)
 
-    // From project folder.
-    let projectCommands = []
-    const projectCommandDir = configuration.get('commands_dir')
-      ? path.resolve(this.#projectPath, configuration.get('commands_dir'))
-      : false
+    // From project folders.
+    const configuration = this.#container.resolve('configuration')
+    const projectCommandsDirs = configuration.get('commands_dirs')
 
-    if (projectCommandDir && fs.existsSync(projectCommandDir)) {
-      projectCommands = fs
-        .readdirSync(projectCommandDir)
-        .map((file) => path.resolve(projectCommandDir, file))
-    }
+    const projectCommands =
+      this.#getCommandsFromProjectDirs(projectCommandsDirs)
 
     const commands = [...projectCommands, ...defaultCommands].filter(
       (el) => ['.js', '.mjs', '.cjs', '.ts'].indexOf(path.extname(el)) !== -1,
@@ -103,6 +96,20 @@ export default class Application {
     }
 
     return commandsFiles
+  }
+
+  /**
+   * Create iterator of commands files.
+   */
+  *#getCommandsFromProjectDirs(dirs) {
+    for (let item in dirs) {
+      const projectCommandDir = dirs[item]
+      if (projectCommandDir && fs.existsSync(projectCommandDir)) {
+        yield* fs
+          .readdirSync(projectCommandDir)
+          .map((file) => path.resolve(projectCommandDir, file))
+      }
+    }
   }
 }
 

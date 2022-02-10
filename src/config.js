@@ -2,7 +2,7 @@ export default {
   // Name of the command line utility
   name: 'Command line utilities',
   // Where to find custom commands
-  commands_dir: null,
+  commands_dirs: [],
   // How and where to run your project executables
   executables: {},
   // List of all package managers and their configs
