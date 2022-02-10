@@ -1,5 +1,7 @@
 # Where to find the project custom commands.
-commands_dir: ./commands
+commands_dirs:
+  - ./commands/folderA
+  - ./commands/folderB
 package_managers:
   composer:
     priority: null

@@ -33,10 +33,16 @@ describe('Applications Feature Tests', () => {
       const outputFormatter = container.resolve('outputFormatter')
       const stub = sandbox.stub(outputFormatter, 'output')
 
-      application.run(['project1_command'])
+      application.run(['project1_command_a'])
       expect(
-        stub.calledWith('Hello from Project 1'),
-        'Should execute project command',
+        stub.calledWith('Hello from Project 1 - folder A'),
+        'Should execute project command from first folder',
+      ).to.be.true
+
+      application.run(['project1_command_b'])
+      expect(
+        stub.calledWith('Hello from Project 1 - folder B'),
+        'Should execute project command from other folder',
       ).to.be.true
     })
 
