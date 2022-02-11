@@ -5,6 +5,7 @@ import { RESOLVER, Lifetime, asFunction } from 'awilix'
 
 export default class Application {
   static CONFIG_FILE = 'dev-env-config.yml'
+  static CONFIG_FILE_OVERRIDE = 'dev-env-config.override.yml'
 
   #container
   #rootPath
@@ -100,8 +101,15 @@ export default class Application {
 
   /**
    * Create iterator of commands files.
+   *
+   * @param {Array | object | string} dirs
    */
   *#getCommandsFromProjectDirs(dirs) {
+    // Cast string to array if needed.
+    if (typeof dirs === 'string') {
+      dirs = [dirs]
+    }
+
     for (let item in dirs) {
       const projectCommandDir = dirs[item]
       if (projectCommandDir && fs.existsSync(projectCommandDir)) {

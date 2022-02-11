@@ -7,7 +7,7 @@
 $ git clone XXXX
 
 # Use npm to symlink to your local folder
-$ npm install -g /path/to/your/folder
+$ npm link
 ```
 
 ## Tests
