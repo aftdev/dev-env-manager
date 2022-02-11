@@ -264,7 +264,8 @@ Configuration values are set inside the `dev-env-config.yml` file.
 
 ```yaml
 # Where to find the project's custom commands (.js/.cjs/.mjs)?
-commands_dir: null
+# use array notation or object notation for easy overriding data.
+commands_dirs: {}
 # Package manager configuration
 package_managers:
   node:

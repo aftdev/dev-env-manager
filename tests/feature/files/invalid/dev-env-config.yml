@@ -1,3 +1,2 @@
 # Where to find the project custom commands.
-commands_dirs:
-  - ./commands
+commands_dirs: ./commands

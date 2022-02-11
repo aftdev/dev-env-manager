@@ -1,6 +1,6 @@
 {
   "name": "@aftdev/dev-env-manager",
-  "version": "0.2.1",
+  "version": "0.4.0",
   "description": "Command line utilities to manage your projects development environment",
   "type": "module",
   "engines": {
@@ -22,6 +22,7 @@
     "findup-sync": "^5.0.0",
     "inquirer": "^8.2.0",
     "nconf": "^0.11.3",
+    "nconf-yaml": "^1.0.2",
     "path": "^0.12.7",
     "url": "^0.11.0",
     "yaml": "^1.10.2"
@@ -53,7 +54,8 @@
     "test": "mocha",
     "test-all": "mocha --reporter=dot --recursive './tests/**/*.test.js'",
     "coverage": "c8 --reporter=html --reporter=text --reporter=html yarn test-all",
-    "ci:coverage": "c8 --check-coverage --reporter=none yarn test-all"
+    "ci:coverage": "c8 --check-coverage --reporter=none yarn test-all",
+    "commit": "cz"
   },
   "config": {
     "commitizen": {

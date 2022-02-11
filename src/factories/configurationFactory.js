@@ -1,6 +1,5 @@
-import fs from 'fs'
 import nconf from 'nconf'
-import yaml from 'yaml'
+import nconfYaml from 'nconf-yaml'
 import Application from '../Application.js'
 import defaultConfig from '../config.js'
 
@@ -18,14 +17,19 @@ export default function (projectPath) {
 
   configuration.use('memory')
 
-  // Fetch Project Configuration
-  const configurationFile = `${projectPath}/${Application.CONFIG_FILE}`
-  if (fs.existsSync(configurationFile)) {
-    const file = fs.readFileSync(configurationFile, 'utf8')
-    const projectConf = yaml.parse(file)
+  // Fetch Project Configuration.
+  const projectConfs = [
+    `${projectPath}/${Application.CONFIG_FILE_OVERRIDE}`,
+    `${projectPath}/${Application.CONFIG_FILE}`,
+  ]
 
-    configuration.add('project', { type: 'literal', store: projectConf })
-  }
+  projectConfs.forEach((file, index) => {
+    configuration.add(`project_${index}`, {
+      type: `file`,
+      file,
+      format: nconfYaml,
+    })
+  })
 
   // Add Default Configs
   configuration.defaults(defaultConfig)
