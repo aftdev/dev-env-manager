@@ -7,13 +7,17 @@ Command line tools and shortcuts to help make your development life easier.
 Dev Environment Manager executes your most utilized commands and takes the
 guesswork out of remembering long strings of commonly used development commands.
 
+![](./docs/demo.gif)
+
+---
+
 <!-- TOC -->
 
 - [Installation](#installation)
 - [Usage: default commands](#usage-default-commands)
   - [init](#init)
   - [setup](#setup)
-  - [start and down](#start-and-down)
+  - [start and stop](#start-and-stop)
   - [connect](#connect)
   - [Scripts auto-discovery](#scripts-auto-discovery)
 - [Custom commands](#custom-commands)
@@ -21,6 +25,8 @@ guesswork out of remembering long strings of commonly used development commands.
 - [Configuration](#configuration)
 
 <!-- /TOC -->
+
+---
 
 We can define where our commands are executed (locally or inside our Docker
 containers). For example, if we'd like all of our Composer (PHP) scripts to be
@@ -94,10 +100,14 @@ freshly cloned project.
 
 This command will execute:
 
-- `docker compose build` (if a `docker-compose.yml` file is found)
-- `docker compose up -d`
+- `docker compose build` && `docker compose up -d` (if a `docker-compose.yml`
+  exists inside the project)
 - `composer install` (if a `composer.json` exists inside the project)
-- `npm install` (if a `docker-compose.yml` file is found)
+- `npm install` (if a `package.json` exists inside the project)
+
+**Note**: Your project will most likely require a different setup mechanism, you
+can easily override this command if needed.
+[See custom commands section](#custom-commands).
 
 ### `start` and `stop`
 
@@ -210,7 +220,15 @@ Project commands will always take precedence over application default commands.
 
 ```yaml
 # @file ./dev-env-config.yml
-commands_dir: ./commands
+commands_dirs: ./commands
+# or array notation
+commands_dirs:
+  - ./commands
+  - ./another_folder
+# or object notation (this makes it easier to override)
+commands_dirs:
+  default: ./commands
+  other: ./another_folder
 ```
 
 ```js
