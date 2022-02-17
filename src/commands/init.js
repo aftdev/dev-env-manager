@@ -33,8 +33,7 @@ export default (cli, outputFormatter, commandExecuter) => {
       // Create config file.
       const config = {
         name: 'Application Name',
-        commands_dir: './commands',
-        autodiscover: {},
+        commands_dirs: { default: './commands' },
         executables: {},
       }
 

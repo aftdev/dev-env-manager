@@ -16,7 +16,7 @@ describe('Init command tests', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox()
-    sandbox.stub(container.resolve('outputFormatter'), 'output')
+    sandbox.stub(container.resolve('outputFormatter'), 'output').returnsThis()
   })
 
   afterEach(() => {

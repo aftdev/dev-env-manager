@@ -2,7 +2,6 @@ import child_process from 'child_process'
 import { RESOLVER, Lifetime } from 'awilix'
 import chalk from 'chalk'
 import { sh, unquoted } from 'puka'
-import Output from './OutputFormatter.js'
 
 export default class CommandExecuter {
   #executables
@@ -108,7 +107,7 @@ export default class CommandExecuter {
     const command = this.getCommandFor(commandType, args)
 
     this.#outputFormatter.output(
-      chalk`{magentaBright ${Output.SEPARATOR_DASH}\n{magentaBright.bold Executing:} {white ${command}}\n${Output.SEPARATOR_DASH}}\n`,
+      chalk`{magentaBright.bold › Executing:} {white.dim ${command}}\n`,
     )
 
     try {
