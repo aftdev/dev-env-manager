@@ -22,7 +22,7 @@ describe('Environment command tests', () => {
       .callsFake()
     stubs.outputFormatter = sandbox
       .stub(container.resolve('outputFormatter'), 'output')
-      .callsFake()
+      .returnsThis()
   })
 
   afterEach(() => {

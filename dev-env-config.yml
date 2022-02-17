@@ -1,0 +1,6 @@
+name: Dev Env Manager
+commands_dirs:
+  default: ./commands
+package_managers:
+  node:
+    manager: 'yarn'

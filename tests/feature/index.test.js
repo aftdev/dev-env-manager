@@ -23,9 +23,8 @@ describe('Index Feature Tests', () => {
   it('should execute main file', async () => {
     await runApp()
 
-    expect(
-      stdoutStub.withArgs(sinon.match('Command line utilities')).calledOnce,
-    ).to.be.true
+    expect(stdoutStub.withArgs(sinon.match('Dev Env Manager')).calledOnce).to.be
+      .true
   })
 
   it('should find dev config file', async () => {

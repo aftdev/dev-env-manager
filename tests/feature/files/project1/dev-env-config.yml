@@ -1,4 +1,5 @@
 # Where to find the project custom commands.
+name: Command line utilities
 commands_dirs:
   folderA: ./commands/folderA
 package_managers:
