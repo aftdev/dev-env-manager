@@ -1,0 +1,41 @@
+# ==============================================================================
+# Release NPM Package
+# ==============================================================================
+# Release npm package every time something is merged to the main branch.
+#
+# If No release is required (because no feat / fix / breaking change)
+# semantic-release will just skip the process.
+#
+# Note:
+# Direct pushes on the main branch are disabled via github
+# branch protection rules.
+# All new changes pushed to the main branch should come from a Pull Request
+# where additional checks are executed. See pull-request.yml
+# ==============================================================================
+name: Release NPM Package
+
+on:
+  push:
+    branches: [main]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    name: Publish new release
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+          cache: 'yarn'
+      - name: Install yarn dependencies
+        run: yarn install
+      # Use standard-version to change changelog and bump version.
+      - name: Bump version, update changelog and release to npm
+        run: yarn semantic-release

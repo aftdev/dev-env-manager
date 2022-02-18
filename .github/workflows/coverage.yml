@@ -1,3 +1,11 @@
+# ==============================================================================
+# Coverage Information
+# ==============================================================================
+# Execute coverage command and upload to codecov.
+# This allows us to display a badge in the readme.md
+#
+# This happens every time changes are pushed to the main branch
+# ==============================================================================
 name: Coverage
 
 on:
