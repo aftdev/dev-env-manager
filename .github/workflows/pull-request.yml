@@ -1,5 +1,5 @@
 # ==============================================================================
-# Pull Request checks
+# Pull Request Checks
 # ==============================================================================
 # Makes sure that on different version of node:
 # - all tests pass
