@@ -1,3 +1,10 @@
+### [0.4.2](https://github.com/aftdev/dev-env-manager/compare/v0.4.1...v0.4.2) (2022-02-20)
+
+### Bug Fixes
+
+- only include subset of files in npm package
+  ([c17c4d5](https://github.com/aftdev/dev-env-manager/commit/c17c4d5a2db922ecc2dd8a698f25b46f9072b122))
+
 ### [0.4.1](https://github.com/aftdev/dev-env-manager/compare/v0.4.0...v0.4.1) (2022-02-18)
 
 ### Bug Fixes
