@@ -1,3 +1,12 @@
+### [0.4.3](https://github.com/aftdev/dev-env-manager/compare/v0.4.2...v0.4.3) (2022-02-20)
+
+### Bug Fixes
+
+- **ci:** skip-ci on semantic-release
+  ([b440211](https://github.com/aftdev/dev-env-manager/commit/b44021129c0f51ba0aa2be7c751ee7c366f12f94))
+- move puka from devDependencies to dependencies
+  ([d1e7f1a](https://github.com/aftdev/dev-env-manager/commit/d1e7f1adbbb62313b3729f633a23a0aec8857235))
+
 ### [0.4.2](https://github.com/aftdev/dev-env-manager/compare/v0.4.1...v0.4.2) (2022-02-20)
 
 ### Bug Fixes
