@@ -15,6 +15,13 @@
     "url": "https://github.com/aftdev/dev-env-manager"
   },
   "license": "MIT",
+  "files": [
+    "bin",
+    "docs",
+    "src",
+    "CHANGELOG.md",
+    "README.md"
+  ],
   "dependencies": {
     "awilix": "^6.0.0",
     "chalk": "^4.1.2",
