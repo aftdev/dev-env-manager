@@ -5,6 +5,6 @@ import Composer from '../services/PackageManager/Composer.js'
  *
  * @returns {Composer}
  */
-export default function (commandExecuter) {
-  return new Composer(commandExecuter)
+export default function (environmentManager) {
+  return new Composer(environmentManager)
 }

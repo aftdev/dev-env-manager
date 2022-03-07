@@ -20,5 +20,10 @@ export default (cli, outputFormatter) => {
         .line('Test Message', 'white', 'Title', OutputFormatter.icons.dash)
         .newLine()
         .line('Test Message')
+
+      outputFormatter.separator()
+      outputFormatter.renderError(
+        new Error('Test Error  \n second line \n test'),
+      )
     })
 }

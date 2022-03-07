@@ -1,7 +1,10 @@
 import { expect } from 'chai'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
-import { default as createTestContainer, mockCliOutput } from './testHelpers.js'
+import {
+  default as createTestContainer,
+  stubCliOutput,
+} from '#tests/feature/testHelpers'
 
 describe('Applications Feature Tests', () => {
   let sandbox
@@ -47,7 +50,7 @@ describe('Applications Feature Tests', () => {
     })
 
     it('should display help message with information about package commands', () => {
-      const outputStub = mockCliOutput(container)
+      const outputStub = stubCliOutput(container)
 
       application.run([])
 
@@ -79,7 +82,7 @@ describe('Applications Feature Tests', () => {
     })
 
     it('should display help message properly without package manager commands', () => {
-      const outputStub = mockCliOutput(container)
+      const outputStub = stubCliOutput(container)
 
       application.run([])
 
@@ -96,9 +99,13 @@ describe('Applications Feature Tests', () => {
     })
 
     it('should throw if not bootstrapped', async () => {
-      expect(() => {
-        application.run([])
-      }).to.throw()
+      const outputFormatter = container.resolve('outputFormatter')
+      const stub = sandbox.stub(outputFormatter, 'output')
+
+      const status = await application.run([])
+      expect(status).to.equal(1)
+      expect(stub.calledWith(sinon.match('Application not bootstrapped'))).to.be
+        .true
     })
 
     it('should capture errors in commands', async () => {

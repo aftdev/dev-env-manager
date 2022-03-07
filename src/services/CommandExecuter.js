@@ -4,11 +4,9 @@ import chalk from 'chalk'
 import { sh, unquoted } from 'puka'
 
 export default class CommandExecuter {
-  #executables
   #outputFormatter
 
-  constructor(executables, outputFormatter) {
-    this.#executables = executables
+  constructor(outputFormatter) {
     this.#outputFormatter = outputFormatter
   }
 
@@ -21,10 +19,10 @@ export default class CommandExecuter {
    *
    * @see https://www.npmjs.com/package/puka#arrays-and-iterables
    */
-  quoteCommandArgs(args) {
+  quoteCommandArgs(args = []) {
     const quotableArgs = []
     args.forEach((arg) => {
-      // If object take go through each key and each value
+      // If object go through each key and each value
       if (arg instanceof Array || typeof arg === 'string') {
         quotableArgs.push(sh`${arg}`)
       } else if (arg instanceof Object) {
@@ -42,112 +40,75 @@ export default class CommandExecuter {
       }
     })
 
-    //console.log(quotableArgs)
     return quotableArgs.join(' ')
   }
 
   /**
-   * Return the command to be run (with target and options).
+   * Display the given command string.
    *
-   * @param {string} executable
-   * @param {Array} args
-   * @param {Array} commandAlreadyParsed - Internally used for circular dependency fail safe.
-   * @returns
+   * @param {string} command
    */
-  getCommandFor(executable, args = [], commandAlreadyParsed = []) {
-    const commandConfig = this.#executables[executable] || executable
-
-    const command =
-      typeof commandConfig === 'string'
-        ? commandConfig
-        : commandConfig.command || executable
-
-    const targetConfiguration = commandConfig.use || null
-
-    // Check Target.
-    let targetCommand = ''
-    if (targetConfiguration) {
-      const target =
-        typeof targetConfiguration === 'string'
-          ? targetConfiguration
-          : targetConfiguration.target || null
-
-      if (target) {
-        // Safe Guard against cycle dependencies.
-        if (commandAlreadyParsed.includes(target)) {
-          throw new RangeError('Circular dependency error !')
-        }
-        commandAlreadyParsed.push(command)
-
-        const targetArguments = targetConfiguration.with || []
-
-        targetCommand = this.getCommandFor(
-          target,
-          targetArguments instanceof Array
-            ? targetArguments
-            : [targetArguments],
-          commandAlreadyParsed,
-        )
-      }
-    }
-
-    return `${targetCommand} ${command} ${this.quoteCommandArgs(args)}`.trim()
-  }
-
-  /**
-   * Display and execute a command.
-   *
-   * @param {string} commandType
-   * @param {Array} args
-   * @param {boolean} catchError
-   * @param {string} stdio
-   * @returns
-   */
-  execute(commandType, args = [], catchError = true, stdio = 'inherit') {
-    const command = this.getCommandFor(commandType, args)
-
+  displayCommand(command) {
     this.#outputFormatter.output(
       chalk`{magentaBright.bold › Executing:} {white.dim ${command}}\n`,
     )
-
-    try {
-      return child_process.execSync(command, { stdio })
-    } catch (err) {
-      if (catchError) {
-        if (err.status != 130) {
-          this.exitScriptWithError(err.message)
-        }
-      } else {
-        throw err
-      }
-    }
-  }
-
-  /**.
-   * Quietly execute command and return result
-   *
-   * @param {String} commandType
-   * @param {Array} args
-   * @returns
-   */
-  backgroundExecute(commandType, args = []) {
-    const command = this.getCommandFor(commandType, args)
-
-    return child_process.execSync(command)
   }
 
   /**
-   * Display an error message and end script execution.
+   * Open shell tty process.
    *
-   * @param {string} errorMessage
-   * @param {Integer} code
+   * @param {string} command
+   * @param {Array} args
+   * @returns {object}
    */
-  exitScriptWithError(errorMessage = null, code = 1) {
-    if (errorMessage) {
-      this.#outputFormatter.error(errorMessage)
+  tty(command, args = []) {
+    args = this.quoteCommandArgs(args)
+    this.displayCommand(`${command} ${args}`)
+
+    return child_process.spawnSync(command, args.split(' '), {
+      stdio: 'inherit',
+      shell: true,
+    })
+  }
+
+  /**
+   * Execute command and display it on screen.
+   *
+   * @param {string} command
+   * @param {Array} args
+   */
+  execute(command, args = []) {
+    return this.#executeSubProcess(command, args, {
+      // in, out, error
+      stdio: 'inherit',
+    })
+  }
+
+  /**
+   * Quietly execute command and return result.
+   *
+   * @param {string} command
+   * @param {Array} args
+   */
+  backgroundExecute(command, args = []) {
+    return this.#executeSubProcess(command, args, {}, false)
+  }
+
+  /**
+   * Execute command (synchronously).
+   *
+   * @param {string} command
+   * @param {Array} args
+   * @param {object} options - That will be forwarded to the child_process.execSync function.
+   * @param {boolean} showCommand - Display the command that is executed.
+   */
+  #executeSubProcess(command, args = [], options = {}, showCommand = true) {
+    const fullCommand = `${command} ${this.quoteCommandArgs(args)}`.trim()
+    if (showCommand) {
+      this.displayCommand(fullCommand)
     }
 
-    process.exit(code)
+    return child_process.execSync(fullCommand, options)
   }
 }
 

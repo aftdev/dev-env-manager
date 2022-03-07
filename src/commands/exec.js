@@ -3,11 +3,13 @@ import inquirer from 'inquirer'
 /**
  * Fallback command using commander event system.
  */
-export default (cli, commandExecuter, dockerCompose, packageManagerScripts) => {
+export default (cli, environmentManager, packageManagerScripts) => {
   // Fallback for any commands.
-  cli.on('command:*', async (calledCommand) => {
-    const command = calledCommand[0]
-    const args = calledCommand.slice(1)
+  cli.action(async () => {
+    const allArgs = cli.args
+
+    const command = allArgs[0]
+    const args = allArgs.slice(1)
 
     // Try to execute script from package managers.
     if (packageManagerScripts.hasScript(command)) {
@@ -31,15 +33,8 @@ export default (cli, commandExecuter, dockerCompose, packageManagerScripts) => {
       return manager.executeScript(command, args)
     }
 
-    // Else - Lets check if docker has a container that match
-    // the command.
-    // If it does execute the rest of command on that container.
-    if (dockerCompose.isEnabled() && dockerCompose.hasContainer(command)) {
-      dockerCompose.containerExecute(command, args)
-      return
-    }
-
-    // Fallback
-    return commandExecuter.execute(command, args)
+    // Use Env manager to execute the command.
+    // It will fallback to the local env if the command is not configured.
+    environmentManager.executeCommand(command, args)
   })
 }

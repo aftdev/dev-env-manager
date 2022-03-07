@@ -8,12 +8,34 @@ package_managers:
   unknown:
     auto_discover: false
     config_file: 'unknown'
-# How and where to run your project executables
-executables:
-  docker-compose: docker compose
-  composer:
-    command: composer
-    # Where should the command be executed?
-    use:
-      target: docker-compose
-      with: ['exec', 'php']
+# Environments
+environments:
+  docker-compose:
+    # which groups this env belong to
+    groups:
+      setup: true
+      connect: true
+      start: true
+    # additional options - different for each environment.
+    # What command will be executed on this environment.
+    commands:
+      php:
+        container: 'phpContainer'
+      composer:
+        command: ['php', 'composer.phar']
+        container: 'phpContainer'
+        type: run
+      mysql:
+        container: 'mysqlContainer'
+  dockerComposeWithOverride:
+    type: docker-compose
+    groups:
+      setup: true
+      connect: true
+      start: true
+    # additional options - different for each environment.
+    options:
+      config_files: ['a', 'b', 'c']
+  vagrant:
+    commands:
+      vagrant-test: { 'machine': 'db' }

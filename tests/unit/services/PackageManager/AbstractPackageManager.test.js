@@ -2,7 +2,7 @@ import fs from 'fs'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
-import CommandExecuter from '../../../../src/services/CommandExecuter.js'
+import EnvironmentManager from '../../../../src/services/EnvironmentManager.js'
 import AbstractPackageManager from '../../../../src/services/PackageManager/AbstractPackageManager.js'
 
 describe('AbstractPackageManager unit tests', () => {
@@ -16,13 +16,13 @@ describe('AbstractPackageManager unit tests', () => {
   })
 
   it('should properly execute install process', () => {
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
-    const manager = new AbstractPackageManager(commandExecuterStub)
+    const envManagerStub = sandbox.createStubInstance(EnvironmentManager)
+    const manager = new AbstractPackageManager(envManagerStub)
 
     manager.install()
 
     expect(
-      commandExecuterStub.execute.withArgs(AbstractPackageManager.COMMAND, [
+      envManagerStub.executeCommand.withArgs(AbstractPackageManager.COMMAND, [
         'install',
       ]).callCount,
     ).to.be.eq(1)
@@ -37,8 +37,8 @@ describe('AbstractPackageManager unit tests', () => {
       }
     }`)
 
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
-    const manager = new AbstractPackageManager(commandExecuterStub)
+    const envManagerStub = sandbox.createStubInstance(EnvironmentManager)
+    const manager = new AbstractPackageManager(envManagerStub)
 
     expect(manager.getScripts()).to.have.lengthOf(2)
     expect(manager.hasScript('scriptA')).to.be.true
@@ -46,7 +46,7 @@ describe('AbstractPackageManager unit tests', () => {
 
     manager.executeScript('scriptB', ['a', 'b', 'c'])
     expect(
-      commandExecuterStub.execute.withArgs(AbstractPackageManager.COMMAND, [
+      envManagerStub.executeCommand.withArgs(AbstractPackageManager.COMMAND, [
         'scriptB',
         'a',
         'b',

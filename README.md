@@ -14,7 +14,7 @@ guesswork out of remembering long strings of commonly used development commands.
 <!-- TOC -->
 
 - [Installation](#installation)
-- [Usage: default commands](#usage-default-commands)
+- [Default commands](#default-commands)
   - [init](#init)
   - [setup](#setup)
   - [start and stop](#start-and-stop)
@@ -34,11 +34,12 @@ executed inside a specific Docker container, we add this configuration inside
 `dev-env-config.yml`:
 
 ```yaml
-executables:
-  composer:
-    use:
-      target: docker-compose
-      with: ['exec', '<container_name>']
+environments:
+  docker-compose:
+    commands:
+      composer:
+        container: '<container_name>'
+        type: 'exec'
 ```
 
 Now, we can simply run:
@@ -76,7 +77,7 @@ package. In this case, there would be a naming collision in the case of `dev`.
 Future versions of Dev Environment Manager may change `dev` to something else
 and _without notice_.
 
-## Usage: default commands
+## Default commands
 
 Run these commands from the root of your project.
 
@@ -117,18 +118,20 @@ dev [start|stop]
 dev [up|down]
 ```
 
-Starts or stops Docker containers. This is basically a shortcut for
+Starts or stops all the environments of the group "start".
+
+On default installations, this is basically a shortcut for
 `docker-compose [up|down]`
 
 ### `connect`
 
-Uses your project's `docker-compose.yml` file to return list of currently
-running containers. Select a container in order to open an SSH connection to it.
+Uses the "targets" defined by all the environments of the "connect" group.
+Docker containers are an example of target. Select a target in order to open an
+SSH connection to it.
 
 ```bash
-dev connect
-
-Select a container to connect to:
+$ dev connect
+> Select a target to connect to:
 - app1
 - app2
 - app3
@@ -136,7 +139,7 @@ Select a container to connect to:
 - redis
 
 # Or, SSH directly to a specific container
-dev connect app1
+$ dev connect app1
 
 # SSH as root
 $ dev connect app1 --root
@@ -253,6 +256,7 @@ need to be added to that project's `package.json` file.
 
 ### Services that can be used by your custom commands
 
+- `environmentManager`: manager to fetch all your envs from
 - `dockerCompose`: execute a command on a container
 - `composer`: execute composer scripts
 - `node`: execute npm, yarn or pnpm commands (depending on the configuration)
@@ -284,6 +288,21 @@ Configuration values are set inside the `dev-env-config.yml` file.
 # Where to find the project's custom commands (.js/.cjs/.mjs)?
 # use array notation or object notation for easy overriding data.
 commands_dirs: {}
+# Environments
+environments:
+  # Default environment where all "executable bins" are executed by default
+  local: {}
+  # Docker compose environment (only enabled if config file is found)
+  docker-compose:
+      # Which groups this env belong to
+      # This is used by the environment default commands in order to figure out
+      # what env to automatically setup, start, connect to.
+      groups:
+        setup: true
+        connect: true
+        start: true
+      options:
+        config_files: 'docker-compose.yml'
 # Package manager configuration
 package_managers:
   node:
@@ -296,14 +315,4 @@ package_managers:
   composer:
     auto_discover: true
     priority: 1
-# How and where to run your project executables
-executables:
-  # Simple format
-  docker-compose: docker compose
-  # With target
-  composer:
-    # Where should the command be executed?
-    use:
-      target: docker-compose
-      with: ['exec', 'php']
 ```

@@ -2,4 +2,4 @@
 
 import runApp from '../src/index.js'
 
-runApp()
+process.exitCode = await runApp()

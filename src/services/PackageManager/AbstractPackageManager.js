@@ -1,14 +1,39 @@
 import fs from 'fs'
-import AbstractFilebasedService from '../AbstractFilebasedService.js'
+import FilebasedServiceMixin from '../../mixins/FilebasedServiceMixin.js'
 
 /**
- * AbstractFilebasedService.
+ * AbstractPackageManager class.
+ *
+ * @abstract
  */
-export default class AbstractPackageManager extends AbstractFilebasedService {
+export default class AbstractPackageManager {
   static FILE = '.unknown'
   static COMMAND = 'command'
 
   #scripts = null
+  #envManager
+
+  /**
+   * Create class and configure it properly.
+   *
+   * @param {*} environmentManager
+   * @param {*} configFiles
+   */
+  constructor(environmentManager, configFiles) {
+    this.#envManager = environmentManager
+    this.setConfigFiles(configFiles)
+  }
+
+  /**
+   * Execute a command for this service.
+   *
+   * @param {Array} args
+   */
+  execute(args) {
+    args = [...this._getConfigArguments(), ...args]
+
+    return this.#envManager.executeCommand(this.constructor.COMMAND, args)
+  }
 
   /**
    * Install / download all packages.
@@ -62,3 +87,5 @@ export default class AbstractPackageManager extends AbstractFilebasedService {
     return this.#scripts
   }
 }
+
+Object.assign(AbstractPackageManager.prototype, FilebasedServiceMixin)

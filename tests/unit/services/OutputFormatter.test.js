@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
+import stripAnsi from 'strip-ansi'
 import OutputFormatter from '../../../src/services/OutputFormatter.js'
 
 describe('Outputformatter', () => {
@@ -71,5 +72,37 @@ describe('Outputformatter', () => {
     outputFormatter.newLine().output('hello')
     expect(mockBuffer.write.firstCall.firstArg).to.equal('\n')
     expect(mockBuffer.write.secondCall.firstArg).to.equal('hello\n')
+  })
+
+  it('should render error', () => {
+    const errorString = 'Error String'
+    outputFormatter.renderError(errorString)
+
+    expect(mockBuffer.write.lastCall)
+      .to.match(/Error:/)
+      .and.to.match(/Error String/)
+
+    let messages = []
+    mockBuffer.write = (message) => {
+      messages.push(message)
+    }
+
+    const error = new Error('First line')
+    outputFormatter.renderError(error)
+
+    let formattedMessage = stripAnsi(messages.join(''))
+    expect(formattedMessage)
+      .to.match(/Error: First line\n/)
+      .to.match(/Stack:/)
+
+    messages = []
+    const multilineError = new Error('First line \n second line \n third line')
+    outputFormatter.renderError(multilineError)
+
+    formattedMessage = stripAnsi(messages.join(''))
+    expect(formattedMessage)
+      .to.match(/Error: First line\n/)
+      .to.match(/\nsecond line/)
+      .to.match(/Stack:/)
   })
 })

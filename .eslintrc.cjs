@@ -11,9 +11,11 @@ const configs = [
 ]
 
 const rules = {
+  'no-process-exit': 'error',
   'arrow-body-style': 'error',
   curly: ['error', 'all'],
   'no-console': 'error',
+  'no-only-tests/no-only-tests': 'error',
   'prefer-arrow-callback': 'error',
   'jsdoc/check-alignment': 'error',
   'jsdoc/check-param-names': 'error',
@@ -39,7 +41,11 @@ const rules = {
   ],
   'promise/prefer-await-to-then': 'warn',
   'import/no-named-as-default-member': 'off',
+  // Until eslint can figure out paths from package.json "imports" section
+  'import/no-unresolved': [2, { ignore: ['^#.+$'] }],
 }
+
+const plugins = ['jsdoc', 'no-only-tests']
 
 module.exports = {
   root: true,
@@ -52,7 +58,7 @@ module.exports = {
   },
   extends: configs,
   globals: { globalThis: 'readonly' },
-  plugins: ['jsdoc'],
+  plugins,
   reportUnusedDisableDirectives: true,
   rules,
 }

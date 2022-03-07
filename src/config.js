@@ -1,10 +1,25 @@
+/**
+ * Default configuration.
+ */
 export default {
   // Name of the command line utility
   name: 'Command line utilities',
   // Where to find custom commands
   commands_dirs: {},
-  // How and where to run your project executables
-  executables: {},
+  // Environment configurations.
+  environments: {
+    'docker-compose': {
+      groups: {
+        setup: true,
+        connect: true,
+        start: true,
+      },
+      options: {
+        config_files: 'docker-compose.yml',
+      },
+    },
+    local: {},
+  },
   // List of all package managers and their configs
   package_managers: {
     // Node
@@ -21,9 +36,5 @@ export default {
       priority: 1,
     },
     // Ruby - TODO
-  },
-  // Docker compose
-  'docker-compose': {
-    config_file: 'docker-compose.yml',
   },
 }

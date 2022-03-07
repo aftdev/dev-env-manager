@@ -23,13 +23,9 @@ describe('Init command tests', () => {
     sandbox.restore()
   })
 
-  it('should exit if file already exist', async () => {
-    const stubExit = sandbox
-      .stub(container.resolve('commandExecuter'), 'exitScriptWithError')
-      .returns(false)
-    application.run(['init'])
-
-    expect(stubExit.calledOnce).to.be.true
+  it('should throw error if file already exist', async () => {
+    const status = await application.run(['init'])
+    expect(status).to.equal(1)
   })
 
   it('should ask for confirmation before creating file', async () => {
