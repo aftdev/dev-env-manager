@@ -1,12 +1,8 @@
-import DockerCompose from '../services/DockerCompose.js'
-
 /**
- * Factory to create Composer service.
+ * Factory to create DockerCompose environment.
  *
- * @returns {Composer}
+ * @returns {DockerCompose}
  */
-export default function (configuration, commandExecuter) {
-  const configFile = configuration.get('docker-compose:config_file')
-
-  return new DockerCompose(commandExecuter, configFile)
+export default function (environmentManager) {
+  return environmentManager.get('docker-compose')
 }

@@ -47,21 +47,36 @@ export default class Application {
     }
   }
 
-  run(args) {
-    if (!this.#bootstrapped) {
-      throw new Error('Application not bootstrapped')
+  /**
+   * Execute application command.
+   *
+   * @param {Array} args
+   *
+   * @returns {Promise}
+   */
+  async run(args = []) {
+    try {
+      if (!this.#bootstrapped) {
+        throw 'Application not bootstrapped'
+      }
+
+      const cli = this.#container.resolve('cli')
+
+      // No command were entered, display help.
+      if (args.length == 0) {
+        cli.outputHelp()
+        return 0
+      }
+
+      // Execute command.
+      // Always use ASYNC as some sub commands could be async.
+      // This allow us to wait for any commands to be over and catch any errors.
+      await cli.parseAsync(args, { from: 'user' })
+      return 0
+    } catch (e) {
+      this.#container.resolve('outputFormatter').renderError(e)
+      return 1
     }
-
-    const cli = this.#container.resolve('cli')
-
-    // No command were entered, display help.
-    if (args.length == 0) {
-      cli.outputHelp()
-      return
-    }
-
-    // Execute command.
-    cli.parse(args, { from: 'user' })
   }
 
   /**

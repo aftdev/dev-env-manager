@@ -2,10 +2,10 @@ import fs from 'fs'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
-import CommandExecuter from '../../../src/services/CommandExecuter.js'
-import DockerCompose from '../../../src/services/DockerCompose.js'
+import CommandExecuter from '../../../../src/services/CommandExecuter.js'
+import DockerCompose from '../../../../src/services/Environment/DockerCompose.js'
 
-describe('DockerCompose unit tests', () => {
+describe('DockerCompose Env unit tests', () => {
   let sandbox
   beforeEach(() => {
     sandbox = sinon.createSandbox()
@@ -64,7 +64,8 @@ app2
       ]).callCount,
     ).to.be.eq(1)
 
-    dockerCompose.containerExecute('app1', ['do', 'something'], true)
+    dockerCompose.containerExecute('app1', ['do', 'something'], { root: true })
+
     expect(
       commandExecuterStub.execute.withArgs(DockerCompose.COMMAND, [
         'exec',
@@ -74,5 +75,49 @@ app2
         'something',
       ]).callCount,
     ).to.be.eq(1)
+  })
+
+  it('should connect to a container', () => {
+    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+    const dockerCompose = new DockerCompose(commandExecuterStub)
+
+    expect(() => {
+      dockerCompose.connect({ 'no target': 'true' })
+    }).to.throw('Please specify target')
+
+    dockerCompose.connect({ target: 'targetName' })
+    const ttyStub = commandExecuterStub.tty.withArgs(DockerCompose.COMMAND, [
+      'exec',
+      'targetName',
+      'bash',
+    ])
+    expect(ttyStub.callCount).to.equal(1)
+
+    // With root.
+    dockerCompose.connect({ target: 'targetName', root: true })
+    const ttyStubWithRoot = commandExecuterStub.tty.withArgs(
+      DockerCompose.COMMAND,
+      ['exec', { '--user': 'root' }, 'targetName', 'bash'],
+    )
+    expect(ttyStubWithRoot.callCount).to.equal(1)
+  })
+
+  const ops = [
+    ['status', ['ps']],
+    ['start', ['up', '-d']],
+    ['stop', ['down']],
+  ]
+  ops.forEach(([operation, args]) => {
+    it(`should execute command ${operation}`, () => {
+      const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+      const dockerCompose = new DockerCompose(commandExecuterStub)
+
+      dockerCompose[operation]()
+      const stubCall = commandExecuterStub.execute.withArgs(
+        DockerCompose.COMMAND,
+        args,
+      )
+      expect(stubCall.calledOnce).to.be.true
+    })
   })
 })

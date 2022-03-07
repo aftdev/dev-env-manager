@@ -15,12 +15,12 @@ export default async function createTestContainer(projectFolder) {
 }
 
 /**
- * Mock the output from the cli service in the given container.
+ * Stub the output from the cli service in the given container.
  *
  * @param {AwilixContainer} container
  * @returns {SinonFake}
  */
-export function mockCliOutput(container) {
+export function stubCliOutput(container) {
   const cli = container.resolve('cli')
 
   const fake = sinon.fake()
@@ -32,4 +32,10 @@ export function mockCliOutput(container) {
   })
 
   return fake
+}
+
+export function stubOutputFormatter(container, sandbox) {
+  const outputFormatter = container.resolve('outputFormatter')
+
+  return sandbox.stub(outputFormatter, 'output')
 }

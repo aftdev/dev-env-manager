@@ -15,12 +15,12 @@ export default async function () {
   // Initialize the container.
   const container = await createContainer(path)
 
-  // Fetch and bootstrap the application
+  // Fetch and bootstrap the application.
   const application = container.resolve('application')
   await application.bootstrap()
 
   // Run Application.
   const [, , ...args] = process.argv
 
-  await application.run(args)
+  return await application.run(args)
 }

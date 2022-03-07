@@ -1,11 +1,14 @@
+import child_process from 'child_process'
 import inquirer from 'inquirer'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
-import DockerCompose from '../../../src/services/DockerCompose.js'
-import { default as createTestContainer } from '../testHelpers.js'
+import {
+  default as createTestContainer,
+  stubOutputFormatter,
+} from '../testHelpers.js'
 
 describe('Exec command tests', () => {
-  let sandbox, application, container
+  let sandbox, application, container, childProcessMock
 
   before(async () => {
     container = await createTestContainer('project1')
@@ -15,6 +18,8 @@ describe('Exec command tests', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox()
+    stubOutputFormatter(container, sandbox)
+    childProcessMock = sandbox.mock(child_process)
   })
 
   afterEach(() => {
@@ -23,65 +28,39 @@ describe('Exec command tests', () => {
   })
 
   it('should fallback to system', () => {
-    const commandExecuter = container.resolve('commandExecuter')
-    const mock = sandbox.mock(commandExecuter)
-
     const dockerCompose = container.resolve('dockerCompose')
     sandbox.stub(dockerCompose, 'hasContainer').returns(false)
 
-    mock.expects('execute').callsFake().never()
-    mock
-      .expects('execute')
+    childProcessMock.expects('execSync').never()
+    childProcessMock
+      .expects('execSync')
       .withArgs('unknown script or container')
       .once()
-      .callsFake()
 
     application.run(['unknown script or container'])
   })
 
   it('should execute correct package manager script', () => {
-    const commandExecuter = container.resolve('commandExecuter')
-    const mock = sandbox.mock(commandExecuter)
-
-    mock.expects('execute').callsFake().never()
-    mock
-      .expects('execute')
-      .withArgs('npm', ['run', 'script a'])
+    childProcessMock.expects('execSync').never()
+    childProcessMock.expects('execSync').withArgs("npm run 'script a'").once()
+    childProcessMock
+      .expects('execSync')
+      .withArgs('docker-compose run phpContainer php composer.phar composerA')
       .once()
-      .callsFake()
-    mock
-      .expects('execute')
-      .withArgs('composer', ['composerA'])
-      .once()
-      .callsFake()
 
     application.run(['script a'])
     application.run(['composerA'])
   })
 
   it('should show a prompt when script is in several managers', async () => {
-    const commandExecuter = container.resolve('commandExecuter')
-    const mock = sandbox.mock(commandExecuter)
-
-    mock.expects('execute').withArgs('composer', ['scriptB']).once().callsFake()
+    childProcessMock
+      .expects('execSync')
+      .withArgs('docker-compose run phpContainer php composer.phar scriptB')
+      .once()
+      .callsFake()
 
     sandbox.stub(inquirer, 'prompt').resolves({ manager: 'Composer' })
 
     await application.run(['scriptB'])
-  })
-
-  it('should execute correct docker-compose command', () => {
-    const commandExecuter = container.resolve('commandExecuter')
-    const dockerCompose = container.resolve('dockerCompose')
-
-    const mock = sandbox.mock(commandExecuter)
-
-    // Tell docker Compose to always return true
-    sandbox.stub(dockerCompose, 'hasContainer').returns(true)
-
-    mock.expects('execute').callsFake().never()
-    mock.expects('execute').withArgs(DockerCompose.COMMAND).once().callsFake()
-
-    application.run(['app1', 'echo', 'a'])
   })
 })

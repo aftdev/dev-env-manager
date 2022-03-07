@@ -1,0 +1,12 @@
+{
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "target": "esnext",
+    "baseUrl": ".",
+    "paths": {
+      "#src/*": ["./src/*.js"],
+      "#services/*": ["./src/services/*.js"],
+      "#tests/*": ["./tests/*.js"]
+    }
+  }
+}

@@ -2,6 +2,8 @@ import fs from 'fs'
 
 /**
  * AbstractFilebasedService.
+ *
+ * @abstract
  */
 export default class AbstractFilebasedService {
   static CONFIG_FILE = '.unknown'

@@ -1,17 +1,31 @@
 import inquirer from 'inquirer'
 
 /**
- * Add commands to start / stop / environment
- * Only compatible with docker for now.
+ * Add commands to setup / start / stop / environments.
  */
-export default (cli, commandExecuter, outputFormatter, dockerCompose) => {
+export default (cli, outputFormatter, environmentManager, node, composer) => {
+  /**
+   * Execute a function on enabled environments that match criteria.
+   *
+   * @param {string} operation
+   * @param {object} criteria
+   */
+  const executeOnEnabledEnvs = (operation, criteria = {}) => {
+    const envs = environmentManager.groupedBy(criteria)
+    envs.forEach((env) => {
+      if (env.isEnabled()) {
+        env[operation]()
+      }
+    })
+  }
+
   if (!cli._findCommand('start')) {
     cli
       .command('start')
       .alias('up')
       .description('Start project environment')
       .action(() => {
-        dockerCompose.execute(['up', '-d'])
+        executeOnEnabledEnvs('start', { start: true })
       })
   }
 
@@ -21,46 +35,86 @@ export default (cli, commandExecuter, outputFormatter, dockerCompose) => {
       .alias('down')
       .description('Stop project environment')
       .action(() => {
-        dockerCompose.execute(['down'])
+        executeOnEnabledEnvs('stop', { start: true })
       })
   }
 
   if (!cli._findCommand('ssh')) {
     cli
-      .command('ssh [container]')
+      .command('ssh [target]')
       .alias('connect')
       .option('-r, --root', 'Connect as ROOT')
-      .description('Connect to one of the docker services')
-      .action(async (container, options) => {
-        outputFormatter.title('Connect to a container')
+      .description('Connect to one of environment')
+      .action(async (target, options) => {
+        // Fetch all Targets.
+        const envs = environmentManager.groupedBy({ connect: true })
+        const targets = []
 
-        if (!container) {
-          const containers = dockerCompose.getContainers()
-          if (containers.length === 0) {
-            return commandExecuter.exitScriptWithError('No running containers')
+        envs.forEach((env) => {
+          if (typeof env.getTargets === 'function') {
+            const envTargets = env.getTargets()
+            envTargets.forEach((target) => {
+              targets.push([target, env])
+            })
           }
+        })
 
+        const targetMap = new Map(targets)
+        if (!targetMap.size) {
+          throw 'No targets found'
+        }
+        if (!target) {
           const choice = await inquirer.prompt({
             type: 'list',
-            name: 'container',
-            message: 'Select a container to connect to:',
-            choices: containers,
+            name: 'target',
+            message: 'Select a target to connect to:',
+            choices: [...targetMap.keys()],
           })
 
-          container = choice.container
+          target = choice.target
         }
-        dockerCompose.containerExecute(container, ['bash'], options.root)
+
+        if (!targetMap.has(target)) {
+          throw 'Invalid target'
+        }
+
+        const env = targetMap.get(target)
+        options.target = target
+        env.connect(options)
       })
   }
 
   if (!cli._findCommand('status')) {
     cli
       .command('status')
-      .description('Display status information')
+      .description('Display status information about the environments')
       .action(() => {
-        outputFormatter.title('Status')
+        executeOnEnabledEnvs('status', { start: true })
+      })
+  }
 
-        dockerCompose.execute(['ps'])
+  if (!cli._findCommand('setup')) {
+    cli
+      .command('setup')
+      .description('Initial setup')
+      .action(() => {
+        // Environments
+        outputFormatter.newLine().subtitle('Build and start environments')
+        executeOnEnabledEnvs('setup', { setup: true })
+        executeOnEnabledEnvs('start', { start: true })
+
+        // Package Managers
+        // Composer
+        if (composer.isEnabled()) {
+          outputFormatter.newLine().subtitle('Composer')
+          composer.execute(['install'])
+        }
+
+        // packages.json (npm / yarn / pnpm)
+        if (node.isEnabled()) {
+          outputFormatter.newLine().subtitle('\nNode')
+          node.execute(['install'])
+        }
       })
   }
 }

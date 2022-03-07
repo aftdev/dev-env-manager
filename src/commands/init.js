@@ -1,22 +1,21 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
 import yaml from 'yaml'
-import Application from '../Application.js'
+import Application from '#src/Application'
 
 /**
  * Initialization related commands.
  */
-export default (cli, outputFormatter, commandExecuter) => {
+export default (cli, outputFormatter) => {
   cli
     .command('init')
     .enablePositionalOptions()
     .description(`Create ${Application.CONFIG_FILE} file for your project`)
     .action(async () => {
-      outputFormatter.title('Initialize Project')
       const configFilePath = `./${Application.CONFIG_FILE}`
 
       if (fs.existsSync(configFilePath)) {
-        return commandExecuter.exitScriptWithError('Config file already exists')
+        throw 'Config file already exists'
       }
 
       // Prompt.
@@ -34,10 +33,11 @@ export default (cli, outputFormatter, commandExecuter) => {
       const config = {
         name: 'Application Name',
         commands_dirs: { default: './commands' },
-        executables: {},
       }
 
-      let yamlStr = yaml.stringify(config)
+      let yamlStr = `# Documentation: https://github.com/aftdev/dev-env-manager#configuration \n${yaml.stringify(
+        config,
+      )}`
 
       fs.writeFileSync(configFilePath, yamlStr)
 

@@ -1,5 +1,6 @@
 import { RESOLVER, Lifetime } from 'awilix'
 import chalk from 'chalk'
+import extractStack from 'extract-stack'
 
 export default class OutputFormatter {
   static icons = {
@@ -135,6 +136,45 @@ export default class OutputFormatter {
    */
   info(text, title = null) {
     return this.line(text, 'blue', title || 'Info', OutputFormatter.icons.error)
+  }
+
+  /**.
+   * Output nicely formatter message from Error object.
+   *
+   * Only display the error stack if the error has been triggered by the
+   * main process (and not a child_process)
+   *
+   * @param {Object} error
+   */
+  renderError(error) {
+    const message = error instanceof Error ? error.message : error
+    const messages = message.split(/\r?\n/).map((message) => message.trim())
+
+    const errorTitle = messages.shift()
+    this.error(errorTitle, error.name)
+
+    // Multiline error messages.
+    const redColor = 'red'
+    const whiteColor = 'white.dim'
+
+    if (messages.length) {
+      this.separator(redColor, OutputFormatter.icons.dash)
+        .line(messages.join('\n'), redColor)
+        .newLine()
+    }
+
+    // Stack
+    const pid = error.pid || process.pid
+    if (pid === process.pid) {
+      const stack = extractStack(error)
+      if (stack) {
+        this.line('Stack:', whiteColor)
+          .separator(whiteColor, OutputFormatter.icons.dash)
+          .line(stack, whiteColor)
+          .separator(whiteColor, OutputFormatter.icons.dash)
+          .newLine()
+      }
+    }
   }
 }
 
