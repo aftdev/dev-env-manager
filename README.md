@@ -257,7 +257,6 @@ need to be added to that project's `package.json` file.
 ### Services that can be used by your custom commands
 
 - `environmentManager`: manager to fetch all your envs from
-- `dockerCompose`: execute a command on a container
 - `composer`: execute composer scripts
 - `node`: execute npm, yarn or pnpm commands (depending on the configuration)
 - `outputFormatter`: helpers to style output
@@ -268,12 +267,11 @@ The above services are automatically injected into your command "module".
 Example:
 
 ```js
-export default (cli, dockerCompose, outputFormatter, composer) => {
+export default (cli, outputFormatter, composer, environmentManager) => {
   cli.command('auto-injection').action(() => {
     outputFormatter.title('Auto Injection example')
 
-    const containers = dockerCompose.getContainers()
-    console.log(containers)
+    environmentManager.get('docker-compose').execute(['status'])
 
     composer.execute(['install'])
   })

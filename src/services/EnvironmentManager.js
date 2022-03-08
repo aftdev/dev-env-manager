@@ -50,6 +50,18 @@ export default class EnvironmentManager {
   }
 
   /**
+   * Whether or not an environment can execute a command.
+   *
+   * @param {string} command
+   * @returns {boolean}
+   */
+  canExecuteCommand(command) {
+    const [envName] = this.#getCommandEnvironment(command)
+
+    return !!envName
+  }
+
+  /**
    * Execute command on configured environment.
    *
    * If no environment is configured it will be executed locally.
@@ -57,7 +69,8 @@ export default class EnvironmentManager {
    * @param {*} command
    */
   executeCommand(command, args = []) {
-    const [envName, options] = this.#getCommandEnvironment(command)
+    const [envName = 'local', options = {}] =
+      this.#getCommandEnvironment(command)
 
     const env = this.get(envName)
 
@@ -90,7 +103,7 @@ export default class EnvironmentManager {
 
       return [env, envOptions]
     } else {
-      return ['local', {}]
+      return []
     }
   }
 
