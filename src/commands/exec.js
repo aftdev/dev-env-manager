@@ -1,3 +1,4 @@
+import chalk from 'chalk'
 import inquirer from 'inquirer'
 
 /**
@@ -34,7 +35,11 @@ export default (cli, environmentManager, packageManagerScripts) => {
     }
 
     // Use Env manager to execute the command.
-    // It will fallback to the local env if the command is not configured.
-    environmentManager.executeCommand(command, args)
+    if (environmentManager.canExecuteCommand(command)) {
+      return environmentManager.executeCommand(command, args)
+    }
+
+    // Error out.
+    throw chalk`Invalid Command {white.dim (add --help for additional information)}`
   })
 }

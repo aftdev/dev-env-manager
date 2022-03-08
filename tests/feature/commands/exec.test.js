@@ -1,4 +1,5 @@
 import child_process from 'child_process'
+import { expect } from 'chai'
 import inquirer from 'inquirer'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
@@ -27,17 +28,19 @@ describe('Exec command tests', () => {
     sandbox.restore()
   })
 
-  it('should fallback to system', () => {
-    const dockerCompose = container.resolve('dockerCompose')
-    sandbox.stub(dockerCompose, 'hasContainer').returns(false)
-
+  it('should execute command on environment', async () => {
     childProcessMock.expects('execSync').never()
     childProcessMock
       .expects('execSync')
-      .withArgs('unknown script or container')
+      .withArgs('docker-compose exec phpContainer php')
       .once()
 
-    application.run(['unknown script or container'])
+    await application.run(['php'])
+  })
+
+  it('should error when command cannot be executed', async () => {
+    const exitCode = await application.run(['unknown script or container'])
+    expect(exitCode).to.equal(1)
   })
 
   it('should execute correct package manager script', () => {
