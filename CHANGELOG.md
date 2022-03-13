@@ -1,3 +1,19 @@
+## [0.5.0](https://github.com/aftdev/dev-env-manager/compare/v0.4.3...v0.5.0) (2022-03-13)
+
+### Features
+
+- exec catchall will only execute command if supported by one environment
+  ([12346f0](https://github.com/aftdev/dev-env-manager/commit/12346f0e2060a65aab933bb80e1f225ecab59bf8))
+- introducing environment manager
+  ([2a6c359](https://github.com/aftdev/dev-env-manager/commit/2a6c359a74501adbf75890ee7e707fc9006fa986))
+- **ssh:** automatically connect to target if only one
+  ([e413d00](https://github.com/aftdev/dev-env-manager/commit/e413d002773cd63cbcef5934d4b3b5907aa9d975))
+
+### Documentation
+
+- update documentation
+  ([10123f9](https://github.com/aftdev/dev-env-manager/commit/10123f9d9e72525fe6aa1cf5e2881cfcc04f11fd))
+
 ### [0.4.3](https://github.com/aftdev/dev-env-manager/compare/v0.4.2...v0.4.3) (2022-02-20)
 
 ### Bug Fixes
