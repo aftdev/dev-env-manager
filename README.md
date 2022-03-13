@@ -333,12 +333,19 @@ to the `commands` section of the environment.
 environments:
   docker-compose:
     commands:
-      container: '<php container>'
+      composer:
+        container: '<php-container>'
         type: 'exec'
       php:
-        container: '<php container>'
+        container: '<php-container>'
       mysql:
-        container: '<mysql container>'
+        container: '<mysql-container>'
+```
+
+```sh
+$ dev composer install # docker-compose exec <php-container> composer install
+$ dev php -v # docker-compose exec <php-container> php -v
+$ dev mysql -V # docker-compose exec <mysql-container> mysql -V
 ```
 
 ### Environment Manager
