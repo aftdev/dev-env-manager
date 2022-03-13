@@ -63,15 +63,20 @@ export default (cli, outputFormatter, environmentManager, node, composer) => {
         if (!targetMap.size) {
           throw 'No targets found'
         }
-        if (!target) {
-          const choice = await inquirer.prompt({
-            type: 'list',
-            name: 'target',
-            message: 'Select a target to connect to:',
-            choices: [...targetMap.keys()],
-          })
 
-          target = choice.target
+        if (!target) {
+          // If only one target, just use it without asking.
+          if (targetMap.size === 1) {
+            ;[target] = targetMap.keys()
+          } else {
+            const choice = await inquirer.prompt({
+              type: 'list',
+              name: 'target',
+              message: 'Select a target to connect to:',
+              choices: [...targetMap.keys()],
+            })
+            target = choice.target
+          }
         }
 
         if (!targetMap.has(target)) {

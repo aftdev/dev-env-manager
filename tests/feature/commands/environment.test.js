@@ -103,6 +103,17 @@ describe('Environment command tests', () => {
     expect(rootCall.calledOnce).to.be.true
   })
 
+  it('connects to lone target automatically', async () => {
+    sandbox.stub(dockerCompose, 'getTargets').returns(['SoLonely'])
+    sandbox.stub(dockerComposeOverride, 'getTargets').returns([])
+
+    const dockerComposeConnectStub = sandbox.stub(dockerCompose, 'connect')
+
+    await application.run(['connect'])
+
+    expect(dockerComposeConnectStub.called).to.be.true
+  })
+
   it('should error when trying to connect if no targets or target invalid', async () => {
     sandbox.stub(dockerCompose, 'getTargets').returns([])
     sandbox
