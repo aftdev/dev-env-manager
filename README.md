@@ -15,23 +15,31 @@ guesswork out of remembering long strings of commonly used development commands.
 
 - [Installation](#installation)
 - [Default commands](#default-commands)
-  - [init](#init)
-  - [setup](#setup)
-  - [start and stop](#start-and-stop)
-  - [connect](#connect)
+  - [`init`](#init)
+  - [`setup`](#setup)
+  - [`start` and `stop`](#start-and-stop)
+  - [`connect`](#connect)
   - [Scripts auto-discovery](#scripts-auto-discovery)
 - [Custom commands](#custom-commands)
   - [Services that can be used by your custom commands](#services-that-can-be-used-by-your-custom-commands)
+- [Environments](#environments)
+  - [Groups](#groups)
+  - [Commands](#commands)
+  - [Environment Manager](#environment-manager)
+  - [Supported Environments](#supported-environments)
+    - [Docker-compose](#docker-compose)
+    - [Vagrant (Work in progress)](#vagrant-work-in-progress)
+    - [Custom Environments (Work in progress)](#custom-environments-work-in-progress)
 - [Configuration](#configuration)
 
 <!-- /TOC -->
 
 ---
 
-We can define where our commands are executed (locally or inside our Docker
-containers). For example, if we'd like all of our Composer (PHP) scripts to be
-executed inside a specific Docker container, we add this configuration inside
-`dev-env-config.yml`:
+We can define where our [commands are executed](#commands) (locally or inside
+our Docker containers). For example, if we'd like all of our Composer (PHP)
+scripts to be executed inside a specific Docker container, we add this
+configuration inside `dev-env-config.yml`:
 
 ```yaml
 environments:
@@ -51,7 +59,7 @@ dev composer install
 Behind the scenes, Dev Environment Manager runs:
 
 ```bash
-docker composer exec <container_name> composer install
+docker-compose exec <container_name> composer install
 ```
 
 🎉
@@ -96,10 +104,10 @@ your configurations and customizations inside this file.
 dev setup
 ```
 
-Sets up the develop environment. Useful for getting started quickly inside a
+Sets up the project environment(s). Useful for getting started quickly inside a
 freshly cloned project.
 
-This command will execute:
+By default, this command will execute:
 
 - `docker compose build` && `docker compose up -d` (if a `docker-compose.yml`
   exists inside the project)
@@ -118,14 +126,16 @@ dev [start|stop]
 dev [up|down]
 ```
 
-Starts or stops all the environments of the group "start".
+Starts or stops all the environments that belong to the "start"
+[group](#groups).
 
 On default installations, this is basically a shortcut for
 `docker-compose [up|down]`
 
 ### `connect`
 
-Uses the "targets" defined by all the environments of the "connect" group.
+Uses the "targets" defined by all the environments that belong the "connect"
+[group](#groups).  
 Docker containers are an example of target. Select a target in order to open an
 SSH connection to it.
 
@@ -147,8 +157,9 @@ $ dev connect app1 --root
 
 ### Scripts auto-discovery
 
-Sometimes typing `dev composer <script-name>` can be repetitive. Dev Environment
-Manager will auto-discover scripts from your package managers for you.
+Sometimes typing `dev composer <script-name>` can be repetitive.  
+Dev Environment Manager will auto-discover scripts from your package managers
+for you.
 
 For example, using Composer and `composer.json`:
 
@@ -163,7 +174,7 @@ For example, using Composer and `composer.json`:
 }
 ```
 
-Using `yarn` and `package.json`:
+Using `npm` and `package.json`:
 
 ```json
 {
@@ -216,7 +227,7 @@ custom command and not `yarn build`.
 
 Each project can set its own custom commands:
 
-1. Set the command folder path in the `dev-env-config.yml` file
+1. Set the command folder path(s) in the `dev-env-config.yml` file
 2. Add command files to the commands directory
 
 Project commands will always take precedence over application default commands.
@@ -278,6 +289,104 @@ export default (cli, outputFormatter, composer, environmentManager) => {
 }
 ```
 
+## Environments
+
+We currently only support `docker-compose` environments.  
+You can configure it or create new ones by editing the `environments` section of
+the `dev-env-config.yml` file.
+
+```yaml
+# @file ./dev-env-config.yml
+environments:
+  local: {}
+  docker-compose:
+    groups:
+      setup: true
+      connect: true
+      start: true
+    options:
+      config_files: ['docker-compose.yml']
+```
+
+### Groups
+
+Every environments belong to groups, those groups are used when executing the
+following commands: `setup`, `connect`, `start`, `stop`
+
+```yaml
+# @file ./dev-env-config.yml
+environments:
+  docker-compose:
+    groups:
+      setup: true
+      connect: true
+      start: true
+```
+
+### Commands
+
+You can define where your application commands will be executed by adding them
+to the `commands` section of the environment.
+
+```yaml
+# @file ./dev-env-config.yml
+environments:
+  docker-compose:
+    commands:
+      container: '<php container>'
+        type: 'exec'
+      php:
+        container: '<php container>'
+      mysql:
+        container: '<mysql container>'
+```
+
+### Environment Manager
+
+All environments should be fetched via the `environmentManager` service (that is
+automatically injected in your
+[custom command files](#services-that-can-be-used-by-your-custom-commands)
+
+```js
+// @file ./commands/my-command.js
+export default (cli, environmentManager) => {
+  cli.command('using-env').action(() => {
+    // Fetch docker-compose environment and execute status command.
+    environmentManager.get('docker-compose').execute(['status'])
+
+    // Start all envs that belong to the start group.
+    environmentManager.groupedBy({ start: true }).forEach((env) => env.start())
+  })
+}
+```
+
+### Supported Environments
+
+#### Docker-compose
+
+```yaml
+# @file ./dev-env-config.yml
+environments:
+  custom-docker-compose:
+    type: docker-compose
+    # Command options
+    commands:
+      command_name:
+        container: '<container name>'
+        type: exec/run
+        root: true/false
+    # Supported Options
+    options:
+      # What configuration files to use.
+      config_files:
+        - docker-compose-customA.yml
+        - docker-compose-customB.yml
+```
+
+#### Vagrant (Work in progress)
+
+#### Custom Environments (Work in progress)
+
 ## Configuration
 
 Configuration values are set inside the `dev-env-config.yml` file.
@@ -292,15 +401,15 @@ environments:
   local: {}
   # Docker compose environment (only enabled if config file is found)
   docker-compose:
-      # Which groups this env belong to
-      # This is used by the environment default commands in order to figure out
-      # what env to automatically setup, start, connect to.
-      groups:
-        setup: true
-        connect: true
-        start: true
-      options:
-        config_files: 'docker-compose.yml'
+    # Which groups this environment belongs to
+    # This is used by the environment default commands in order to figure out
+    # what env to automatically setup, start, connect to.
+    groups:
+      setup: true
+      connect: true
+      start: true
+    options:
+      config_files: 'docker-compose.yml'
 # Package manager configuration
 package_managers:
   node:
