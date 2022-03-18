@@ -40,18 +40,17 @@ export default async function (projectPath) {
     ...opts,
     resolverOptions: {
       lifetime: Lifetime.SINGLETON,
-      injector: (c) => ({ container: c }),
     },
     formatName: (name) => name.replace('Factory', ''),
   })
 
   // Manually register other services.
   container.register({
+    // Allows any factories to use container
+    container: asValue(container),
     projectPath: asValue(projectPath),
     rootPath: asValue(__dirname),
-    application: asClass(Application)
-      .singleton()
-      .inject((c) => ({ container: c })),
+    application: asClass(Application).singleton(),
     outputFormatter: asClass(OutputFormatter),
   })
 
