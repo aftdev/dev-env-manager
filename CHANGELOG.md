@@ -1,3 +1,15 @@
+## [0.6.0](https://github.com/aftdev/dev-env-manager/compare/v0.5.0...v0.6.0) (2022-03-18)
+
+### Features
+
+- **environments:** allow creation of custom environments
+  ([dfe82df](https://github.com/aftdev/dev-env-manager/commit/dfe82df2442cce2e1621ac0872fec6fcc81e36dc))
+
+### Documentation
+
+- **commands:** fix commands doc and added examples
+  ([5f5274f](https://github.com/aftdev/dev-env-manager/commit/5f5274fd3d19e6053877812aea000b8b0c2a3eaf))
+
 ## [0.5.0](https://github.com/aftdev/dev-env-manager/compare/v0.4.3...v0.5.0) (2022-03-13)
 
 ### Features
