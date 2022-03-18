@@ -1,3 +1,4 @@
+import { createContainer } from 'awilix'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import sinon from 'sinon'
@@ -15,14 +16,16 @@ describe('Environment Manager Tests', () => {
         },
       },
       never: {
+        type: 'local',
         groups: {
           setup: false,
           connect: false,
           start: false,
         },
       },
-      empty: {},
+      empty: { type: 'local' },
       connectOnly: {
+        type: 'local',
         groups: {
           connect: true,
         },
@@ -50,5 +53,46 @@ describe('Environment Manager Tests', () => {
 
     const unknownCriteria = envManager.groupedBy({ what: true })
     expect(unknownCriteria).to.be.empty
+  })
+
+  it('fails when environment does not exist', () => {
+    const envManager = new EnvironmentManager({ resolve: sinon.fake() }, {})
+
+    expect(() => {
+      envManager.get('myCustomEnv')
+    }).to.throw('Unknown')
+  })
+
+  it('fails when environment is invalid', () => {
+    const config = {
+      env_name: {
+        type: 'invalid env',
+      },
+    }
+    const envManager = new EnvironmentManager({ resolve: sinon.fake() }, config)
+
+    expect(() => {
+      envManager.get('env_name')
+    }).to.throw('Invalid')
+  })
+
+  it('allows creating/extending environments', () => {
+    const config = {
+      custom_env: {
+        type: 'customType',
+        options: ['a', 'b'],
+      },
+    }
+
+    const container = createContainer()
+    const envManager = new EnvironmentManager(container, config)
+
+    envManager.extend('customType', (options) => ({ customEnv: true, options }))
+
+    const environment = envManager.get('custom_env')
+    expect(environment).to.eql({
+      customEnv: true,
+      options: config.custom_env.options,
+    })
   })
 })

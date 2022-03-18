@@ -29,7 +29,7 @@ guesswork out of remembering long strings of commonly used development commands.
   - [Supported Environments](#supported-environments)
     - [Docker-compose](#docker-compose)
     - [Vagrant (Work in progress)](#vagrant-work-in-progress)
-    - [Custom Environments (Work in progress)](#custom-environments-work-in-progress)
+  - [Custom Environments](#custom-environments)
 - [Configuration](#configuration)
 
 <!-- /TOC -->
@@ -392,7 +392,57 @@ environments:
 
 #### Vagrant (Work in progress)
 
-#### Custom Environments (Work in progress)
+### Custom Environments
+
+You can create your own environments by extending the EnvironmentManager.
+
+First step is to add your environment configuration to your `dev-env-config.yml`
+file.
+
+```yaml
+# @file ./dev-env-config.yml
+environments:
+  my-fancy-env:
+    type: <customEnvType>
+    groups:
+      setup: true
+      start: true
+    options:
+      a: option a
+      b: option b
+```
+
+The second step is to tell the `environmentManager` how to build your
+environment.  
+To do so, in one of your custom command file, use the `extend` function.
+
+```js
+// @file ./commands/custom-env.js
+
+export default (environmentManager) => {
+  // Define a "factory" for the custom type.
+  environmentManager.extend('<customEnvType>', (envOptions, container) => {
+    // envOptions = {a: option a, b: option b}
+    return {
+      isEnabled: () => true,
+      setup: () => {},
+      connect: () => {},
+      start() => {},
+      stop() => {},
+      execute(command = [], options = {}) {}
+    }
+  })
+}
+```
+
+The method accepts a closure, which should return the environment object or
+class that respond to functions defined in the
+[AbstractEnvironment.js](https://github.com/aftdev/dev-env-manager/blob/main/src/services/Environment/AbstractEnvironment.js)
+abstract.  
+The closure receives the environment options and the container instance.
+
+**Note**: Consider creating a pull request, if you think your custom environment
+could be used by others.
 
 ## Configuration
 

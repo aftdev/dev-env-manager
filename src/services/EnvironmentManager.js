@@ -7,6 +7,7 @@ export default class EnvironmentManager {
   #container
   #configuration
   #environments = new Map()
+  #extensions = new Map()
 
   constructor(container, configuration = {}) {
     this.#container = container
@@ -109,20 +110,40 @@ export default class EnvironmentManager {
 
   build(envName) {
     const envConfig = this.#configuration[envName]
+    if (!envConfig) {
+      throw 'Unknown environment'
+    }
+
     const envType = envConfig['type'] || envName
     const buildOptions = envConfig['options'] || []
+
+    if (this.#extensions.has(envType)) {
+      const factoryCallback = this.#extensions.get(envType)
+      return factoryCallback(buildOptions, this.#container)
+    }
 
     switch (envType.toLowerCase()) {
       case 'dockercompose':
       case 'docker-compose':
-        return this.buildDockerCompose(buildOptions)
+        return this.#buildDockerCompose(buildOptions)
       case 'local':
-      default:
-        return this.buildLocal()
+        return this.#buildLocal()
     }
+
+    throw 'Invalid environment type'
   }
 
-  buildDockerCompose(options) {
+  /**
+   * Extend the environment manager to allow custom environments.
+   *
+   * @param {string} name
+   * @param {callback} factoryCallback
+   */
+  extend(name, factoryCallback) {
+    this.#extensions.set(name, factoryCallback)
+  }
+
+  #buildDockerCompose(options) {
     const configFiles = options['config_files'] || []
 
     return new DockerCompose(
@@ -131,7 +152,7 @@ export default class EnvironmentManager {
     )
   }
 
-  buildLocal() {
+  #buildLocal() {
     return new Local(this.#container.resolve('commandExecuter'))
   }
 }
