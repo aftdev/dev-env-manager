@@ -52,11 +52,10 @@ export default class Vagrant extends AbstractEnvironment {
   }
 
   /**
-   * Execute a vagrant command or a command on a machine.
+   * Execute a command on a machine.
    *
    * @param {Array} commandArgs
    * @param {object} options - (machine).
-   
    */
   execute(commandArgs = [], options = {}) {
     const machine = options.machine || 'default'
@@ -100,21 +99,21 @@ export default class Vagrant extends AbstractEnvironment {
   }
 
   /**
-   * Start the containers.
+   * Start the machines.
    */
   start() {
     this.vagrantCommand(['up'])
   }
 
   /**
-   * Stop the containers.
+   * Stop the machines.
    */
   stop() {
     this.vagrantCommand(['halt'])
   }
 
   /**
-   * Build all the containers.
+   * Provision all the machines.
    */
   setup() {
     this.vagrantCommand(['up', '--provision'])

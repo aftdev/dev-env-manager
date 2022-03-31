@@ -152,7 +152,7 @@ export default class DockerCompose extends AbstractEnvironment {
    * Build all the containers.
    */
   setup() {
-    this.dockerComposeCommand(['build'])
+    this.dockerComposeCommand(['up', '-d', '--build'])
   }
 }
 
