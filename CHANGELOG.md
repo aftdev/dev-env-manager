@@ -1,3 +1,17 @@
+## [0.7.0](https://github.com/aftdev/dev-env-manager/compare/v0.6.0...v0.7.0) (2022-03-31)
+
+### Features
+
+- **setup:** improve setup commands
+  ([fae0741](https://github.com/aftdev/dev-env-manager/commit/fae074121bec267b9d9676dae722c9f48477cf16))
+- **vagrant:** add vagrant environment
+  ([ed2d5aa](https://github.com/aftdev/dev-env-manager/commit/ed2d5aa567dd91eb23f6c3d32829bce407677d34))
+
+### Code Refactoring
+
+- **environments:** improve vagrant and docker services
+  ([8dd72db](https://github.com/aftdev/dev-env-manager/commit/8dd72dbc0fad7f4801d90a3ec0d9ae777b0591c0))
+
 ## [0.6.0](https://github.com/aftdev/dev-env-manager/compare/v0.5.0...v0.6.0) (2022-03-18)
 
 ### Features
