@@ -2,6 +2,7 @@ import { createContainer } from 'awilix'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import sinon from 'sinon'
+import Vagrant from '#src/services/Environment/Vagrant'
 import EnvironmentManager from '#src/services/EnvironmentManager'
 
 describe('Environment Manager Tests', () => {
@@ -94,5 +95,17 @@ describe('Environment Manager Tests', () => {
       customEnv: true,
       options: config.custom_env.options,
     })
+  })
+
+  it('can create Vagrant env', () => {
+    const config = {
+      env_name: {
+        type: 'vagrant',
+      },
+    }
+    const envManager = new EnvironmentManager({ resolve: sinon.fake() }, config)
+
+    const vagrant = envManager.get('env_name')
+    expect(vagrant).to.be.instanceof(Vagrant)
   })
 })
