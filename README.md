@@ -28,7 +28,7 @@ guesswork out of remembering long strings of commonly used development commands.
   - [Environment Manager](#environment-manager)
   - [Supported Environments](#supported-environments)
     - [Docker-compose](#docker-compose)
-    - [Vagrant (Work in progress)](#vagrant-work-in-progress)
+    - [Vagrant](#vagrant)
   - [Custom Environments](#custom-environments)
 - [Configuration](#configuration)
 
@@ -258,6 +258,10 @@ export default (cli) => {
 }
 ```
 
+`cli` is an instance of [`commander`](https://github.com/tj/commander.js). The
+documentation on how to create cli commands can be found
+[here](https://github.com/tj/commander.js#commands)
+
 **Note**: If you want to use an NPM package from your project, the package will
 need to be added to that project's `package.json` file.
 
@@ -336,6 +340,10 @@ environments:
       composer:
         container: '<php-container>'
         type: 'exec'
+      composer-custom:
+        command: 'php composer.phar' # allow customization of the command.
+        container: '<php-container>'
+        type: 'run'
       php:
         container: '<php-container>'
       mysql:
@@ -344,6 +352,7 @@ environments:
 
 ```sh
 $ dev composer install # docker-compose exec <php-container> composer install
+$ dev composer-custom install # docker-compose run <php-container> php composer.phar install
 $ dev php -v # docker-compose exec <php-container> php -v
 $ dev mysql -V # docker-compose exec <mysql-container> mysql -V
 ```
@@ -374,7 +383,7 @@ export default (cli, environmentManager) => {
 ```yaml
 # @file ./dev-env-config.yml
 environments:
-  custom-docker-compose:
+  env_name:
     type: docker-compose
     # Command options
     commands:
@@ -390,7 +399,18 @@ environments:
         - docker-compose-customB.yml
 ```
 
-#### Vagrant (Work in progress)
+#### Vagrant
+
+```yaml
+# @file ./dev-env-config.yml
+environments:
+  env_name:
+    type: vagrant
+    # Command options
+    commands:
+      command_name:
+        machine: '<machine name>'
+```
 
 ### Custom Environments
 

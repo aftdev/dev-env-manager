@@ -1,5 +1,6 @@
 import DockerCompose from '#services/Environment/DockerCompose'
 import Local from '#services/Environment/Local'
+import Vagrant from '#services/Environment/Vagrant'
 
 export default class EnvironmentManager {
   static COMMAND = 'command'
@@ -126,6 +127,8 @@ export default class EnvironmentManager {
       case 'dockercompose':
       case 'docker-compose':
         return this.#buildDockerCompose(buildOptions)
+      case 'vagrant':
+        return this.#buildVagrant(buildOptions)
       case 'local':
         return this.#buildLocal()
     }
@@ -154,5 +157,9 @@ export default class EnvironmentManager {
 
   #buildLocal() {
     return new Local(this.#container.resolve('commandExecuter'))
+  }
+
+  #buildVagrant(options) {
+    return new Vagrant(this.#container.resolve('commandExecuter'), options)
   }
 }
