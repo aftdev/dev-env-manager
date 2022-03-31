@@ -155,9 +155,9 @@ describe('Environment command tests', () => {
 
     application.run(['setup'])
 
-    expect(dockerComposeStub.calledTwice, 'should setup docker-compose').to.be
+    expect(dockerComposeStub.calledOnce, 'should setup docker-compose').to.be
       .true
-    expect(dockerComposeOverrideStub.calledTwice, 'should setup docker-compose')
+    expect(dockerComposeOverrideStub.calledOnce, 'should setup docker-compose')
       .to.be.true
 
     expect(composer.calledOnce, 'should setup composer').to.be.true

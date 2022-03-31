@@ -106,7 +106,6 @@ export default (cli, outputFormatter, environmentManager, node, composer) => {
         // Environments
         outputFormatter.newLine().subtitle('Build and start environments')
         executeOnEnabledEnvs('setup', { setup: true })
-        executeOnEnabledEnvs('start', { start: true })
 
         // Package Managers
         // Composer
