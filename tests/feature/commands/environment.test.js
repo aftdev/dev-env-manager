@@ -142,10 +142,13 @@ describe('Environment command tests', () => {
 
   it('should setup environment', () => {
     sandbox.stub(container.resolve('outputFormatter'), 'output').returnsThis()
-    const dockerComposeStub = sandbox.stub(dockerCompose, 'execute')
+    const dockerComposeStub = sandbox.stub(
+      dockerCompose,
+      'dockerComposeCommand',
+    )
     const dockerComposeOverrideStub = sandbox.stub(
       dockerComposeOverride,
-      'execute',
+      'dockerComposeCommand',
     )
     const composer = sandbox.stub(container.resolve('composer'), 'execute')
     const npm = sandbox.stub(container.resolve('node'), 'execute')
