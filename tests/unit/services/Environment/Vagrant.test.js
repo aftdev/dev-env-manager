@@ -54,6 +54,16 @@ invalid,format
         ['do', 'something'],
       ]).callCount,
     ).to.be.eq(1)
+
+    vagrant.execute(['do', 'something', 'on', 'default'], {})
+    expect(
+      commandExecuterStub.execute.withArgs(Vagrant.COMMAND, [
+        'ssh',
+        'default',
+        '-c',
+        ['do', 'something', 'on', 'default'],
+      ]).callCount,
+    ).to.be.eq(1)
   })
 
   it('should connect to a machine', () => {

@@ -24,9 +24,8 @@ export default class Vagrant extends AbstractEnvironment {
     this.#machines = []
 
     if (this.isEnabled()) {
-      const services = this.execute(
+      const services = this.vagrantCommand(
         ['status', '--machine-readable'],
-        {},
         'backgroundExecute',
       )
 
@@ -52,24 +51,34 @@ export default class Vagrant extends AbstractEnvironment {
     return this.getTargets().indexOf(machine) !== -1
   }
 
-  /**.
-   * Execute a vagrant command
+  /**
+   * Execute a vagrant command or a command on a machine.
    *
    * @param {Array} commandArgs
    * @param {object} options - (machine).
-   * @param {object} type - What commandExecuter command to use.
+   
    */
-  execute(commandArgs = [], options = {}, type = 'execute') {
-    const machine = options.machine || ''
+  execute(commandArgs = [], options = {}) {
+    const machine = options.machine || 'default'
 
-    // Do we want to execute the command on a machine ?
-    const args = machine ? ['ssh', machine, '-c', commandArgs] : commandArgs
+    const args = ['ssh', machine, '-c', commandArgs]
 
+    return this.vagrantCommand(args)
+  }
+
+  /**
+   * Execute Vagrant command.
+   *
+   * @param {Array} args
+   * @param {object} type - What commandExecuter command to use.
+   * @returns
+   */
+  vagrantCommand(args, type = 'execute') {
     return this._commandExecuter[type](this.constructor.COMMAND, args)
   }
 
   /**
-   * Connect to container.
+   * Connect to a machine.
    *
    * @param {object} options
    * @returns {object}
@@ -80,34 +89,34 @@ export default class Vagrant extends AbstractEnvironment {
       throw 'Please specify machine'
     }
 
-    return this.execute(['ssh', machine], {}, 'tty')
+    return this.vagrantCommand(['ssh', machine], 'tty')
   }
 
   /**
    * Return status of containers.
    */
   status() {
-    this.execute(['status'])
+    this.vagrantCommand(['status'])
   }
 
   /**
    * Start the containers.
    */
   start() {
-    this.execute(['up'])
+    this.vagrantCommand(['up'])
   }
 
   /**
    * Stop the containers.
    */
   stop() {
-    this.execute(['halt'])
+    this.vagrantCommand(['halt'])
   }
 
   /**
    * Build all the containers.
    */
   setup() {
-    this.execute(['up', '--provision'])
+    this.vagrantCommand(['up', '--provision'])
   }
 }

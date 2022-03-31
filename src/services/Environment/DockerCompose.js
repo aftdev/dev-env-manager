@@ -85,14 +85,23 @@ export default class DockerCompose extends AbstractEnvironment {
     // If we have a container we need to either exec or run
     const dockerCommandType = container ? options.type || 'exec' : ''
 
+    return this.dockerComposeCommand(
+      [dockerCommandType, rootParam, container, ...commandArgs],
+      type,
+    )
+  }
+
+  /**
+   * Execute a docker compose command.
+   *
+   * @param {Array} args
+   * @param {object} type - What commandExecuter command to use.
+   * @returns
+   */
+  dockerComposeCommand(args, type = 'execute') {
     return this._commandExecuter[type](
       this.constructor.COMMAND,
-      this.injectServiceConfig([
-        dockerCommandType,
-        rootParam,
-        container,
-        ...commandArgs,
-      ]),
+      this.injectServiceConfig(args),
     )
   }
 
@@ -122,28 +131,28 @@ export default class DockerCompose extends AbstractEnvironment {
    * Return status of containers.
    */
   status() {
-    this.execute(['ps'])
+    this.dockerComposeCommand(['ps'])
   }
 
   /**
    * Start the containers.
    */
   start() {
-    this.execute(['up', '-d'])
+    this.dockerComposeCommand(['up', '-d'])
   }
 
   /**
    * Stop the containers.
    */
   stop() {
-    this.execute(['down'])
+    this.dockerComposeCommand(['down'])
   }
 
   /**
    * Build all the containers.
    */
   setup() {
-    this.execute(['build'])
+    this.dockerComposeCommand(['build'])
   }
 }
 
