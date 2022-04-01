@@ -2,8 +2,10 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: '/'
+    # We only want security updates
+    open-pull-requests-limit: 0
     schedule:
-      interval: daily
+      interval: monthly
     commit-message:
       prefix: fix
       prefix-development: chore
