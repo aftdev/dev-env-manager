@@ -1,3 +1,17 @@
+## [0.8.0](https://github.com/aftdev/dev-env-manager/compare/v0.7.0...v0.8.0) (2022-04-01)
+
+### Features
+
+- **commander:** update to version 9
+  ([d4995c6](https://github.com/aftdev/dev-env-manager/commit/d4995c652e92828ef72d3cf470cf7c4c680bb701))
+
+### Continuous Integration
+
+- **dependabot:** :rocket: update commit message format
+  ([544dae2](https://github.com/aftdev/dev-env-manager/commit/544dae239d762498a663d8b36b756c0fa41b222e))
+- **dependabot:** disable normal dependabot pr
+  ([4b7d76a](https://github.com/aftdev/dev-env-manager/commit/4b7d76a6e1c8eda8ce942baa8e168cfc8f454b6f))
+
 ## [0.7.0](https://github.com/aftdev/dev-env-manager/compare/v0.6.0...v0.7.0) (2022-03-31)
 
 ### Features
