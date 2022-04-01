@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import commander from 'commander'
+import { Command } from 'commander'
 
 /**
  * Create and configure the main "commander" cli.
@@ -7,7 +7,8 @@ import commander from 'commander'
  * @returns {Command}
  */
 export default function (configuration, packageManagerScripts) {
-  return new commander.Command('dev')
+  return new Command()
+    .name('dev')
     .description(configuration.get('name'))
     .enablePositionalOptions()
     .passThroughOptions()
