@@ -30,7 +30,7 @@
   ],
   "dependencies": {
     "awilix": "^6.0.0",
-    "chalk": "^4.1.2",
+    "chalk": "^5.0.1",
     "commander": "^8.3.0",
     "extract-stack": "^3.0.0",
     "findup-sync": "^5.0.0",
