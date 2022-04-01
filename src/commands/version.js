@@ -1,5 +1,5 @@
 import fs from 'fs'
-import chalk from 'chalk'
+import chalkTemplate from 'chalk-template'
 
 /**
  * Display version information.
@@ -12,7 +12,7 @@ export default (cli, outputFormatter, rootPath) => {
         fs.readFileSync(`${rootPath}/../package.json`, 'utf8'),
       )
 
-      outputFormatter.output(chalk`Version: {green ${version}}`)
+      outputFormatter.output(chalkTemplate`Version: {green ${version}}`)
 
       return cli._exit(0, 'commander.version', version)
     })
