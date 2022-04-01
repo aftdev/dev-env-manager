@@ -1,5 +1,5 @@
 import { RESOLVER, Lifetime } from 'awilix'
-import chalk from 'chalk'
+import chalk from 'chalk-template'
 import extractStack from 'extract-stack'
 
 export default class OutputFormatter {
@@ -83,7 +83,7 @@ export default class OutputFormatter {
    */
   line(text, color = 'white', title = '', icon = '') {
     let lineTitle = `${icon || ''} ${title || ''}`.trim()
-    lineTitle = lineTitle ? chalk.bold(`${lineTitle}: `) : ''
+    lineTitle = lineTitle ? chalk`{bold ${lineTitle}: }` : ''
 
     return this.output(chalk`{${color} ${lineTitle}${text}}`)
   }

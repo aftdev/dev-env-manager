@@ -1,4 +1,4 @@
-import chalk from 'chalk'
+import chalkTemplate from 'chalk-template'
 import inquirer from 'inquirer'
 
 /**
@@ -40,6 +40,6 @@ export default (cli, environmentManager, packageManagerScripts) => {
     }
 
     // Error out.
-    throw chalk`Invalid Command {white.dim (add --help for additional information)}`
+    throw chalkTemplate`Invalid Command {white.dim (add --help for additional information)}`
   })
 }

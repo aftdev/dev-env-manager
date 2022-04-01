@@ -1,6 +1,6 @@
 import child_process from 'child_process'
 import { RESOLVER, Lifetime } from 'awilix'
-import chalk from 'chalk'
+import chalkTemplate from 'chalk-template'
 import { sh, unquoted } from 'puka'
 
 export default class CommandExecuter {
@@ -50,7 +50,7 @@ export default class CommandExecuter {
    */
   displayCommand(command) {
     this.#outputFormatter.output(
-      chalk`{magentaBright.bold › Executing:} {white.dim ${command}}\n`,
+      chalkTemplate`{magentaBright.bold › Executing:} {white.dim ${command}}\n`,
     )
   }
 
