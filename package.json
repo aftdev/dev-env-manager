@@ -29,7 +29,7 @@
     "README.md"
   ],
   "dependencies": {
-    "awilix": "^6.0.0",
+    "awilix": "^7.0.1",
     "chalk": "^5.0.1",
     "chalk-template": "^0.4.0",
     "commander": "^9.1.0",
