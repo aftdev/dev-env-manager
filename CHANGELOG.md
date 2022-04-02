@@ -1,3 +1,10 @@
+### [0.8.1](https://github.com/aftdev/dev-env-manager/compare/v0.8.0...v0.8.1) (2022-04-02)
+
+### Bug Fixes
+
+- **dep:** update dependencies
+  ([d55c5be](https://github.com/aftdev/dev-env-manager/commit/d55c5beec82ebf83ec17abd4c13600abece4c73b))
+
 ## [0.8.0](https://github.com/aftdev/dev-env-manager/compare/v0.7.0...v0.8.0) (2022-04-01)
 
 ### Features
