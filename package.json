@@ -81,12 +81,6 @@
     "test": "mocha",
     "test-all": "mocha --reporter=dot --recursive './tests/**/*.test.js'",
     "coverage": "c8 --reporter=html --reporter=text --reporter=html yarn test-all",
-    "ci:coverage": "c8 --check-coverage --reporter=none yarn test-all",
-    "commit": "cz"
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
+    "ci:coverage": "c8 --check-coverage --reporter=none yarn test-all"
   }
 }
