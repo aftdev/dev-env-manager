@@ -32,7 +32,7 @@ export default class EnvironmentManager {
   /**
    * Return all the environments that match the criteria.
    *
-   * @param {object<string, boolean>} criteria
+   * @param {Object<string, boolean>} criteria
    * @returns {Map} Map of environmentName -> environment matching criteria.
    */
   groupedBy(criteria = {}) {
