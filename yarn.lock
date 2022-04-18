@@ -952,9 +952,9 @@ at-least-node@^1.0.0:
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
 awilix@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/awilix/-/awilix-7.0.1.tgz#8ec5e06a12266de4eb1ce804b401e4ab80067f32"
-  integrity sha512-ya9l28+Csj3pNguJEzK+JMuohL3GBB23wAW0V0dkVzI6WgtOA3kcnFOlhnBTFFMVSW4VQ3QWcHfZm8ABWZySUQ==
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/awilix/-/awilix-7.0.2.tgz#8dfdfd5f803f148492e94265bea44fd7a8c053cf"
+  integrity sha512-eaI6aIhqVAoLZjCScpkEFz54ALMBgbjX00x45oOCFteye9AFs3Qm9FjbT20uYb3wR1FEEMhXUc1/rh4yVSY23g==
   dependencies:
     camel-case "^4.1.2"
     fast-glob "^3.2.11"
