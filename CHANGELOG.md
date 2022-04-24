@@ -1,3 +1,10 @@
+### [0.8.4](https://github.com/aftdev/dev-env-manager/compare/v0.8.3...v0.8.4) (2022-04-24)
+
+### Bug Fixes
+
+- **deps:** bump nconf from 0.11.3 to 0.12.0
+  ([9b4a96d](https://github.com/aftdev/dev-env-manager/commit/9b4a96db38588d30477ae7781ed1a0c11dacc8af))
+
 ### [0.8.3](https://github.com/aftdev/dev-env-manager/compare/v0.8.2...v0.8.3) (2022-04-24)
 
 ### Bug Fixes
