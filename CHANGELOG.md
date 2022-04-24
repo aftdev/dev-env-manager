@@ -1,3 +1,10 @@
+### [0.8.3](https://github.com/aftdev/dev-env-manager/compare/v0.8.2...v0.8.3) (2022-04-24)
+
+### Bug Fixes
+
+- **deps:** bump yaml from 1.10.2 to 2.0.1
+  ([d0387c0](https://github.com/aftdev/dev-env-manager/commit/d0387c0e6343825e80ab70a935757b8099e82516))
+
 ### [0.8.2](https://github.com/aftdev/dev-env-manager/compare/v0.8.1...v0.8.2) (2022-04-02)
 
 ### Bug Fixes
