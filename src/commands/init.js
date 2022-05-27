@@ -1,12 +1,11 @@
 import fs from 'fs'
-import inquirer from 'inquirer'
 import yaml from 'yaml'
 import Application from '#src/Application'
 
 /**
  * Initialization related commands.
  */
-export default (cli, outputFormatter) => {
+export default (cli, outputFormatter, enquirer) => {
   cli
     .command('init')
     .enablePositionalOptions()
@@ -19,9 +18,10 @@ export default (cli, outputFormatter) => {
       }
 
       // Prompt.
-      const choice = await inquirer.prompt({
+      const choice = await enquirer.prompt({
         type: 'confirm',
         name: 'confirm',
+        initial: true,
         message: `This will create the file in the current directory ${process.cwd()}`,
       })
 

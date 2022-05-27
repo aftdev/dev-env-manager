@@ -276,6 +276,8 @@ need to be added to that project's `package.json` file.
 - `node`: execute npm, yarn or pnpm commands (depending on the configuration)
 - `outputFormatter`: helpers to style output
 - `commandExecuter`: execute commands
+- `enquirer`: create cli prompts with
+  [enquirer](https://github.com/enquirer/enquirer)
 
 The above services are automatically injected into your command "module".
 

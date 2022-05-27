@@ -1,8 +1,10 @@
 import { expect } from 'chai'
-import inquirer from 'inquirer'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
-import { default as createTestContainer } from '#tests/feature/testHelpers'
+import {
+  default as createTestContainer,
+  stubEnquirer,
+} from '#tests/feature/testHelpers'
 
 describe('Environment command tests', () => {
   let sandbox, application, container
@@ -74,19 +76,16 @@ describe('Environment command tests', () => {
 
     sandbox.stub(dockerComposeOverride, 'getTargets').returns(['containerC'])
 
-    const inquirerStub = sandbox
-      .stub(inquirer, 'prompt')
-      .resolves({ target: 'containerC' })
-
     const dockerComposeConnectStub = sandbox.stub(dockerCompose, 'connect')
     const dockerComposeOverrideConnectStub = sandbox.stub(
       dockerComposeOverride,
       'connect',
     )
 
+    stubEnquirer(container, { target: 'containerC' })
+
     // Asking for target.
     await application.run(['connect'])
-    expect(inquirerStub.calledOnce).to.be.true
     expect(dockerComposeOverrideConnectStub.called).to.be.true
     sandbox.resetHistory()
 

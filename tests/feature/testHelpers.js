@@ -39,3 +39,36 @@ export function stubOutputFormatter(container, sandbox) {
 
   return sandbox.stub(outputFormatter, 'output')
 }
+
+let currentEnquirerPromptStub = () => {}
+
+/**.
+ * Stub the enquirer answers
+ *
+ * @param {AwilixContainer} container
+ * @param {Object} answers
+ */
+export function stubEnquirer(container, answers = {}) {
+  const enquirer = container.resolve('enquirer')
+  enquirer.options.show = false
+
+  enquirer.off('prompt', currentEnquirerPromptStub)
+  currentEnquirerPromptStub = (prompt) => {
+    const promptAnswer = prompt.name in answers ? answers[prompt.name] : null
+    switch (prompt.type.toLowerCase()) {
+      case 'select':
+      case 'confirm':
+        prompt.initial = promptAnswer
+        break
+      default:
+        prompt.value = promptAnswer
+        break
+    }
+
+    prompt.submit()
+  }
+
+  enquirer.on('prompt', currentEnquirerPromptStub)
+
+  return enquirer
+}

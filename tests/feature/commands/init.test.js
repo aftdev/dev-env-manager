@@ -1,9 +1,8 @@
 import fs from 'fs'
 import { expect } from 'chai'
-import inquirer from 'inquirer'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
-import { default as createTestContainer } from '../testHelpers.js'
+import { default as createTestContainer, stubEnquirer } from '../testHelpers.js'
 
 describe('Init command tests', () => {
   let sandbox, application, container
@@ -23,7 +22,7 @@ describe('Init command tests', () => {
     sandbox.restore()
   })
 
-  it('should throw error if file already exist', async () => {
+  it('should throw error if file already exists', async () => {
     const status = await application.run(['init'])
     expect(status).to.equal(1)
   })
@@ -32,16 +31,12 @@ describe('Init command tests', () => {
     sandbox.stub(fs, 'existsSync').returns(false)
     const stubWrite = sandbox.stub(fs, 'writeFileSync')
 
-    sandbox
-      .stub(inquirer, 'prompt')
-      .resolves({ confirm: true })
-      .onFirstCall()
-      .resolves({ confirm: false })
-
     // Without confirmation.
+    stubEnquirer(container, { confirm: false })
     await application.run(['init'])
 
     // With confirmation.
+    stubEnquirer(container, { confirm: true })
     await application.run(['init'])
 
     expect(stubWrite.calledOnce).to.be.true

@@ -1,9 +1,14 @@
-import inquirer from 'inquirer'
-
 /**
  * Add commands to setup / start / stop / environments.
  */
-export default (cli, outputFormatter, environmentManager, node, composer) => {
+export default (
+  cli,
+  outputFormatter,
+  environmentManager,
+  node,
+  composer,
+  enquirer,
+) => {
   /**
    * Execute a function on enabled environments that match criteria.
    *
@@ -69,12 +74,13 @@ export default (cli, outputFormatter, environmentManager, node, composer) => {
           if (targetMap.size === 1) {
             ;[target] = targetMap.keys()
           } else {
-            const choice = await inquirer.prompt({
-              type: 'list',
+            const choice = await enquirer.prompt({
+              type: 'select',
               name: 'target',
               message: 'Select a target to connect to:',
               choices: [...targetMap.keys()],
             })
+
             target = choice.target
           }
         }
