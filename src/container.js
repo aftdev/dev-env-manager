@@ -1,5 +1,5 @@
+import { fileURLToPath } from 'node:url'
 import { dirname } from 'path'
-import { fileURLToPath } from 'url'
 import {
   Lifetime,
   InjectionMode,
