@@ -105,4 +105,8 @@ describe('Outputformatter', () => {
       .to.match(/\nsecond line/)
       .to.match(/Stack:/)
   })
+
+  it('should return empty string if error is empty', () => {
+    expect(outputFormatter.renderError('')).to.be.empty
+  })
 })

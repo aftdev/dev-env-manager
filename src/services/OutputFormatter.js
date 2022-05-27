@@ -145,11 +145,13 @@ export default class OutputFormatter {
    * main process (and not a child_process)
    *
    * @param {Object} error
+   *
+   * @return String
    */
   renderError(error) {
     const message = error instanceof Error ? error.message : error
     if (!message) {
-      return
+      return ''
     }
 
     const messages = message.split(/\r?\n/).map((message) => message.trim())
