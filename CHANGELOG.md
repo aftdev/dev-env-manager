@@ -1,3 +1,20 @@
+## [0.9.0](https://github.com/aftdev/dev-env-manager/compare/v0.8.4...v0.9.0) (2022-05-27)
+
+### Features
+
+- **enquirer:** use enquirer instead of inquirer
+  ([c75abf5](https://github.com/aftdev/dev-env-manager/commit/c75abf5323e5cab85a51469d8cc5e40d35d98167))
+
+### Bug Fixes
+
+- **url:** get rid of useless node package
+  ([e7f4d3a](https://github.com/aftdev/dev-env-manager/commit/e7f4d3acb04146465d11d422628520c44391fd12))
+
+### Documentation
+
+- mention enquirer in list of available services
+  ([6d6eed8](https://github.com/aftdev/dev-env-manager/commit/6d6eed8f8771ffd4a8fe363341965b26f13d5628))
+
 ### [0.8.4](https://github.com/aftdev/dev-env-manager/compare/v0.8.3...v0.8.4) (2022-04-24)
 
 ### Bug Fixes
