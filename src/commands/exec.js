@@ -1,10 +1,9 @@
 import chalkTemplate from 'chalk-template'
-import inquirer from 'inquirer'
 
 /**
  * Fallback command using commander event system.
  */
-export default (cli, environmentManager, packageManagerScripts) => {
+export default (cli, environmentManager, packageManagerScripts, enquirer) => {
   // Fallback for any commands.
   cli.action(async () => {
     const allArgs = cli.args
@@ -17,8 +16,8 @@ export default (cli, environmentManager, packageManagerScripts) => {
       const managers = packageManagerScripts.getManagersForScript(command)
       let manager
       if (managers.length > 1) {
-        const choice = await inquirer.prompt({
-          type: 'list',
+        const choice = await enquirer.prompt({
+          type: 'select',
           name: 'manager',
           message: 'Select which package manager to use:',
           choices: managers.map((manager) => manager.constructor.name),

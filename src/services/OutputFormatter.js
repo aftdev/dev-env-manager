@@ -148,6 +148,10 @@ export default class OutputFormatter {
    */
   renderError(error) {
     const message = error instanceof Error ? error.message : error
+    if (!message) {
+      return
+    }
+
     const messages = message.split(/\r?\n/).map((message) => message.trim())
 
     const errorTitle = messages.shift()

@@ -1,11 +1,11 @@
 import child_process from 'child_process'
 import { expect } from 'chai'
-import inquirer from 'inquirer'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon from 'sinon'
 import {
   default as createTestContainer,
   stubOutputFormatter,
+  stubEnquirer,
 } from '../testHelpers.js'
 
 describe('Exec command tests', () => {
@@ -62,7 +62,7 @@ describe('Exec command tests', () => {
       .once()
       .callsFake()
 
-    sandbox.stub(inquirer, 'prompt').resolves({ manager: 'Composer' })
+    stubEnquirer(container, { manager: 'Composer' })
 
     await application.run(['scriptB'])
   })
