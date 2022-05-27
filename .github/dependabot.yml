@@ -8,3 +8,8 @@ updates:
       prefix: fix
       prefix-development: chore
       include: scope
+    versioning-strategy: increase-if-necessary
+    ignore:
+      # For all packages, ignore all patch updates
+      - dependency-name: '*'
+        update-types: ['version-update:semver-patch']
