@@ -1,3 +1,11 @@
+## [0.9.2](https://github.com/aftdev/dev-env-manager/compare/v0.9.1...v0.9.2) (2022-10-16)
+
+### Bug Fixes
+
+- **deps:** bump awilix from 7.0.3 to 8.0.0
+  ([#106](https://github.com/aftdev/dev-env-manager/issues/106))
+  ([91b5d04](https://github.com/aftdev/dev-env-manager/commit/91b5d04b79f77771b4f492882d720b14fbbc8f23))
+
 ## [0.9.1](https://github.com/aftdev/dev-env-manager/compare/v0.9.0...v0.9.1) (2022-10-16)
 
 ### Bug Fixes
