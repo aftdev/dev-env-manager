@@ -1,3 +1,16 @@
+## [0.9.1](https://github.com/aftdev/dev-env-manager/compare/v0.9.0...v0.9.1) (2022-10-16)
+
+### Bug Fixes
+
+- **deps:** update dependencies
+  ([#105](https://github.com/aftdev/dev-env-manager/issues/105))
+  ([ed16e6e](https://github.com/aftdev/dev-env-manager/commit/ed16e6e458a0975783fe4aedd5fe61535ef3a1b8))
+
+### Continuous Integration
+
+- **dependabot:** 🚀 only update package.json if new version
+  ([64ad7b3](https://github.com/aftdev/dev-env-manager/commit/64ad7b37b2231074264e681c5f6cfb2fb19c0980))
+
 ## [0.9.0](https://github.com/aftdev/dev-env-manager/compare/v0.8.4...v0.9.0) (2022-05-27)
 
 ### Features
