@@ -1,3 +1,21 @@
+## [1.0.0](https://github.com/aftdev/dev-env-manager/compare/v0.9.2...v1.0.0) (2023-01-16)
+
+### ⚠ BREAKING CHANGES
+
+- **deps:** new node version
+
+### Miscellaneous Chores
+
+- **deps:** update node version to 18
+  ([4db05f6](https://github.com/aftdev/dev-env-manager/commit/4db05f6c8066537ea9c2118daaae931352017fe6))
+
+### Continuous Integration
+
+- add node 19 to matrix
+  ([fa56647](https://github.com/aftdev/dev-env-manager/commit/fa56647ae5389f9caf15f5db9c5b2bb7d05eaef0))
+- ignore node version on yarn install
+  ([f9c03d4](https://github.com/aftdev/dev-env-manager/commit/f9c03d469a0a0fa532d244a0b03c290c069d9655))
+
 ## [0.9.2](https://github.com/aftdev/dev-env-manager/compare/v0.9.1...v0.9.2) (2022-10-16)
 
 ### Bug Fixes
