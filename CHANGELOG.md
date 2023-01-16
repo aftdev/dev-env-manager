@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/aftdev/dev-env-manager/compare/v1.0.0...v1.0.1) (2023-01-16)
+
+### Bug Fixes
+
+- **deps:** bump json5 from 1.0.1 to 1.0.2
+  ([8902a82](https://github.com/aftdev/dev-env-manager/commit/8902a82d91ac9c5c76c19d505c93e9103075edd1))
+
 ## [1.0.0](https://github.com/aftdev/dev-env-manager/compare/v0.9.2...v1.0.0) (2023-01-16)
 
 ### ⚠ BREAKING CHANGES
