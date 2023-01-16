@@ -10,7 +10,7 @@
     "package manager"
   ],
   "engines": {
-    "node": ">=16.0"
+    "node": ">=17.0"
   },
   "bin": {
     "dev": "./bin/index.js"
