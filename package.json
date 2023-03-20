@@ -12,7 +12,6 @@
   "engines": {
     "node": ">=18.0"
   },
-  "packageManager": "yarn@3.5.0",
   "bin": {
     "dev": "./bin/index.js"
   },
@@ -82,5 +81,6 @@
     "test-all": "mocha --reporter=dot --recursive './tests/**/*.test.js'",
     "coverage": "c8 --reporter=html --reporter=text --reporter=html yarn test-all",
     "ci:coverage": "c8 --check-coverage --reporter=none yarn test-all"
-  }
+  },
+  "packageManager": "yarn@3.5.0"
 }
