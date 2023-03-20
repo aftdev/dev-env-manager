@@ -18,7 +18,7 @@ __metadata:
     c8: ^7.13.0
     chai: ^4.3.7
     chalk: ^5.2.0
-    chalk-template: ^0.5.0
+    chalk-template: ^1.0.0
     commander: ^10.0.0
     conventional-changelog-conventionalcommits: ^5.0.0
     enquirer: ^2.3.6
@@ -1608,12 +1608,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk-template@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "chalk-template@npm:0.5.0"
+"chalk-template@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "chalk-template@npm:1.0.0"
   dependencies:
-    chalk: ^4.1.2
-  checksum: f8336f23bccc86221f7d53354fbadf1555f07186707e5b07daa64c76417db3bbf2994b64ee105c238a1a15ec1dff2345f18332d44993256718d4403179099880
+    chalk: ^5.2.0
+  checksum: 2cd8ae86d7e2ccc546a8fa93871931f7e5731b812e867be1bb77487f83ad6bd657dd25483a99dd0e4d615163551fde4457e48995597b69d58b8f1f633bc21952
   languageName: node
   linkType: hard
 
