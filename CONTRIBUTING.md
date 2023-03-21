@@ -71,3 +71,7 @@ needs to contain a `changeset` file
 To do so use the command `yarn changeset add` and follow the instructions. It
 will automatically create a commit for you that you can then push to your
 branch.
+
+Everything is done thanks to
+[changesets](https://github.com/changesets/changesets) and it's
+[github action](https://github.com/changesets/action)
