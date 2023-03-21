@@ -2,17 +2,13 @@
 # Changeset + Release NPM Package
 # ==============================================================================
 # We are using changeset to manage release packages and changelogs
-# Every time a PR is merged to main the action will check if there is a
+#
+# Every time a PR is merged to main, the action will check if there is a
 # changeset and create/update a release branch and create a pull request
 # for that branch.
+#
 # When that release PR is merged to main changeset will publish the package to
 # npm by executing `yarn release`
-#
-# Note: auto commit messages from changeset will contain a [skip-ci] description
-# which will stop PR merges back to main to trigger this action.
-#
-# For this reason the `commit` option in `./changeset/config.json` was set
-# to `false`
 # ==============================================================================
 name: Release
 
