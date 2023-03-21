@@ -30,23 +30,6 @@ $ yarn test path/to/file.js -g "test function description"
 $ yarn test path/to/file.js -g "test functions description"
 ```
 
-## Commit messages
-
-This project follows
-[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary)
-
-You will not be able to commit anything if your commit messages does not follow
-the convention.
-
-You could install
-[commitizen](https://github.com/commitizen/cz-cli#using-the-command-line-tool)
-to help you with message generation.
-
-```bash
-$ npm install -g commitizen
-$ git cz
-```
-
 ## Linting
 
 Linting should be done automatically when you add a commit thanks to
@@ -76,14 +59,15 @@ action workflow. [See file here](.github/workflows/release.yml)
 
 This workflow will automatically:
 
-- bump the version in the [`package.json`](./package.json) file
-- create a git tag and github release for that version
-- update the [`CHANGELOG.md`](./CHANGELOG.md) file
-- publish the new version to the
-  [NPM repository](https://www.npmjs.com/package/@aftdev/dev-env-manager)
+- create a branch and pull request `changeset-release/main` that will contain
+  - package.json version bump
+  - CHANGELOG addition
+- when this pull request is merged back to `main` new packages will be published
+  automatically.
 
-We are using
-[semantic-release](https://github.com/semantic-release/semantic-release) to do
-that. Please read the
-[How does it work](https://github.com/semantic-release/semantic-release#how-does-it-work)
-section to learn more about the process.
+In order to trigger a version bump and creation of this release branch your PR
+needs to contain a `changeset` file
+
+To do so use the command `yarn changeset add` and follow the instructions. It
+will automatically create a commit for you that you can then push to your
+branch.

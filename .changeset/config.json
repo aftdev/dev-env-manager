@@ -1,7 +1,10 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "aftdev/dev-env-manager" }
+  ],
+  "commit": true,
   "fixed": [],
   "linked": [],
   "access": "restricted",
