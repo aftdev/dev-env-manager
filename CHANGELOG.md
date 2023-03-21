@@ -1,5 +1,14 @@
 ## [1.0.2](https://github.com/aftdev/dev-env-manager/compare/v1.0.1...v1.0.2) (2023-02-10)
 
+## 1.0.3
+
+### Patch Changes
+
+- [#146](https://github.com/aftdev/dev-env-manager/pull/146)
+  [`8fa7deb`](https://github.com/aftdev/dev-env-manager/commit/8fa7deb30f943250efc81f53a26646297506fcba)
+  Thanks [@cgaube](https://github.com/cgaube)! - Testing changesets release
+  process
+
 ### Bug Fixes
 
 - **deps:** bump http-cache-semantics from 4.1.0 to 4.1.1
