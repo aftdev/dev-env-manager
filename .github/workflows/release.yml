@@ -1,43 +1,43 @@
 # ==============================================================================
-# Release NPM Package
+# Changeset + Release NPM Package
 # ==============================================================================
-# Release npm package every time something is merged to the main branch.
-#
-# If No release is required (because no feat / fix / breaking change)
-# semantic-release will just skip the process.
-#
-# Note:
-# Direct pushes on the main branch are disabled via github
-# branch protection rules.
-# All new changes pushed to the main branch should come from a Pull Request
-# where additional checks are executed. See pull-request.yml
+# We are using changeset to manage release packages and changelogs
+# Every time a PR is merged to main the action will check if there is a
+# changeset and create/update a release branch and create a pull request
+# for that branch.
+# When that release PR is merged to main changeset will publish the package to
+# npm by executing `yarn release`
 # ==============================================================================
-name: Release NPM Package
+name: Release
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
+    name: Release
     runs-on: ubuntu-latest
-    name: Publish new release
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v3
         with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Setup node
-        uses: actions/setup-node@v2
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
         with:
-          node-version: lts/*
-          cache: 'yarn'
-      - name: Install yarn dependencies
-        run: yarn install
-      # Use standard-version to change changelog and bump version.
-      - name: Bump version, update changelog and release to npm
-        run: yarn semantic-release
+          publish: yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
