@@ -4,7 +4,7 @@
     "@changesets/changelog-github",
     { "repo": "aftdev/dev-env-manager" }
   ],
-  "commit": true,
+  "commit": false,
   "fixed": [],
   "linked": [],
   "access": "restricted",

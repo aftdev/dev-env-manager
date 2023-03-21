@@ -68,10 +68,12 @@ This workflow will automatically:
 In order to trigger a version bump and creation of this release branch your PR
 needs to contain a `changeset` file
 
-To do so use the command `yarn changeset add` and follow the instructions. It
-will automatically create a commit for you that you can then push to your
-branch.
+To do so use the command `yarn changeset add` and follow the instructions.
+Commit and push the newly created changesets file(s) along your other changes to
+your PR.
 
 Everything is done thanks to
 [changesets](https://github.com/changesets/changesets) and it's
 [github action](https://github.com/changesets/action)
+
+More information can be found [here](./.changeset/README.md)

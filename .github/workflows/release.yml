@@ -7,6 +7,12 @@
 # for that branch.
 # When that release PR is merged to main changeset will publish the package to
 # npm by executing `yarn release`
+#
+# Note: auto commit messages from changeset will contain a [skip-ci] description
+# which will stop PR merges back to main to trigger this action.
+#
+# For this reason the `commit` option in `./changeset/config.json` was set
+# to `false`
 # ==============================================================================
 name: Release
 
@@ -40,6 +46,8 @@ jobs:
         uses: changesets/action@v1
         with:
           publish: yarn release
+          commit: 'chore(release): changesets versioning & publication'
+          title: 'Changesets: Versioning & Publication'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHANGESET_GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
