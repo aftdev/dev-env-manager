@@ -1,11 +1,11 @@
-## [1.0.2](https://github.com/aftdev/dev-env-manager/compare/v1.0.1...v1.0.2) (2023-02-10)
-
 ## 1.0.3
 
 ### Patch Changes
 
 - [`ea2b834`](https://github.com/aftdev/dev-env-manager/commit/ea2b83459d1531001398221bfba02930b82bc0b6)
   Thanks [@cgaube](https://github.com/cgaube)! - Test changeset release process
+
+## [1.0.2](https://github.com/aftdev/dev-env-manager/compare/v1.0.1...v1.0.2) (2023-02-10)
 
 ### Bug Fixes
 
