@@ -10,7 +10,7 @@ __metadata:
   resolution: "@aftdev/dev-env-manager@workspace:."
   dependencies:
     "@changesets/changelog-github": ^0.4.8
-    "@changesets/cli": ^2.26.0
+    "@changesets/cli": ^2.26.1
     awilix: ^8.0.0
     c8: ^7.13.0
     chai: ^4.3.7
@@ -18,25 +18,25 @@ __metadata:
     chalk-template: ^1.0.0
     commander: ^10.0.0
     enquirer: ^2.3.6
-    eslint: ^8.35.0
+    eslint: ^8.36.0
     eslint-config-airbnb-base: ^15.0.0
-    eslint-config-prettier: ^8.6.0
+    eslint-config-prettier: ^8.8.0
     eslint-plugin-import: ^2.27.5
-    eslint-plugin-jsdoc: ^40.0.1
+    eslint-plugin-jsdoc: ^40.1.0
     eslint-plugin-no-only-tests: ^3.1.0
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-promise: ^6.1.1
     extract-stack: ^3.0.0
     findup-sync: ^5.0.0
     husky: ^8.0.3
-    lint-staged: ^13.1.3
+    lint-staged: ^13.2.0
     mocha: ^10.2.0
     nconf: ^0.12.0
     nconf-yaml: ^1.0.2
     path: ^0.12.7
-    prettier: ^2.8.4
+    prettier: ^2.8.7
     puka: ^1.0.1
-    sinon: ^15.0.1
+    sinon: ^15.0.3
     strip-ansi: ^7.0.1
     yaml: ^2.2.1
   bin:
@@ -142,9 +142,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/cli@npm:^2.26.0":
-  version: 2.26.0
-  resolution: "@changesets/cli@npm:2.26.0"
+"@changesets/cli@npm:^2.26.1":
+  version: 2.26.1
+  resolution: "@changesets/cli@npm:2.26.1"
   dependencies:
     "@babel/runtime": ^7.20.1
     "@changesets/apply-release-plan": ^6.1.3
@@ -181,7 +181,7 @@ __metadata:
     tty-table: ^4.1.5
   bin:
     changeset: bin.js
-  checksum: 12a911b4196ff390ce114e27b475e59f5f5e1fdc7049d1ab04effe73d4811d99db47a030de6abe332300b4b2c43cffc537cec4883476b59b69bc23aee07cd5c5
+  checksum: d7d6445ebbc1b2718d97852a2275f59af32020e8a1e1efe666767819dd862c7794ce50627ad52f1f97ba4bc57c81bfc4750e92265757cc94ab2d44198d2afb10
   languageName: node
   linkType: hard
 
@@ -542,7 +542,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/fake-timers@npm:10.0.2, @sinonjs/fake-timers@npm:^10.0.2":
+"@sinonjs/commons@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@sinonjs/commons@npm:3.0.0"
+  dependencies:
+    type-detect: 4.0.8
+  checksum: b4b5b73d4df4560fb8c0c7b38c7ad4aeabedd362f3373859d804c988c725889cde33550e4bcc7cd316a30f5152a2d1d43db71b6d0c38f5feef71fd8d016763f8
+  languageName: node
+  linkType: hard
+
+"@sinonjs/fake-timers@npm:^10.0.2":
   version: 10.0.2
   resolution: "@sinonjs/fake-timers@npm:10.0.2"
   dependencies:
@@ -551,14 +560,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/samsam@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "@sinonjs/samsam@npm:7.0.1"
+"@sinonjs/samsam@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@sinonjs/samsam@npm:8.0.0"
   dependencies:
     "@sinonjs/commons": ^2.0.0
     lodash.get: ^4.4.2
     type-detect: ^4.0.8
-  checksum: 291efb158d54c67dee23ddabcb28873d22063449b692aaa3b2a4f1826d2f79d38695574063c92e9c17573cc805cd6acbf0ab0c66c9f3aed7afd0f12a2b905615
+  checksum: 95e40d0bb9f7288e27c379bee1b03c3dc51e7e78b9d5ea6aef66a690da7e81efc4715145b561b449cefc5361a171791e3ce30fb1a46ab247d4c0766024c60a60
   languageName: node
   linkType: hard
 
@@ -1490,10 +1499,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diff@npm:5.0.0, diff@npm:^5.0.0":
+"diff@npm:5.0.0":
   version: 5.0.0
   resolution: "diff@npm:5.0.0"
   checksum: f19fe29284b633afdb2725c2a8bb7d25761ea54d321d8e67987ac851c5294be4afeab532bd84531e02583a3fe7f4014aa314a3eda84f5590e7a9e6b371ef3b46
+  languageName: node
+  linkType: hard
+
+"diff@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "diff@npm:5.1.0"
+  checksum: c7bf0df7c9bfbe1cf8a678fd1b2137c4fb11be117a67bc18a0e03ae75105e8533dbfb1cda6b46beb3586ef5aed22143ef9d70713977d5fb1f9114e21455fba90
   languageName: node
   linkType: hard
 
@@ -1701,7 +1717,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.6.0":
+"eslint-config-prettier@npm:^8.8.0":
   version: 8.8.0
   resolution: "eslint-config-prettier@npm:8.8.0"
   peerDependencies:
@@ -1760,7 +1776,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:^40.0.1":
+"eslint-plugin-jsdoc@npm:^40.1.0":
   version: 40.1.0
   resolution: "eslint-plugin-jsdoc@npm:40.1.0"
   dependencies:
@@ -1825,7 +1841,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.35.0":
+"eslint@npm:^8.36.0":
   version: 8.36.0
   resolution: "eslint@npm:8.36.0"
   dependencies:
@@ -3113,7 +3129,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^13.1.3":
+"lint-staged@npm:^13.2.0":
   version: 13.2.0
   resolution: "lint-staged@npm:13.2.0"
   dependencies:
@@ -3615,7 +3631,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nise@npm:^5.1.2":
+"nise@npm:^5.1.4":
   version: 5.1.4
   resolution: "nise@npm:5.1.4"
   dependencies:
@@ -4069,12 +4085,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.8.4":
-  version: 2.8.4
-  resolution: "prettier@npm:2.8.4"
+"prettier@npm:^2.8.7":
+  version: 2.8.7
+  resolution: "prettier@npm:2.8.7"
   bin:
     prettier: bin-prettier.js
-  checksum: c173064bf3df57b6d93d19aa98753b9b9dd7657212e33b41ada8e2e9f9884066bb9ca0b4005b89b3ab137efffdf8fbe0b462785aba20364798ff4303aadda57e
+  checksum: fdc8f2616f099f5f0d685907f4449a70595a0fc1d081a88919604375989e0d5e9168d6121d8cc6861f21990b31665828e00472544d785d5940ea08a17660c3a6
   languageName: node
   linkType: hard
 
@@ -4480,17 +4496,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sinon@npm:^15.0.1":
-  version: 15.0.1
-  resolution: "sinon@npm:15.0.1"
+"sinon@npm:^15.0.3":
+  version: 15.0.3
+  resolution: "sinon@npm:15.0.3"
   dependencies:
-    "@sinonjs/commons": ^2.0.0
-    "@sinonjs/fake-timers": 10.0.2
-    "@sinonjs/samsam": ^7.0.1
-    diff: ^5.0.0
-    nise: ^5.1.2
+    "@sinonjs/commons": ^3.0.0
+    "@sinonjs/fake-timers": ^10.0.2
+    "@sinonjs/samsam": ^8.0.0
+    diff: ^5.1.0
+    nise: ^5.1.4
     supports-color: ^7.2.0
-  checksum: 4b5acff291b4650cf736bf45fc9eceed44dceca63b663cbd55926dd688fe8e9baa4b4629e296ee5d5b64245aedec5c540fea0416b8bb35bccfb98ca9e9ed87f3
+  checksum: fb9401e44215c7a7904d2df3032c56369cb4f2fd9c708460e1b980c6032de8e13bd8c4d90039074f9383e5219702a5e0755b7bea94bd4c090b8c1e583f137c3d
   languageName: node
   linkType: hard
 
