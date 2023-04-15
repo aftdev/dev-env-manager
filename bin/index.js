@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import runApp from '../src/index.js'
+import runApp from '../dist/index.js'
 
 process.exitCode = await runApp()

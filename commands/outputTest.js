@@ -1,5 +1,3 @@
-import OutputFormatter from '../src/services/OutputFormatter.js'
-
 /**
  * Show all output styles.
  */
@@ -17,7 +15,7 @@ export default (cli, outputFormatter) => {
       outputFormatter.error('Error Message')
       outputFormatter.separator()
       outputFormatter
-        .line('Test Message', 'white', 'Title', OutputFormatter.icons.dash)
+        .line('Test Message', 'white', 'Title', outputFormatter.icons.dash)
         .newLine()
         .line('Test Message')
 

@@ -8,25 +8,19 @@ const configs = [
   'plugin:import/recommended',
   'plugin:promise/recommended',
   'plugin:prettier/recommended',
+  'plugin:@typescript-eslint/eslint-recommended',
+  'plugin:@typescript-eslint/recommended',
+  'prettier',
 ]
 
 const rules = {
+  'import/named': 'off',
   'no-process-exit': 'error',
   'arrow-body-style': 'error',
   curly: ['error', 'all'],
   'no-console': 'error',
   'no-only-tests/no-only-tests': 'error',
   'prefer-arrow-callback': 'error',
-  'jsdoc/check-alignment': 'error',
-  'jsdoc/check-param-names': 'error',
-  'jsdoc/check-syntax': 'error',
-  'jsdoc/check-tag-names': 'error',
-  'jsdoc/check-types': 'error',
-  'jsdoc/implements-on-classes': 'error',
-  'jsdoc/newline-after-description': 'error',
-  'jsdoc/require-description-complete-sentence': 'error',
-  'jsdoc/require-hyphen-before-param-description': 'error',
-  'jsdoc/require-returns-check': 'error',
   'import/no-extraneous-dependencies': 'error',
   'import/first': 'error',
   'import/newline-after-import': 'error',
@@ -41,11 +35,16 @@ const rules = {
   ],
   'promise/prefer-await-to-then': 'warn',
   'import/no-named-as-default-member': 'off',
-  // Until eslint can figure out paths from package.json "imports" section
-  'import/no-unresolved': [2, { ignore: ['^#.+$'] }],
+  '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+  '@typescript-eslint/no-non-null-assertion': 'off',
 }
 
-const plugins = ['jsdoc', 'no-only-tests']
+const plugins = [
+  'jsdoc',
+  'no-only-tests',
+  '@typescript-eslint',
+  'eslint-plugin-tsdoc',
+]
 
 module.exports = {
   root: true,
@@ -61,4 +60,14 @@ module.exports = {
   plugins,
   reportUnusedDisableDirectives: true,
   rules,
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+      },
+    },
+  },
 }

@@ -19,7 +19,7 @@ const removeIgnoredFiles = async (files) => {
 
 export default {
   '*.{js,mjs,cjs,ts,md,json,yaml,yml}': 'prettier --write',
-  '*.{js,mjs,cjs}': async (files) => {
+  '*.{ts,js,mjs,cjs}': async (files) => {
     // https://github.com/okonet/lint-staged#how-can-i-ignore-files-from-eslintignore
     const filesToLint = await removeIgnoredFiles(files)
     return [`eslint --cache --fix --max-warnings 0 ${filesToLint}`]
