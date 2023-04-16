@@ -1,5 +1,14 @@
 ## 1.0.3
 
+## 2.0.0
+
+### Major Changes
+
+- [#153](https://github.com/aftdev/dev-env-manager/pull/153)
+  [`6613e9e`](https://github.com/aftdev/dev-env-manager/commit/6613e9e0b1f8cd00273e337e3845cb0b5097ebe7)
+  Thanks [@cgaube](https://github.com/cgaube)! - We are now using typescript for
+  all our files
+
 ### Patch Changes
 
 - [`ea2b834`](https://github.com/aftdev/dev-env-manager/commit/ea2b83459d1531001398221bfba02930b82bc0b6)
