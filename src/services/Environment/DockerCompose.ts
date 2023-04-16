@@ -138,7 +138,7 @@ export default class DockerCompose extends AbstractEnvironment {
   override connect(options: DockerComposeConnectOptions = {}) {
     const container = options.target || false
     if (!container) {
-      throw 'Please specify target'
+      throw new Error('Please specify target')
     }
 
     return this.execute(

@@ -82,7 +82,7 @@ export default class Vagrant extends AbstractEnvironment {
   override connect(options: VagrantConnectOptions = {}) {
     const machine = options.target || false
     if (!machine) {
-      throw 'Please specify machine'
+      throw new Error('Please specify machine')
     }
 
     return this.vagrantCommand(['ssh', machine], 'tty')

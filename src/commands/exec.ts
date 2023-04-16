@@ -53,6 +53,8 @@ export default (
     }
 
     // Error out.
-    throw chalkTemplate`Invalid Command {white.dim (add --help for additional information)}`
+    throw new Error(
+      chalkTemplate`Invalid Command {white.dim (add --help for additional information)}`,
+    )
   })
 }

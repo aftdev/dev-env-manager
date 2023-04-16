@@ -135,7 +135,7 @@ describe('Environment command tests', () => {
       .returns(['a', 'b', 'c'])
 
     const outputFormatter = container.resolve('outputFormatter')
-    const outputStub = sandbox.stub(outputFormatter, 'output')
+    const outputStub = sandbox.stub(outputFormatter, 'output').returnsThis()
 
     const exitCode = await application.run(['connect'])
 

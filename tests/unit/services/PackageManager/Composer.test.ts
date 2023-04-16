@@ -24,4 +24,14 @@ describe('Composer unit tests', () => {
         .callCount,
     ).to.be.eq(1)
   })
+
+  it('should properly execute install process', () => {
+    const envManagerStub = sandbox.createStubInstance(EnvManager)
+    const packageManager = new Composer(envManagerStub)
+    packageManager.install()
+
+    expect(
+      envManagerStub.executeCommand.withArgs('composer', ['install']).callCount,
+    ).to.be.eq(1)
+  })
 })

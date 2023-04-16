@@ -18,6 +18,7 @@ const rules = {
   'no-process-exit': 'error',
   'arrow-body-style': 'error',
   curly: ['error', 'all'],
+  'no-throw-literal': 'error',
   'no-console': 'error',
   'no-only-tests/no-only-tests': 'error',
   'prefer-arrow-callback': 'error',

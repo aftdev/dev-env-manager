@@ -41,11 +41,7 @@ export default class EnvironmentManager {
       this.environments.set(envName, this.build(envName))
     }
 
-    const env = this.environments.get(envName)
-    if (!env) {
-      throw new Error('Could not find the env')
-    }
-    return env
+    return this.environments.get(envName)!
   }
 
   /**
@@ -88,10 +84,6 @@ export default class EnvironmentManager {
       this.getCommandEnvironment(command)
 
     const env = this.get(envName)
-    if (!env) {
-      throw new Error('Could not find environment')
-    }
-
     // allow override of the command.
     command = (options.command || command) as string
 
@@ -110,7 +102,7 @@ export default class EnvironmentManager {
   public build(envName: string): AbstractEnvironment {
     const envConfig = this.configuration[envName]
     if (!envConfig) {
-      throw 'Unknown environment'
+      throw new Error(`Cannot build env [${envName}]: Unknown`)
     }
 
     const envType = envConfig.type || envName

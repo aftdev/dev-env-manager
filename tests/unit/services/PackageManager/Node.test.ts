@@ -30,6 +30,15 @@ describe('Node Package Managers unit tests', () => {
       ).to.be.eq(1)
     })
 
+    it('should properly execute install process', () => {
+      const packageManager = new Npm(envManagerStub)
+      packageManager.install()
+
+      expect(
+        envManagerStub.executeCommand.withArgs('npm', ['install']).callCount,
+      ).to.be.eq(1)
+    })
+
     it(`should execute script`, () => {
       const packageManager = new Npm(envManagerStub)
       packageManager.executeScript('script')
@@ -52,6 +61,15 @@ describe('Node Package Managers unit tests', () => {
       ).to.be.eq(1)
     })
 
+    it('should properly execute install process', () => {
+      const packageManager = new Yarn(envManagerStub)
+      packageManager.install()
+
+      expect(
+        envManagerStub.executeCommand.withArgs('yarn', ['install']).callCount,
+      ).to.be.eq(1)
+    })
+
     it(`executes scripts`, () => {
       const packageManager = new Yarn(envManagerStub)
       packageManager.executeScript('script')
@@ -71,6 +89,15 @@ describe('Node Package Managers unit tests', () => {
       expect(
         envManagerStub.executeCommand.withArgs('pnpm', ['test command'])
           .callCount,
+      ).to.be.eq(1)
+    })
+
+    it('should properly execute install process', () => {
+      const packageManager = new Pnpm(envManagerStub)
+      packageManager.install()
+
+      expect(
+        envManagerStub.executeCommand.withArgs('pnpm', ['install']).callCount,
       ).to.be.eq(1)
     })
 

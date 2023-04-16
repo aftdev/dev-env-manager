@@ -20,4 +20,29 @@ describe('Local Env unit tests', () => {
 
     expect(localEnv.isEnabled()).to.be.true
   })
+
+  it('should always be enabled', () => {
+    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+    const localEnv = new Local(commandExecuterStub)
+
+    expect(localEnv.isEnabled()).to.be.true
+  })
+
+  const ops: Array<keyof Local & string> = [
+    'status',
+    'start',
+    'stop',
+    'connect',
+  ]
+
+  ops.forEach((operation) => {
+    it(`should be noop operation ${operation}`, () => {
+      const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+      const localEnv = new Local(commandExecuterStub)
+
+      localEnv[operation]()
+
+      expect(localEnv[operation]()).to.be.undefined
+    })
+  })
 })

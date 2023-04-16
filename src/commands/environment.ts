@@ -82,7 +82,7 @@ export default (
 
         const targetMap = new Map(targets)
         if (!targetMap.size) {
-          throw 'No targets found'
+          throw new Error('No targets found')
         }
 
         if (!target) {
@@ -102,7 +102,7 @@ export default (
         }
 
         if (!targetMap.has(target)) {
-          throw 'Invalid target'
+          throw new Error('Invalid target')
         }
 
         const env = targetMap.get(target)

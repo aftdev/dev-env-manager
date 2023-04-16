@@ -21,7 +21,7 @@ export default (
       const configFilePath = `./${Application.CONFIG_FILE}`
 
       if (fs.existsSync(configFilePath)) {
-        throw 'Config file already exists'
+        throw new Error('Config file already exists')
       }
 
       // Prompt.

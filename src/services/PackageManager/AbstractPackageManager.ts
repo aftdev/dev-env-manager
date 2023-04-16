@@ -1,7 +1,7 @@
 import fs from 'fs'
-import EnvironmentManager from '../EnvironmentManager.js'
-import FileConfigArgs from '../FileConfigArgs.js'
 import type { CommandArgs } from '#services/CommandExecuter.js'
+import EnvironmentManager from '#services/EnvironmentManager.js'
+import FileConfigArgs from '#services/FileConfigArgs.js'
 
 /**
  * AbstractPackageManager class.

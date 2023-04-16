@@ -69,7 +69,7 @@ describe('Environment Manager Tests', () => {
 
     expect(() => {
       envManager.get('myCustomEnv')
-    }).to.throw('Unknown')
+    }).to.throw('Cannot build env [myCustomEnv]: Unknown')
   })
 
   it('fails when environment is invalid', () => {
