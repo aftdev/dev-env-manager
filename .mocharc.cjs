@@ -4,5 +4,7 @@
  * @see https://mochajs.org/#configuring-mocha-nodejs
  */
 module.exports = {
-  require: ['tests/hooks.js'],
+  require: ['tests/hooks.mjs'],
+  extension: ['js', 'ts'],
+  loader: 'tsx',
 }

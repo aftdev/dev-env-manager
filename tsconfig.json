@@ -1,0 +1,20 @@
+{
+  "extends": "@tsconfig/node-lts/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "moduleResolution": "node16",
+    "module": "es2022",
+    "target": "ES2022",
+    "noImplicitOverride": true,
+    "declaration": true,
+    "noEmit": true,
+    "noEmitOnError": true,
+    "paths": {
+      "#services/*": ["./src/services/*"],
+      "#src/*": ["./src/*"],
+      "#tests/*": ["./tests/*"]
+    },
+    "outDir": "dist"
+  },
+  "include": ["src/**/*", "tests/**/*"]
+}

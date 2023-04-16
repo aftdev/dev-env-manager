@@ -1,7 +1,11 @@
+
+dist/
 coverage/
 node_modules/
 .eslintcache
 .nyc_output
+
+.DS_Store
 
 # Yarn
 .pnp.*
