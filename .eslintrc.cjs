@@ -40,12 +40,7 @@ const rules = {
   '@typescript-eslint/no-non-null-assertion': 'off',
 }
 
-const plugins = [
-  'jsdoc',
-  'no-only-tests',
-  '@typescript-eslint',
-  'eslint-plugin-tsdoc',
-]
+const plugins = ['no-only-tests', '@typescript-eslint', 'eslint-plugin-tsdoc']
 
 module.exports = {
   root: true,
