@@ -1,6 +1,6 @@
 {
   "name": "@aftdev/dev-env-manager",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Command line utilities to manage your projects development environment",
   "type": "module",
   "main": "dist/index.js",
@@ -26,7 +26,7 @@
   "files": [
     "./bin",
     "./docs",
-    "./src",
+    "./dist",
     "./CHANGELOG.md",
     "./README.md"
   ],
