@@ -1,18 +1,16 @@
 import fs from 'fs'
-import type { Command } from 'commander'
-import type Enquirer from 'enquirer'
 import yaml from 'yaml'
-import type OutputFormatter from '#services/OutputFormatter.js'
+import type { DevCommandInitializer } from './index.js'
 import Application from '#src/Application.js'
 
 /**
  * Initialization related commands.
  */
-export default (
-  cli: Command,
-  outputFormatter: OutputFormatter,
-  enquirer: Enquirer,
-) => {
+const initCommands: DevCommandInitializer = ({
+  cli,
+  outputFormatter,
+  enquirer,
+}) => {
   cli
     .command('init')
     .enablePositionalOptions()
@@ -51,3 +49,5 @@ export default (
       outputFormatter.success(`${Application.CONFIG_FILE} file created`)
     })
 }
+
+export default initCommands

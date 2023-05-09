@@ -1,18 +1,15 @@
 import chalkTemplate from 'chalk-template'
-import type { Command } from 'commander'
-import Enquirer from 'enquirer'
-import type EnvironmentManager from '#services/EnvironmentManager.js'
-import type PackageManagerScript from '#services/PackageManagerScript.js'
+import type { DevCommandInitializer } from './index.js'
 
 /**
  * Fallback command using commander event system.
  */
-export default (
-  cli: Command,
-  environmentManager: EnvironmentManager,
-  packageManagerScripts: PackageManagerScript,
-  enquirer: Enquirer,
-) => {
+const initCommands: DevCommandInitializer = ({
+  cli,
+  environmentManager,
+  packageManagerScripts,
+  enquirer,
+}) => {
   // Fallback for any commands.
   cli.action(async () => {
     const allArgs = cli.args
@@ -25,7 +22,6 @@ export default (
       const managers = packageManagerScripts.getManagersForScript(command)
       let manager
       if (managers.length > 1) {
-        //{manager: string}
         const choice = (await enquirer.prompt({
           type: 'select',
           name: 'manager',
@@ -58,3 +54,5 @@ export default (
     )
   })
 }
+
+export default initCommands

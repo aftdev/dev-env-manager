@@ -1,7 +1,7 @@
 /**
  * Show all output styles.
  */
-export default (cli, outputFormatter) => {
+export default ({ cli, outputFormatter }) => {
   cli
     .command('output')
     .description('Test all output styles')

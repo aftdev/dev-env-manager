@@ -247,8 +247,7 @@ commands_dirs:
 
 ```js
 // @file ./commands/my-command.js
-
-export default (cli) => {
+export default ({ cli }) => {
   cli
     .command('your-command-name')
     .description('This is my really cool command')
@@ -256,6 +255,20 @@ export default (cli) => {
       console.log('HELLO')
     })
 }
+```
+
+```ts
+// @file ./commands/my-command.ts
+const commandsInitalizer: CommandInitalizer = ({ cli }) => {
+  cli
+    .command('your-command-name')
+    .description('This is my really cool command')
+    .action(() => {
+      console.log('HELLO from JS')
+    })
+}
+
+export default commandsInitalizer
 ```
 
 `cli` is an instance of [`commander`](https://github.com/tj/commander.js). The
@@ -279,12 +292,18 @@ need to be added to that project's `package.json` file.
 - `enquirer`: create cli prompts with
   [enquirer](https://github.com/enquirer/enquirer)
 
-The above services are automatically injected into your command "module".
+The above services are automatically injected into your command initializer
+function (you can use typescript to discover services that are available)
 
 Example:
 
-```js
-export default (cli, outputFormatter, composer, environmentManager) => {
+```ts
+const commandsInitalizer: CommandInitalizer = ({
+  cli,
+  outputFormatter,
+  composer,
+  environmentManager,
+}) => {
   cli.command('auto-injection').action(() => {
     outputFormatter.title('Auto Injection example')
 
@@ -293,6 +312,8 @@ export default (cli, outputFormatter, composer, environmentManager) => {
     composer.execute(['install'])
   })
 }
+
+export default commandsInitalizer
 ```
 
 ## Environments

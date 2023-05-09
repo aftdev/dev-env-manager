@@ -1,22 +1,17 @@
-import type { Command } from 'commander'
-import type Enquirer from 'enquirer'
+import type { DevCommandInitializer } from './index.js'
 import AbstractEnvironment from '#services/Environment/AbstractEnvironment.js'
-import EnvironmentManager from '#services/EnvironmentManager.js'
-import type OutputFormatter from '#services/OutputFormatter.js'
-import type AbstractPackageManager from '#services/PackageManager/AbstractPackageManager.js'
-import type Composer from '#services/PackageManager/Composer.js'
 
 /**
  * Add commands to setup / start / stop / environments.
  */
-export default (
-  cli: Command,
-  outputFormatter: OutputFormatter,
-  environmentManager: EnvironmentManager,
-  node: AbstractPackageManager,
-  composer: Composer,
-  enquirer: Enquirer,
-) => {
+const initCommands: DevCommandInitializer = ({
+  cli,
+  outputFormatter,
+  environmentManager,
+  node,
+  composer,
+  enquirer,
+}) => {
   /**
    * Execute a function on enabled environments that match criteria.
    *
@@ -46,7 +41,7 @@ export default (
       })
   }
 
-  /// @ts-expect-error: using private commander functions
+  // @ts-expect-error: using private commander functions
   if (!cli._findCommand('stop')) {
     cli
       .command('stop')
@@ -146,3 +141,5 @@ export default (
       })
   }
 }
+
+export default initCommands
