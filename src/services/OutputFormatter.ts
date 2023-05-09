@@ -7,7 +7,7 @@ export default class OutputFormatter {
     lifetime: Lifetime.SCOPED,
   }
 
-  static icons = {
+  static ICONS = {
     info: 'ℹ',
     success: '✔',
     warning: '⚠',
@@ -31,9 +31,9 @@ export default class OutputFormatter {
    * Output a title.
    */
   title(text: string, color = 'green') {
-    return this.separator(color, OutputFormatter.icons.titleSeparator)
+    return this.separator(color, OutputFormatter.ICONS.titleSeparator)
       .output(chalk`{${color}.bold ${text}}`)
-      .separator(color, OutputFormatter.icons.titleSeparator)
+      .separator(color, OutputFormatter.ICONS.titleSeparator)
   }
 
   /**
@@ -42,7 +42,7 @@ export default class OutputFormatter {
   subtitle(text: string, color = 'yellow') {
     return this.output(chalk`{${color} ${text}}`).separator(
       color,
-      OutputFormatter.icons.dash,
+      OutputFormatter.ICONS.dash,
     )
   }
 
@@ -51,7 +51,7 @@ export default class OutputFormatter {
    */
   separator(
     color = 'white.dim',
-    type: string = OutputFormatter.icons.separator,
+    type: string = OutputFormatter.ICONS.separator,
   ) {
     const separator = type.repeat(process.stdout.columns)
 
@@ -83,7 +83,7 @@ export default class OutputFormatter {
       text,
       'green',
       title || 'Success',
-      OutputFormatter.icons.success,
+      OutputFormatter.ICONS.success,
     )
   }
 
@@ -95,7 +95,7 @@ export default class OutputFormatter {
       text,
       'yellow',
       title || 'Warning',
-      OutputFormatter.icons.warning,
+      OutputFormatter.ICONS.warning,
     )
   }
 
@@ -103,14 +103,14 @@ export default class OutputFormatter {
    * Output an error message.
    */
   error(text: string, title?: string) {
-    return this.line(text, 'red', title || 'Error', OutputFormatter.icons.error)
+    return this.line(text, 'red', title || 'Error', OutputFormatter.ICONS.error)
   }
 
   /**
    * Output an information message.
    */
   info(text: string, title?: string) {
-    return this.line(text, 'blue', title || 'Info', OutputFormatter.icons.error)
+    return this.line(text, 'blue', title || 'Info', OutputFormatter.ICONS.error)
   }
 
   /**.
@@ -137,7 +137,7 @@ export default class OutputFormatter {
     const whiteColor = 'white.dim'
 
     if (messages.length) {
-      this.separator(redColor, OutputFormatter.icons.dash)
+      this.separator(redColor, OutputFormatter.ICONS.dash)
         .line(messages.join('\n'), redColor)
         .newLine()
     }
@@ -146,9 +146,9 @@ export default class OutputFormatter {
     const stack = extractStack(error)
     if (stack) {
       this.line('Stack:', whiteColor)
-        .separator(whiteColor, OutputFormatter.icons.dash)
+        .separator(whiteColor, OutputFormatter.ICONS.dash)
         .line(stack, whiteColor)
-        .separator(whiteColor, OutputFormatter.icons.dash)
+        .separator(whiteColor, OutputFormatter.ICONS.dash)
         .newLine()
     }
   }

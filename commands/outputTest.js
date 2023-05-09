@@ -15,7 +15,12 @@ export default ({ cli, outputFormatter }) => {
       outputFormatter.error('Error Message')
       outputFormatter.separator()
       outputFormatter
-        .line('Test Message', 'white', 'Title', outputFormatter.icons.dash)
+        .line(
+          'Test Message',
+          'white',
+          'Title',
+          Object.getPrototypeOf(outputFormatter).constructor.ICONS.dash,
+        )
         .newLine()
         .line('Test Message')
 
