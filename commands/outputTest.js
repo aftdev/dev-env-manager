@@ -1,7 +1,7 @@
 /**
  * Show all output styles.
  */
-export default (cli, outputFormatter) => {
+export default ({ cli, outputFormatter }) => {
   cli
     .command('output')
     .description('Test all output styles')
@@ -15,7 +15,12 @@ export default (cli, outputFormatter) => {
       outputFormatter.error('Error Message')
       outputFormatter.separator()
       outputFormatter
-        .line('Test Message', 'white', 'Title', outputFormatter.icons.dash)
+        .line(
+          'Test Message',
+          'white',
+          'Title',
+          Object.getPrototypeOf(outputFormatter).constructor.ICONS.dash,
+        )
         .newLine()
         .line('Test Message')
 

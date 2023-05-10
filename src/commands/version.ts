@@ -1,16 +1,15 @@
 import fs from 'fs'
 import chalkTemplate from 'chalk-template'
-import type { Command } from 'commander'
-import type OutputFormatter from '#services/OutputFormatter.js'
+import type { DevCommandInitializer } from './index.js'
 
 /**
  * Display version information.
  */
-export default (
-  cli: Command,
-  outputFormatter: OutputFormatter,
-  rootPath: string,
-) => {
+const initCommands: DevCommandInitializer = ({
+  cli,
+  outputFormatter,
+  rootPath,
+}) => {
   cli
     .option('-V, --version', 'Output the current version')
     .on('option:version', () => {
@@ -24,3 +23,5 @@ export default (
       return cli._exit(0, 'commander.version', version)
     })
 }
+
+export default initCommands

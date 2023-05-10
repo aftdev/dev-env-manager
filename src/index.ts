@@ -4,6 +4,9 @@ import findup from 'findup-sync'
 import Application from './Application.js'
 import createContainer from './container.js'
 
+export * from '#src/services/index.js'
+export * from '#src/commands/index.js'
+
 export default async function () {
   // Get closest dir that have the config file.
   let path = process.cwd()

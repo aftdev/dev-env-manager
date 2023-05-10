@@ -40,7 +40,8 @@ export default class Application {
 
       // Use container to load all command modules.
       commands.forEach((module: FunctionReturning<unknown>) => {
-        this.container.build(asFunction(module))
+        // For typescript and type-hinting, we use the proxy mode.
+        this.container.build(asFunction(module).proxy())
       })
 
       this.bootstrapped = true

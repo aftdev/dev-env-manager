@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import type { AwilixContainer } from 'awilix'
+import Enquirer from 'enquirer'
 import sinon, { SinonSandbox } from 'sinon'
 import createContainer from '../../src/container.js'
 
@@ -44,20 +45,25 @@ let currentEnquirerPromptStub: (
   args: Record<string, { name: string; initial: string; type: string }>,
 ) => void
 
-/**.
- * Stub the enquirer answers
- *
+/**
+ * Stub the enquirer answers.
  */
-export function stubEnquirer(container: AwilixContainer, answers = {}) {
-  const enquirer = container.resolve('enquirer')
+export function stubEnquirer(
+  container: AwilixContainer,
+  answers: Record<string, unknown> = {},
+) {
+  const enquirer = container.resolve('enquirer') as Enquirer
+  // @ts-expect-error: using enquirer hidden property.
   enquirer.options.show = false
 
   if (currentEnquirerPromptStub) {
     enquirer.off('prompt', currentEnquirerPromptStub)
   }
 
-  currentEnquirerPromptStub = (prompt) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  currentEnquirerPromptStub = (prompt: any) => {
     const promptAnswer = prompt.name in answers ? answers[prompt.name] : null
+
     switch (prompt.type.toLowerCase()) {
       case 'select':
       case 'confirm':
