@@ -1,5 +1,20 @@
 ## 1.0.3
 
+## 3.0.0
+
+### Major Changes
+
+- [#169](https://github.com/aftdev/dev-env-manager/pull/169)
+  [`496f9d8`](https://github.com/aftdev/dev-env-manager/commit/496f9d8e87eb574be8f906d2ced657e8d2e00e0a)
+  Thanks [@cgaube](https://github.com/cgaube)! - Improve typescript definition
+  of the commands initializer
+
+  Breaking change: The command initializers parameters are now using Awilix
+  proxy method instead of the classic one
+
+  This will help for type-hinting when users are creating their own initializers
+  using typescript.
+
 ## 2.0.0
 
 ### Major Changes
