@@ -228,7 +228,7 @@ custom command and not `yarn build`.
 Each project can set its own custom commands:
 
 1. Set the command folder path(s) in the `dev-env-config.yml` file
-2. Add command files to the commands directory
+2. Add command files (js, mjs, cjs) to the commands directory
 
 Project commands will always take precedence over application default commands.
 
@@ -259,31 +259,29 @@ export default ({ cli }) => {
 
 ```ts
 // @file ./commands/my-command.ts
-const commandsInitalizer: CommandInitalizer = ({ cli }) => {
+import type { DevCommandInitializer } from '@aftdev/dev-env-manager'
+
+const commandsInitializer: DevCommandInitializer = ({ cli }) => {
   cli
     .command('your-command-name')
     .description('This is my really cool command')
     .action(() => {
-      console.log('HELLO from JS')
+      console.log('HELLO from TS')
     })
 }
 
-export default commandsInitalizer
+export default commandsInitializer
 ```
 
-`cli` is an instance of [`commander`](https://github.com/tj/commander.js). The
-documentation on how to create cli commands can be found
-[here](https://github.com/tj/commander.js#commands)
-
-**Note**: If you want to use an NPM package from your project, the package will
-need to be added to that project's `package.json` file.
-
-**Important**: please use the **`.mjs`** extension if your project's
-`package.json` is not setup as `type: "module"` (or if you do not have a
-`package.json` file).
+**Note**: When using typescript you need to build your command files into a
+different directory and use that directory in your `dev-env-config.yml` file.
 
 ### Services that can be used by your custom commands
 
+- `cli`: an instance of
+  [`commander`](https://github.com/tj/commander.js#commands). The documentation
+  on how to add commands can be found
+  [here](https://github.com/tj/commander.js#commands)
 - `environmentManager`: manager to fetch all your envs from
 - `composer`: execute composer scripts
 - `node`: execute npm, yarn or pnpm commands (depending on the configuration)
@@ -292,29 +290,8 @@ need to be added to that project's `package.json` file.
 - `enquirer`: create cli prompts with
   [enquirer](https://github.com/enquirer/enquirer)
 
-The above services are automatically injected into your command initializer
-function (you can use typescript to discover services that are available)
-
-Example:
-
-```ts
-const commandsInitalizer: CommandInitalizer = ({
-  cli,
-  outputFormatter,
-  composer,
-  environmentManager,
-}) => {
-  cli.command('auto-injection').action(() => {
-    outputFormatter.title('Auto Injection example')
-
-    environmentManager.get('docker-compose').execute(['status'])
-
-    composer.execute(['install'])
-  })
-}
-
-export default commandsInitalizer
-```
+The services above are automatically injected into your command initializer
+functions. Using typescript will help you with type hinting.
 
 ## Environments
 
@@ -373,6 +350,8 @@ environments:
         container: '<mysql-container>'
 ```
 
+This will allow you to run those commands:
+
 ```sh
 $ dev composer install # docker-compose exec <php-container> composer install
 $ dev composer-custom install # docker-compose run <php-container> php composer.phar install
@@ -382,13 +361,18 @@ $ dev mysql -V # docker-compose exec <mysql-container> mysql -V
 
 ### Environment Manager
 
-All environments should be fetched via the `environmentManager` service (that is
+All environments should be fetched via the `environmentManager` service that is
 automatically injected in your
 [custom command files](#services-that-can-be-used-by-your-custom-commands)
 
-```js
-// @file ./commands/my-command.js
-export default (cli, environmentManager) => {
+```ts
+// @file ./commands/my-command.ts
+import type { DevCommandInitializer } from '@aftdev/dev-env-manager'
+
+const commandsInitializer: DevCommandInitializer = ({
+  cli,
+  environmentManager,
+}) => {
   cli.command('using-env').action(() => {
     // Fetch docker-compose environment and execute status command.
     environmentManager.get('docker-compose').execute(['status'])
@@ -397,6 +381,8 @@ export default (cli, environmentManager) => {
     environmentManager.groupedBy({ start: true }).forEach((env) => env.start())
   })
 }
+
+export default commandsInitializer
 ```
 
 ### Supported Environments
@@ -460,9 +446,10 @@ environment.
 To do so, in one of your custom command file, use the `extend` function.
 
 ```js
-// @file ./commands/custom-env.js
+// @file ./commands/custom-env.ts
+import type { DevCommandInitializer } from '@aftdev/dev-env-manager'
 
-export default (environmentManager) => {
+const environmentInit: DevCommandInitializer = ({ environmentManager }) => {
   // Define a "factory" for the custom type.
   environmentManager.extend('<customEnvType>', (envOptions, container) => {
     // envOptions = {a: option a, b: option b}
@@ -476,6 +463,8 @@ export default (environmentManager) => {
     }
   })
 }
+
+export default environmentInit
 ```
 
 The method accepts a closure, which should return the environment object or
