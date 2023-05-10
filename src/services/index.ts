@@ -57,7 +57,7 @@ export type RegisteredServices = {
   /**
    * The service container
    *
-   * You should probably not have to interact with directly :)
+   * You should probably not have to interact with it directly :)
    */
   container: AwilixContainer
   /**

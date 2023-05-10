@@ -87,7 +87,7 @@ describe('Applications Feature Tests', () => {
       await application.bootstrap()
     })
 
-    it('should bootstrap application properly2', () => {
+    it('should bootstrap application properly', () => {
       const cli = container.resolve('cli')
       expect(cli.commands.length).to.be.gt(0)
     })
