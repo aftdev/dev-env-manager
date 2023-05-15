@@ -11,15 +11,15 @@ __metadata:
   dependencies:
     "@changesets/changelog-github": ^0.4.8
     "@changesets/cli": ^2.26.1
-    "@tsconfig/node-lts": ^18.12.1
+    "@tsconfig/node-lts": ^18.12.2
     "@tsconfig/recommended": ^1.0.2
     "@types/chai": ^4.3.5
     "@types/findup-sync": ^4.0.2
     "@types/mocha": ^10.0.1
     "@types/nconf": ^0.10.3
-    "@types/node": ^18.16.6
+    "@types/node": ^18.16.9
     "@types/readable-stream": ^2.3.15
-    "@types/sinon": ^10.0.14
+    "@types/sinon": ^10.0.15
     "@typescript-eslint/eslint-plugin": ^5.59.5
     "@typescript-eslint/parser": ^5.59.5
     awilix: ^8.0.1
@@ -810,10 +810,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node-lts@npm:^18.12.1":
-  version: 18.12.1
-  resolution: "@tsconfig/node-lts@npm:18.12.1"
-  checksum: a59f2dc4cb12690585be3ad81a45f56bf6c68df79fdae7b8ef82162706bc37ee126ed08c476888a54eacdae1d22a21e81c247f2706fa59241a4f8acbf4a756ba
+"@tsconfig/node-lts@npm:^18.12.2":
+  version: 18.12.2
+  resolution: "@tsconfig/node-lts@npm:18.12.2"
+  checksum: 67190ca756f5be97c96338d0e3ad7f84ac95a92a728593d933e41c1f72b2a2b24f13ec7d3a68eb9ada4635fbe5bf98bc3a44e3ea5c0e15af6071bd462896f8ca
   languageName: node
   linkType: hard
 
@@ -921,10 +921,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.16.6":
-  version: 18.16.6
-  resolution: "@types/node@npm:18.16.6"
-  checksum: 99417418952c0b1a6ff5dd40ccf01c2cd18db6a1c54bfaaff29c700c877e2e541aa31ea33090592f3817adb2b8c0946b86c7fb57049131e7c08252d70075f09b
+"@types/node@npm:^18.16.9":
+  version: 18.16.9
+  resolution: "@types/node@npm:18.16.9"
+  checksum: 7fe0ef372ba8b157bd646efe29b0ece92ccb9f455171a7ceb4c92d6b490789ff0f14411b1dc6ad203351a0efa2b435072dfab5566fb6eaaaa5cd549e1fb22afa
   languageName: node
   linkType: hard
 
@@ -959,12 +959,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sinon@npm:^10.0.14":
-  version: 10.0.14
-  resolution: "@types/sinon@npm:10.0.14"
+"@types/sinon@npm:^10.0.15":
+  version: 10.0.15
+  resolution: "@types/sinon@npm:10.0.15"
   dependencies:
     "@types/sinonjs__fake-timers": "*"
-  checksum: b6e1d46bfb03fa5c11ba4a84790795dcb72dae4e599318ca6983affff106bf56874a0b1b5e263ca15319c7e7bd92132d6db30fa62890ffb2ee29b011bdd5d548
+  checksum: cec6d7d9d5582ca3ac851b029d5d90451bfe6d376164253792a6eb6ddcd609a0411a7fac9ed92e1879e7d3ec091d2ea2e8dbb4f6140a1065439b81dc20cafa7c
   languageName: node
   linkType: hard
 
