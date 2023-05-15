@@ -2,6 +2,9 @@ import type { AwilixContainer } from 'awilix'
 import type { Command } from 'commander'
 import type Enquirer from 'enquirer'
 import type { Provider as Nconf } from 'nconf'
+import type CommandExecuter from './CommandExecuter.js'
+import type DockerCompose from './Environment/DockerCompose.js'
+import type Vagrant from './Environment/Vagrant.js'
 import type EnvironmentManager from '#services/EnvironmentManager.js'
 import type OutputFormatter from '#services/OutputFormatter.js'
 import type Composer from '#services/PackageManager/Composer.js'
@@ -34,6 +37,10 @@ export type RegisteredServices = {
    * Manager to fetch all your envs from
    */
   environmentManager: EnvironmentManager
+  /**
+   * Helper class to execute and display commands
+   */
+  commandExecuter: CommandExecuter
   /**
    * Node class to execute npm/pnpm or yarn commands
    */
@@ -68,4 +75,12 @@ export type RegisteredServices = {
    * The path of the current project (where the executable was called from)
    */
   projectPath: string
+  /**
+   * Vagrant helper
+   */
+  vagrant: Vagrant
+  /**
+   * Docker Compose helper
+   */
+  dockerCompose: DockerCompose
 }
