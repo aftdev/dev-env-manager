@@ -1,4 +1,11 @@
-## 1.0.3
+## 3.0.1
+
+### Patch Changes
+
+- [#172](https://github.com/aftdev/dev-env-manager/pull/172)
+  [`e7ed553`](https://github.com/aftdev/dev-env-manager/commit/e7ed5530d5c871e61593cc1fe3299f77b8399e63)
+  Thanks [@cgaube](https://github.com/cgaube)! - Adding more types to the
+  declaration files
 
 ## 3.0.0
 
