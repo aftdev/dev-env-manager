@@ -1,5 +1,5 @@
 import fs from 'fs'
-import type { CommandArgs } from './CommandExecuter.js'
+import type { CommandArgs } from './Command.js'
 
 export default class FileConfigArgs {
   public configFiles: Array<string> = []

@@ -2,6 +2,7 @@ import { AwilixContainer } from 'awilix'
 import { expect } from 'chai'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox } from 'sinon'
+import Command from '#services/Command.js'
 import DockerCompose from '#services/Environment/DockerCompose.js'
 import Local from '#services/Environment/Local.js'
 import EnvironmentManager from '#services/EnvironmentManager.js'
@@ -153,14 +154,14 @@ describe('Environment command tests', () => {
 
   it('should setup environment', () => {
     sandbox.stub(container.resolve('outputFormatter'), 'output').returnsThis()
-    const dockerComposeStub = sandbox.stub(
-      dockerCompose,
-      'dockerComposeCommand',
-    )
-    const dockerComposeOverrideStub = sandbox.stub(
-      dockerComposeOverride,
-      'dockerComposeCommand',
-    )
+    const dockerComposeStub = sandbox
+      .stub(dockerCompose, 'command')
+      .returns(sandbox.createStubInstance(Command))
+
+    const dockerComposeOverrideStub = sandbox
+      .stub(dockerComposeOverride, 'command')
+      .returns(sandbox.createStubInstance(Command))
+
     const composer = sandbox.stub(container.resolve('composer'), 'execute')
     const npm = sandbox.stub(container.resolve('node'), 'execute')
 
@@ -168,8 +169,10 @@ describe('Environment command tests', () => {
 
     expect(dockerComposeStub.calledOnce, 'should setup docker-compose').to.be
       .true
-    expect(dockerComposeOverrideStub.calledOnce, 'should setup docker-compose')
-      .to.be.true
+    expect(
+      dockerComposeOverrideStub.calledOnce,
+      'should setup docker-compose 2',
+    ).to.be.true
 
     expect(composer.calledOnce, 'should setup composer').to.be.true
     expect(npm.calledOnce, 'should setup npm').to.be.true

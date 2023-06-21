@@ -1,6 +1,6 @@
 {
   "name": "@aftdev/dev-env-manager",
-  "version": "3.0.1",
+  "version": "3.0.1-dev",
   "description": "Command line utilities to manage your projects development environment",
   "type": "module",
   "main": "dist/index.js",
@@ -84,8 +84,8 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "build": "tsc --build --clean && tsc -p tsconfig.production.json && tsc-alias",
-    "watch": "yarn build && (concurrently \"tsc -w\" \"tsc-alias -w\")",
+    "build": "tsc --build --clean && tsc -p tsconfig.production.json && tsc-alias -p tsconfig.production.json",
+    "watch": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "prepare": "husky install",
     "lint": "eslint --cache --max-warnings 0 .",
     "lint:fix": "yarn lint --fix",

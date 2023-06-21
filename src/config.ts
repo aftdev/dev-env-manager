@@ -18,6 +18,13 @@ export default {
         config_files: 'docker-compose.yml',
       },
     },
+    vagrant: {
+      groups: {
+        setup: true,
+        connect: true,
+        start: true,
+      },
+    },
     local: {},
   },
   // List of all package managers and their configs

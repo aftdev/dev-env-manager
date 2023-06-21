@@ -1,14 +1,21 @@
 import fs from 'fs'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
-import sinon, { SinonSandbox } from 'sinon'
-import CommandExecuter, { CommandArgs } from '#services/CommandExecuter.js'
+import sinon, { SinonSandbox, SinonStubbedInstance } from 'sinon'
+import Command, { CommandArgs } from '#services/Command.js'
+import CommandExecuter from '#services/CommandExecuter.js'
 import DockerCompose from '#services/Environment/DockerCompose.js'
 
 describe('DockerCompose Env unit tests', () => {
   let sandbox: SinonSandbox
+  let fakeCommand: Command
+  let commandExecuterStub: SinonStubbedInstance<CommandExecuter>
+
   beforeEach(() => {
     sandbox = sinon.createSandbox()
+    fakeCommand = new Command('fake')
+    commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+    commandExecuterStub.command.returns(fakeCommand)
   })
 
   afterEach(() => {
@@ -17,7 +24,8 @@ describe('DockerCompose Env unit tests', () => {
   })
 
   it('should execute commands properly with different config file', () => {
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+    const execStub = sandbox.stub(fakeCommand, 'execute')
+
     const dockerCompose = new DockerCompose(commandExecuterStub, [
       'differentCompose.json',
       'differentCompose2.json',
@@ -26,24 +34,27 @@ describe('DockerCompose Env unit tests', () => {
     dockerCompose.execute(['test command'])
 
     expect(
-      commandExecuterStub.execute.withArgs(DockerCompose.COMMAND, [
+      commandExecuterStub.command.withArgs(DockerCompose.COMMAND, [
         { '--file': ['differentCompose.json', 'differentCompose2.json'] },
         'test command',
-      ]).callCount,
-    ).to.be.eq(1)
+      ]).calledOnce,
+    ).to.be.true
+
+    expect(execStub.calledOnce).to.be.true
   })
 
   it('should return list of containers', () => {
     sandbox.stub(fs, 'existsSync').returns(true)
+    sandbox.stub(fakeCommand, 'execute')
 
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
     // Stub return value of the docker compose command. (weak test)
-    const serviceStub = Buffer.from(`
-app1
-app2
-`)
+    sandbox.stub(fakeCommand, 'executeInBackground').returns(
+      Buffer.from(`
+      app1
+      app2
+`),
+    )
 
-    commandExecuterStub.backgroundExecute.returns(serviceStub)
     const dockerCompose = new DockerCompose(commandExecuterStub)
 
     expect(dockerCompose.hasContainer('app1')).to.be.true
@@ -51,34 +62,36 @@ app2
   })
 
   it('should properly execute command on container', () => {
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+    const commandStub = sandbox.stub(fakeCommand, 'execute')
     const dockerCompose = new DockerCompose(commandExecuterStub)
 
     dockerCompose.containerExecute('app1', ['do', 'something'])
     expect(
-      commandExecuterStub.execute.withArgs(DockerCompose.COMMAND, [
+      commandExecuterStub.command.withArgs(DockerCompose.COMMAND, [
         'exec',
         'app1',
         'do',
         'something',
-      ]).callCount,
-    ).to.be.eq(1)
+      ]).calledOnce,
+    ).to.be.true
 
     dockerCompose.containerExecute('app1', ['do', 'something'], { root: true })
 
     expect(
-      commandExecuterStub.execute.withArgs(DockerCompose.COMMAND, [
+      commandExecuterStub.command.withArgs(DockerCompose.COMMAND, [
         'exec',
         { '--user': 'root' },
         'app1',
         'do',
         'something',
-      ]).callCount,
-    ).to.be.eq(1)
+      ]).calledOnce,
+    ).to.be.true
+
+    expect(commandStub.calledTwice).to.be.true
   })
 
   it('should connect to a container', () => {
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+    const commandStub = sandbox.stub(fakeCommand, 'tty')
     const dockerCompose = new DockerCompose(commandExecuterStub)
 
     expect(() => {
@@ -87,20 +100,21 @@ app2
     }).to.throw('Please specify target')
 
     dockerCompose.connect({ target: 'targetName' })
-    const ttyStub = commandExecuterStub.tty.withArgs(DockerCompose.COMMAND, [
-      'exec',
-      'targetName',
-      'bash',
-    ])
+    const ttyStub = commandExecuterStub.command.withArgs(
+      DockerCompose.COMMAND,
+      ['exec', 'targetName', 'bash'],
+    )
     expect(ttyStub.callCount).to.equal(1)
 
     // With root.
     dockerCompose.connect({ target: 'targetName', root: true })
-    const ttyStubWithRoot = commandExecuterStub.tty.withArgs(
+    const ttyStubWithRoot = commandExecuterStub.command.withArgs(
       DockerCompose.COMMAND,
       ['exec', { '--user': 'root' }, 'targetName', 'bash'],
     )
     expect(ttyStubWithRoot.callCount).to.equal(1)
+
+    expect(commandStub.calledTwice).to.be.true
   })
 
   const ops: ['status' | 'start' | 'stop', CommandArgs][] = [
@@ -110,15 +124,16 @@ app2
   ]
   ops.forEach(([operation, args]) => {
     it(`should execute command ${operation}`, () => {
-      const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+      const commandStub = sandbox.stub(fakeCommand, 'execute')
       const dockerCompose = new DockerCompose(commandExecuterStub)
 
       dockerCompose[operation]()
-      const stubCall = commandExecuterStub.execute.withArgs(
+      const stubCall = commandExecuterStub.command.withArgs(
         DockerCompose.COMMAND,
         args,
       )
       expect(stubCall.calledOnce).to.be.true
+      expect(commandStub.calledOnce).to.be.true
     })
   })
 })

@@ -1,29 +1,26 @@
-import CommandExecuter, {
-  CommandArgs,
-  ExecutionType,
-} from '../CommandExecuter.js'
-import FileConfigArgs from '../FileConfigArgs.js'
+import type { CommandArgs } from '#services/Command.js'
+import Command from '#services/Command.js'
+import CommandExecuter from '#services/CommandExecuter.js'
 import AbstractEnvironment, {
   EnvironmentOptions,
 } from '#services/Environment/AbstractEnvironment.js'
+import FileConfigArgs from '#services/FileConfigArgs.js'
 
 export interface DockerComposeEnvOptions extends EnvironmentOptions {
   config_files: Array<string>
 }
 
-export type DockerComposeOptions = {
-  root?: boolean
-  container?: string
-}
-
 export const dockerExecType = ['run', 'exec']
 
-export type DockerComposeExecuteOptions = DockerComposeOptions & {
+export type DockerComposeExecuteOptions = {
+  container?: string
+  root?: boolean
   type?: (typeof dockerExecType)[number]
 }
 
-export type DockerComposeConnectOptions = DockerComposeOptions & {
-  target?: string
+export type DockerComposeConnectOptions = {
+  root?: boolean
+  target: string
 }
 
 /**
@@ -64,20 +61,11 @@ export default class DockerCompose extends AbstractEnvironment {
     this.containers = []
 
     if (this.isEnabled()) {
-      const services = this.execute(
-        ['ps', '--services'],
-        {},
-        'backgroundExecute',
-      )
-
-      this.containers = services
-        .toString()
-        .trim()
-        .split('\n')
-        .filter((n: string) => n)
+      const serviceCommands = this.command(['ps', '--services'])
+      this.containers = serviceCommands.quiet().lines()
     }
 
-    return this.containers || []
+    return this.containers
   }
 
   /**
@@ -87,6 +75,43 @@ export default class DockerCompose extends AbstractEnvironment {
     const containers = this.getTargets()
 
     return containers.indexOf(container) !== -1
+  }
+
+  /**
+   * Build a docker compose command
+   */
+  command(
+    args: CommandArgs,
+    commandOptions: DockerComposeExecuteOptions = {},
+  ): Command {
+    const fullArgs: CommandArgs =
+      this.fileConfigArgsService.getConfigArguments()
+
+    // Container related options
+    if (commandOptions.container) {
+      fullArgs.push(commandOptions.type || 'exec')
+
+      if (commandOptions.root) {
+        fullArgs.push({ '--user': 'root' })
+      }
+
+      fullArgs.push(commandOptions.container)
+    }
+
+    return this.commandExecuter.command(DockerCompose.COMMAND, [
+      ...fullArgs,
+      ...args,
+    ])
+  }
+
+  /**
+   * Execute a docker compose command.
+   */
+  override execute(
+    commandArgs: CommandArgs = [],
+    options: DockerComposeExecuteOptions = {},
+  ) {
+    return this.command(commandArgs, options).execute()
   }
 
   /**
@@ -100,82 +125,49 @@ export default class DockerCompose extends AbstractEnvironment {
     options.container = container
     options.type ??= 'exec'
 
-    return this.execute(commandArgs, options)
-  }
-
-  /**
-   * Execute a docker compose command.
-   */
-  override execute(
-    commandArgs: CommandArgs = [],
-    options: DockerComposeExecuteOptions = {},
-    type: ExecutionType = 'execute',
-  ) {
-    const rootParam = options.root || false ? { '--user': 'root' } : ''
-    const container = options.container || ''
-    // If we have a container we need to either exec or run
-    const dockerCommandType = container ? options.type || 'exec' : ''
-
-    return this.dockerComposeCommand(
-      [dockerCommandType, rootParam, container, ...commandArgs],
-      type,
-    )
-  }
-
-  /**
-   * Execute a docker compose command.
-   */
-  dockerComposeCommand(args: CommandArgs, type: ExecutionType = 'execute') {
-    return this.commandExecuter[type](
-      DockerCompose.COMMAND,
-      this.fileConfigArgsService.injectServiceConfig(args),
-    )
+    return this.command(commandArgs, options).execute()
   }
 
   /**
    * Connect to container.
    */
-  override connect(options: DockerComposeConnectOptions = {}) {
+  override connect(options: DockerComposeConnectOptions) {
     const container = options.target || false
     if (!container) {
       throw new Error('Please specify target')
     }
 
-    return this.execute(
-      ['bash'],
-      {
-        container,
-        root: options.root || false,
-      },
-      'tty',
-    )
+    return this.command(['bash'], {
+      container,
+      root: options.root || false,
+    }).tty()
   }
 
   /**
    * Return status of containers.
    */
   override status() {
-    this.dockerComposeCommand(['ps'])
+    this.command(['ps']).execute()
   }
 
   /**
    * Start the containers.
    */
   override start() {
-    this.dockerComposeCommand(['up', '-d'])
+    this.command(['up', '-d']).execute()
   }
 
   /**
    * Stop the containers.
    */
   override stop() {
-    this.dockerComposeCommand(['down'])
+    this.command(['down']).execute()
   }
 
   /**
    * Build all the containers.
    */
   override setup() {
-    this.dockerComposeCommand(['up', '-d', '--build'])
+    this.command(['up', '-d', '--build']).execute()
   }
 }
