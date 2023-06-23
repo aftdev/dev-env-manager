@@ -1,5 +1,4 @@
 import fs from 'fs'
-import type { CommandArgs } from './CommandExecuter.js'
 
 export default class FileConfigArgs {
   public configFiles: Array<string> = []
@@ -31,13 +30,6 @@ export default class FileConfigArgs {
       return []
     }
     return this.buildConfigArguments()
-  }
-
-  /**
-   * Inject config files as arguments.
-   */
-  public injectServiceConfig(args: CommandArgs): CommandArgs {
-    return [...this.getConfigArguments(), ...args].filter((n) => n)
   }
 
   /**

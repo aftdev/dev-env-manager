@@ -1,5 +1,5 @@
 import fs from 'fs'
-import type { CommandArgs } from '#services/CommandExecuter.js'
+import type { CommandArgs } from '#services/Command.js'
 import EnvironmentManager from '#services/EnvironmentManager.js'
 import FileConfigArgs from '#services/FileConfigArgs.js'
 

@@ -1,14 +1,22 @@
 import fs from 'fs'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
-import sinon, { SinonSandbox } from 'sinon'
-import CommandExecuter, { CommandArgs } from '#services/CommandExecuter.js'
+import sinon, { SinonSandbox, SinonStubbedInstance } from 'sinon'
+import Command, { CommandArgs } from '#services/Command.js'
+import CommandExecuter from '#services/CommandExecuter.js'
 import Vagrant from '#services/Environment/Vagrant.js'
 
 describe('Vagrant Env unit tests', () => {
   let sandbox: SinonSandbox
+  let fakeCommand: Command
+  let commandExecuterStub: SinonStubbedInstance<CommandExecuter>
+
   beforeEach(() => {
     sandbox = sinon.createSandbox()
+
+    fakeCommand = new Command('fake')
+    commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+    commandExecuterStub.command.returns(fakeCommand)
   })
 
   afterEach(() => {
@@ -19,9 +27,9 @@ describe('Vagrant Env unit tests', () => {
   it('should return list of machines', () => {
     sandbox.stub(fs, 'existsSync').returns(true)
 
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
     // Stub return value of the vagrant command. (weak test)
-    const serviceStub = Buffer.from(`
+    sandbox.stub(fakeCommand, 'executeInBackground').returns(
+      Buffer.from(`
 1648267788,web,metadata,provider,virtualbox
 1648267788,db,metadata,provider,virtualbox
 1648267790,web,provider-name,virtualbox
@@ -30,9 +38,9 @@ describe('Vagrant Env unit tests', () => {
 1648267790,other,state,poweroff
 1648267790,db,state,running
 invalid,format
-`)
+`),
+    )
 
-    commandExecuterStub.backgroundExecute.returns(serviceStub)
     const vagrant = new Vagrant(commandExecuterStub)
 
     expect(vagrant.hasMachine('web')).to.be.true
@@ -42,13 +50,14 @@ invalid,format
   })
 
   it('should properly execute command on machine', () => {
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+    sandbox.stub(fakeCommand, 'execute')
+
     const vagrant = new Vagrant(commandExecuterStub)
 
     vagrant.execute(['do', 'something'], { machine: 'web' })
 
     expect(
-      commandExecuterStub.execute.withArgs(Vagrant.COMMAND, [
+      commandExecuterStub.command.withArgs(Vagrant.COMMAND, [
         'ssh',
         'web',
         '-c',
@@ -59,7 +68,7 @@ invalid,format
 
     vagrant.execute(['do', 'something', 'on', 'default'], {})
     expect(
-      commandExecuterStub.execute.withArgs(Vagrant.COMMAND, [
+      commandExecuterStub.command.withArgs(Vagrant.COMMAND, [
         'ssh',
         'default',
         '-c',
@@ -72,8 +81,8 @@ invalid,format
   })
 
   it('should connect to a machine', () => {
-    const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
     const vagrant = new Vagrant(commandExecuterStub)
+    const ttyStub = sandbox.stub(fakeCommand, 'tty')
 
     expect(() => {
       // @ts-expect-error: passing invalid value on purpose
@@ -81,11 +90,14 @@ invalid,format
     }).to.throw('Please specify machine')
 
     vagrant.connect({ target: 'targetName' })
-    const ttyStub = commandExecuterStub.tty.withArgs(Vagrant.COMMAND, [
-      'ssh',
-      'targetName',
-    ])
-    expect(ttyStub.callCount).to.equal(1)
+    expect(
+      commandExecuterStub.command.withArgs(Vagrant.COMMAND, [
+        'ssh',
+        'targetName',
+      ]).calledOnce,
+    ).to.be.true
+
+    expect(ttyStub.calledOnce).to.be.true
   })
 
   const ops: ['status' | 'start' | 'stop' | 'setup', CommandArgs][] = [
@@ -97,11 +109,11 @@ invalid,format
 
   ops.forEach(([operation, args]) => {
     it(`should execute command ${operation}`, () => {
-      const commandExecuterStub = sandbox.createStubInstance(CommandExecuter)
+      sandbox.stub(fakeCommand, 'execute')
       const vagrant = new Vagrant(commandExecuterStub)
 
       vagrant[operation]()
-      const stubCall = commandExecuterStub.execute.withArgs(
+      const stubCall = commandExecuterStub.command.withArgs(
         Vagrant.COMMAND,
         args,
       )

@@ -2,6 +2,7 @@ import type { AwilixContainer } from 'awilix'
 import { expect } from 'chai'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox } from 'sinon'
+import Command from '#services/Command.js'
 import DockerCompose from '#services/Environment/DockerCompose.js'
 import Application from '#src/Application.js'
 import { default as createTestContainer } from '#tests/feature/testHelpers.js'
@@ -51,7 +52,9 @@ describe('Environment Feature Tests', () => {
   it('executes the command on the right environment', async () => {
     const commandExecuter = container.resolve('commandExecuter')
 
-    const stub = sandbox.stub(commandExecuter, 'execute')
+    const stub = sandbox
+      .stub(commandExecuter, 'command')
+      .returns(sandbox.createStubInstance(Command))
 
     const envManager = container.resolve('environmentManager')
 

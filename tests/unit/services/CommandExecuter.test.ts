@@ -1,14 +1,20 @@
 import child_process from 'child_process'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
-import sinon, { SinonSandbox } from 'sinon'
-import CommandExecuter, { CommandArgs } from '#services/CommandExecuter.js'
+import sinon, { SinonSandbox, SinonStub } from 'sinon'
+import CommandExecuter from '#services/CommandExecuter.js'
 import OutputFormatter from '#services/OutputFormatter.js'
 
 describe('CommandExecuter Tests', () => {
   let sandbox: SinonSandbox
+  let outputFormatter: OutputFormatter
+  let outputStub: SinonStub<[value: string], OutputFormatter>
+
   beforeEach(() => {
     sandbox = sinon.createSandbox()
+
+    outputFormatter = new OutputFormatter()
+    outputStub = sandbox.stub(outputFormatter, 'output').returnsThis()
   })
 
   afterEach(() => {
@@ -16,35 +22,7 @@ describe('CommandExecuter Tests', () => {
     sandbox.restore()
   })
 
-  it('should quote command parameters properly', () => {
-    const outputFormatter = sandbox.createStubInstance(OutputFormatter)
-    const executer = new CommandExecuter(outputFormatter)
-
-    const args: CommandArgs = [
-      'something',
-      { '--long': 'configA' },
-      { '--longSpace': 'configB with space' },
-      { '--longArray': ['a with space', 'b'] },
-      { '-z': 'z' },
-      { s: 'something' },
-      { a: ['a', 'b with space'] },
-      { withQuote: 'Quote"Me' },
-      '-l',
-      '--lonelyLong',
-      '--',
-      'other',
-      ['a', 'b'],
-    ]
-
-    const expected =
-      "something --long=configA --longSpace='configB with space' --longArray='a with space' --longArray=b -z z -s something -a a -a 'b with space' -withQuote 'Quote\"Me' -l --lonelyLong -- other a b"
-
-    const quoted = `${executer.quoteCommandArgs(args)}`
-    expect(quoted).to.equal(expected)
-  })
-
   it('should execute command properly', () => {
-    const outputFormatter = sandbox.createStubInstance(OutputFormatter)
     const executer = new CommandExecuter(outputFormatter)
 
     sandbox
@@ -60,11 +38,12 @@ describe('CommandExecuter Tests', () => {
       executer.execute('with exception - should throw')
     }).to.throw()
 
-    expect(outputFormatter.output.callCount).to.be.equal(2)
+    expect(outputStub.calledWith(sinon.match('echo TEST'))).to.be.true
+    expect(outputStub.calledWith(sinon.match('with exception - should throw')))
+      .to.be.true
   })
 
   it('should execute command in the background (no output)', () => {
-    const outputFormatter = sandbox.createStubInstance(OutputFormatter)
     const executer = new CommandExecuter(outputFormatter)
 
     const stub = sandbox
@@ -73,11 +52,11 @@ describe('CommandExecuter Tests', () => {
 
     executer.backgroundExecute('test command', ['ps', '--services'])
 
-    expect(stub.withArgs('test command ps --services').callCount).to.be.equal(1)
+    expect(stub.calledWith('test command ps --services')).to.be.true
+    expect(outputStub.called).to.be.false
   })
 
   it('should open tty subcommand', () => {
-    const outputFormatter = sandbox.createStubInstance(OutputFormatter)
     const executer = new CommandExecuter(outputFormatter)
 
     const stub = sandbox
@@ -88,8 +67,9 @@ describe('CommandExecuter Tests', () => {
     executer.tty('ssh', ['with', '--options'])
 
     expect(
-      stub.withArgs('ssh', ['with', '--options'], sinon.match({ shell: true }))
-        .callCount,
-    ).to.be.equal(1)
+      stub.calledWith('ssh with --options', [], sinon.match({ shell: true })),
+    ).to.be.true
+
+    expect(outputStub.calledWith(sinon.match('ssh with --options'))).to.be.true
   })
 })

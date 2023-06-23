@@ -1,5 +1,5 @@
 import type { AwilixContainer } from 'awilix'
-import type { CommandArgs } from '#services/CommandExecuter.js'
+import type { CommandArgs } from '#services/Command.js'
 import AbstractEnvironment, {
   EnvironmentOptions,
 } from '#services/Environment/AbstractEnvironment.js'

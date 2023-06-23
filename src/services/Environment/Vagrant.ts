@@ -1,5 +1,6 @@
 import fs from 'fs'
-import type { CommandArgs, ExecutionType } from '#services/CommandExecuter.js'
+import type { CommandArgs } from '#services/Command.js'
+import Command from '#services/Command.js'
 import AbstractEnvironment from '#services/Environment/AbstractEnvironment.js'
 
 export type VagrantExecuteOptions = {
@@ -17,7 +18,7 @@ export default class Vagrant extends AbstractEnvironment {
   private machines?: Array<string>
 
   override isEnabled() {
-    return fs.existsSync(Vagrant.CONFIG_FILE)
+    return fs.existsSync('Vagrantfile')
   }
 
   /**
@@ -31,15 +32,9 @@ export default class Vagrant extends AbstractEnvironment {
     this.machines = []
 
     if (this.isEnabled()) {
-      const services = this.vagrantCommand(
-        ['status', '--machine-readable'],
-        'backgroundExecute',
-      )
-
-      this.machines = services
-        .toString()
-        .trim()
-        .split('\n')
+      this.machines = this.command(['status', '--machine-readable'])
+        .quiet()
+        .lines()
         .map((n: string) => n.split(','))
         .filter((n: Array<string>) => n[2] === 'state' && n[3] === 'running')
         .map((n: Array<string>) => n[1])
@@ -56,24 +51,29 @@ export default class Vagrant extends AbstractEnvironment {
   }
 
   /**
+   * Create Vagrant command.
+   */
+  command(args: CommandArgs, options: VagrantExecuteOptions = {}): Command {
+    let commandArgs = args
+
+    // Do we want to execute a command on a given machine?
+    if (options.machine) {
+      commandArgs = ['ssh', options.machine, '-c', ...commandArgs]
+    }
+
+    return this.commandExecuter.command(Vagrant.COMMAND, commandArgs)
+  }
+
+  /**
    * Execute a command on a machine.
    */
   override execute(
     commandArgs: CommandArgs,
     options: VagrantExecuteOptions = {},
   ) {
-    const machine = options.machine || 'default'
+    options.machine ??= 'default'
 
-    const args = ['ssh', machine, '-c', ...commandArgs]
-
-    return this.vagrantCommand(args)
-  }
-
-  /**
-   * Execute Vagrant command.
-   */
-  vagrantCommand(args: CommandArgs, type: ExecutionType = 'execute') {
-    return this.commandExecuter[type](Vagrant.COMMAND, args)
+    return this.command(commandArgs, options).execute()
   }
 
   /**
@@ -85,34 +85,34 @@ export default class Vagrant extends AbstractEnvironment {
       throw new Error('Please specify machine')
     }
 
-    return this.vagrantCommand(['ssh', machine], 'tty')
+    return this.command(['ssh', machine]).tty()
   }
 
   /**
    * Return status of containers.
    */
   override status() {
-    this.vagrantCommand(['status'])
+    this.command(['status']).execute()
   }
 
   /**
    * Start the machines.
    */
   override start() {
-    this.vagrantCommand(['up'])
+    this.command(['up']).execute()
   }
 
   /**
    * Stop the machines.
    */
   override stop() {
-    this.vagrantCommand(['halt'])
+    this.command(['halt']).execute()
   }
 
   /**
    * Provision all the machines.
    */
   override setup() {
-    this.vagrantCommand(['up', '--provision'])
+    this.command(['up', '--provision']).execute()
   }
 }
