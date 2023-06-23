@@ -1,5 +1,3 @@
-## 3.0.1
-
 ## 3.1.0
 
 ### Minor Changes
@@ -27,13 +25,15 @@
   // Get Array of lines from command output
   const array = command.lines()
   ```
-
+  
 ### Patch Changes
 
 - [#190](https://github.com/aftdev/dev-env-manager/pull/190)
   [`6a6c19d`](https://github.com/aftdev/dev-env-manager/commit/6a6c19d0b51b61bbf9fa92910c92be9d23ae3153)
   Thanks [@cgaube](https://github.com/cgaube)! - update c8 and commander
   dependencies
+
+## 3.0.1
 
 ### Patch Changes
 
