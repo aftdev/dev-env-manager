@@ -1,3 +1,40 @@
+# @aftdev/dev-env-manager
+
+## 3.1.0
+
+### Minor Changes
+
+- [#188](https://github.com/aftdev/dev-env-manager/pull/188)
+  [`63b3073`](https://github.com/aftdev/dev-env-manager/commit/63b30737509a94d7e4a74242fe8f1b61e86885de)
+  Thanks [@cgaube](https://github.com/cgaube)! - New way to execute commands via
+  command class
+
+  ```typescript
+  const command = commandExecuter.command('your-command')
+
+  // Display command and execute it - command output will be shown
+  command.execute()
+
+  // Execute command only - will display output but no show what command was executed
+  command.quiet().execute()
+
+  // Execute and return output (will not display the output)
+  const output = command.executeInBackground()
+
+  // Get json object from command output (Only works if command returns json compatible output)
+  const json = command.json()
+
+  // Get Array of lines from command output
+  const array = command.lines()
+  ```
+  
+### Patch Changes
+
+- [#190](https://github.com/aftdev/dev-env-manager/pull/190)
+  [`6a6c19d`](https://github.com/aftdev/dev-env-manager/commit/6a6c19d0b51b61bbf9fa92910c92be9d23ae3153)
+  Thanks [@cgaube](https://github.com/cgaube)! - update c8 and commander
+  dependencies
+
 ## 3.0.1
 
 ### Patch Changes
