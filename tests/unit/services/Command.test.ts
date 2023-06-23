@@ -51,10 +51,19 @@ describe('Command Tests', () => {
       sandbox.stub(child_process, 'execSync')
       const command = new Command(
         'echo',
-        ['test2'],
+        ['test'],
         { displayCommand: false },
         outputFormatter,
       )
+
+      command.execute()
+
+      expect(outputStub.called).to.be.false
+    })
+
+    it('does not display command without a output formatter', () => {
+      sandbox.stub(child_process, 'execSync')
+      const command = new Command('echo', ['test2'], {})
 
       command.execute()
 
