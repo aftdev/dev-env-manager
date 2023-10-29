@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "moduleResolution": "node16",
-    "module": "es2022",
+    "module": "Node16",
     "target": "ES2022",
     "noImplicitOverride": true,
     "declaration": true,
