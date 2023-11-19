@@ -127,8 +127,8 @@ export default class Command {
           const formattedKey = isLongKey
             ? `${key}=`
             : !key.startsWith('-')
-            ? `-${key} `
-            : `${key} `
+              ? `-${key} `
+              : `${key} `
 
           quotableArgs.push(sh`${unquoted(formattedKey)}${values}`)
         }
