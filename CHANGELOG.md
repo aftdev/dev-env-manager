@@ -1,5 +1,13 @@
 # @aftdev/dev-env-manager
 
+## 3.1.1
+
+### Patch Changes
+
+- [#191](https://github.com/aftdev/dev-env-manager/pull/191)
+  [`864f584`](https://github.com/aftdev/dev-env-manager/commit/864f5845b77656a15085a7c68796e325b1aea25c)
+  Thanks [@cgaube](https://github.com/cgaube)! - Updating node dependencies
+
 ## 3.1.0
 
 ### Minor Changes
@@ -27,7 +35,7 @@
   // Get Array of lines from command output
   const array = command.lines()
   ```
-  
+
 ### Patch Changes
 
 - [#190](https://github.com/aftdev/dev-env-manager/pull/190)
