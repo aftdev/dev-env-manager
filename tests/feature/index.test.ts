@@ -2,7 +2,7 @@ import process from 'process'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox, SinonStub } from 'sinon'
-import runApp from '../../src/index.js'
+import runApp from '#src/index.js'
 
 describe('Index Feature Tests', () => {
   let sandbox: SinonSandbox
