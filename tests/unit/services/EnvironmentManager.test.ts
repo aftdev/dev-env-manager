@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { createContainer } from 'awilix'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'

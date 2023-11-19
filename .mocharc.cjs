@@ -6,5 +6,5 @@
 module.exports = {
   require: ['tests/hooks.mjs'],
   extension: ['js', 'ts'],
-  loader: 'tsx',
+  import: 'tsx',
 }
