@@ -6,6 +6,7 @@ import Composer from '../../../../src/services/PackageManager/Composer.js'
 
 describe('Composer unit tests', () => {
   let sandbox: SinonSandbox
+
   beforeEach(() => {
     sandbox = sinon.createSandbox()
   })

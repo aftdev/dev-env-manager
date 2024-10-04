@@ -15,8 +15,8 @@ const initCommands: DevCommandInitializer = ({
   /**
    * Execute a function on enabled environments that match criteria.
    *
-   * @param {string} operation
-   * @param {object} criteria
+   * @param operation -
+   * @param criteria -
    */
   const executeOnEnabledEnvs = (
     operation: 'start' | 'stop' | 'status' | 'setup',

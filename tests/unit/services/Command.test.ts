@@ -139,6 +139,7 @@ describe('Command Tests', () => {
 
   describe('lines', () => {
     let command: Command
+
     beforeEach(() => {
       command = new Command(
         'command',
