@@ -1,5 +1,14 @@
 # @aftdev/dev-env-manager
 
+## 4.0.0
+
+### Major Changes
+
+- [#193](https://github.com/aftdev/dev-env-manager/pull/193)
+  [`5375792`](https://github.com/aftdev/dev-env-manager/commit/5375792be87caa1341203f5602170898682d4b8e)
+  Thanks [@cgaube](https://github.com/cgaube)! - Upgrading major packages to the
+  latest versions
+
 ## 3.1.1
 
 ### Patch Changes
