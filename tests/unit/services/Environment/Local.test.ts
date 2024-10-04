@@ -6,6 +6,7 @@ import Local from '#services/Environment/Local.js'
 
 describe('Local Env unit tests', () => {
   let sandbox: SinonSandbox
+
   beforeEach(() => {
     sandbox = sinon.createSandbox()
   })

@@ -1,6 +1,6 @@
 import CommandExecuter from '#services/CommandExecuter.js'
 
-export interface EnvironmentOptions {}
+export type EnvironmentOptions = object
 
 /**
  * AbstractEnvironment class.

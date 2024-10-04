@@ -129,7 +129,7 @@ describe('Applications Feature Tests', () => {
       try {
         await application.bootstrap()
         expect.fail('should have thrown an error')
-      } catch (err) {
+      } catch {
         expect(
           stub.calledWith(
             sinon.match('Not all command files could be bootstrapped'),
