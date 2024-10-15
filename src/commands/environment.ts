@@ -9,7 +9,7 @@ const initCommands: DevCommandInitializer = ({
   environmentManager,
   node,
   composer,
-  outputFormatter,
+  //outputFormatter,
   enquirer,
 }) => {
   /**
@@ -123,9 +123,9 @@ const initCommands: DevCommandInitializer = ({
       .description('Initial setup')
       .action(async () => {
         // Environments
-        outputFormatter.title('Build and start environments', {
-          title: 'Setup',
-        })
+        // outputFormatter.title('Build and start environments', {
+        //   title: 'Setup',
+        // })
         executeOnEnabledEnvs('setup', { setup: true })
 
         if (composer.isEnabled()) {

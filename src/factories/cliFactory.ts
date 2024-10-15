@@ -30,12 +30,9 @@ export default function (
       if (debug) {
         consola.level = 999
       }
-      consola.wrapAll()
     })
     .addHelpText('after', ({ command: cli }) => {
       const allScripts = packageManagerScripts.getScripts()
-      const help = ''
-
       allScripts.forEach((scripts, manager) => {
         if (scripts.size == 0) {
           return
@@ -55,10 +52,6 @@ export default function (
         }
       })
 
-      if (help) {
-        //help = chalk.cyan('\nPackage manager commands:') + help
-      }
-
-      return help
+      return ''
     })
 }

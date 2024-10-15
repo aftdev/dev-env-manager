@@ -75,8 +75,10 @@ export default class Application {
       await cli.parseAsync(args, { from: 'user' })
       return 0
     } catch (error) {
-      const output = this.container.resolve('outputFormatter')
-      output.error(error)
+      if (error) {
+        const output = this.container.resolve('outputFormatter')
+        output.error(error)
+      }
       return 1
     }
   }
