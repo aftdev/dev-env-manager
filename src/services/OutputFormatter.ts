@@ -18,15 +18,25 @@ export default class OutputFormatter {
   constructor(private consola: ConsolaInstance) {}
 
   /**
+   * Build a line to be outputted to the console
+   */
+  buildLine(
+    text: string,
+    { color = 'reset', title }: Pick<LineOptions, 'color' | 'title'> = {},
+  ): string {
+    const titleBox = title ? chalk`{inverse  ${title} }` : ''
+    const content = `${titleBox} ${text}`.trim()
+    return chalk`{${color} ${content}}`
+  }
+
+  /**
    * Log a line to the console
    */
   log(
     text: string,
     { type = 'log', color = 'reset', title, date }: LineOptions = {},
   ): OutputFormatter {
-    const titleBox = title ? chalk`{inverse  ${title} }` : ''
-    const content = `${titleBox} ${text}`.trim()
-    const coloredText = chalk`{${color} ${content}}`
+    const coloredText = this.buildLine(text, { color, title })
 
     const options: InputLogObject = {}
     if (date) {

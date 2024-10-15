@@ -2,6 +2,7 @@ import chalk from 'chalk'
 import { Command } from 'commander'
 import { ConsolaInstance } from 'consola'
 import type { Provider } from 'nconf'
+import OutputFormatter from '#services/OutputFormatter.js'
 import type PackageManagerScript from '#services/PackageManagerScript.js'
 
 /**
@@ -11,6 +12,7 @@ export default function (
   configuration: Provider,
   packageManagerScripts: PackageManagerScript,
   consola: ConsolaInstance,
+  outputFormatter: OutputFormatter,
 ) {
   return new Command()
     .name('dev')
@@ -32,29 +34,29 @@ export default function (
     })
     .addHelpText('after', ({ command: cli }) => {
       const allScripts = packageManagerScripts.getScripts()
-      let help = ''
+      const help = ''
 
       allScripts.forEach((scripts, manager) => {
         if (scripts.size == 0) {
           return
         }
-        let managerScriptHelp = ''
-        scripts.forEach((script) => {
-          // Do not show commands defined on the cli object has they wont
-          // be able to be executed.
+
+        const managerScriptHelp = [...scripts]
           // @ts-expect-error: use private commander function.
-          if (!cli._findCommand(script)) {
-            managerScriptHelp += chalk.white(`\n  ${script}`)
-          }
-        })
+          .filter((script: string) => !cli._findCommand(script))
 
         if (managerScriptHelp) {
-          help += chalk.white(`\n${manager}:`) + managerScriptHelp
+          outputFormatter.newLine().title('scripts', {
+            title: manager.toString(),
+          })
+          outputFormatter.log(
+            chalk.reset('  ' + managerScriptHelp.join('\n  ')),
+          )
         }
       })
 
       if (help) {
-        help = chalk.cyan('\nPackage manager commands:') + help
+        //help = chalk.cyan('\nPackage manager commands:') + help
       }
 
       return help
