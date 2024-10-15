@@ -1,20 +1,19 @@
 import child_process from 'child_process'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
-import sinon, { SinonSandbox, SinonStub } from 'sinon'
+import sinon, { SinonSandbox, SinonStubbedInstance } from 'sinon'
 import Command, { CommandArgs } from '#services/Command.js'
 import OutputFormatter from '#services/OutputFormatter.js'
 
 describe('Command Tests', () => {
   let sandbox: SinonSandbox
-  let outputFormatter: OutputFormatter
-  let outputStub: SinonStub<[value: string], OutputFormatter>
+  let outputFormatterStub: SinonStubbedInstance<OutputFormatter>
 
   beforeEach(() => {
     sandbox = sinon.createSandbox()
 
-    outputFormatter = new OutputFormatter()
-    outputStub = sandbox.stub(outputFormatter, 'output').returnsThis()
+    outputFormatterStub = sinon.createStubInstance(OutputFormatter)
+    outputFormatterStub.start.returnsThis()
   })
 
   afterEach(() => {
@@ -53,12 +52,12 @@ describe('Command Tests', () => {
         'echo',
         ['test'],
         { displayCommand: false },
-        outputFormatter,
+        outputFormatterStub,
       )
 
       command.execute()
 
-      expect(outputStub.called).to.be.false
+      expect(outputFormatterStub.start.called).to.be.false
     })
 
     it('does not display command without a output formatter', () => {
@@ -67,33 +66,34 @@ describe('Command Tests', () => {
 
       command.execute()
 
-      expect(outputStub.called).to.be.false
+      expect(outputFormatterStub.start.called).to.be.false
     })
   })
 
   describe('execute', () => {
     it('should execute command and display it by default', () => {
-      const command = new Command('echo', ['TEST'], {}, outputFormatter)
-
+      const command = new Command('echo', ['TEST'], {}, outputFormatterStub)
       const stub = sandbox.stub(child_process, 'execSync')
 
       command.execute()
       expect(stub.called).to.be.true
-      expect(outputStub.withArgs(sinon.match('echo TEST')).calledOnce).to.be
-        .true
+      expect(
+        outputFormatterStub.start.withArgs(sinon.match('echo TEST')).calledOnce,
+      ).to.be.true
     })
   })
 
   describe('tty', () => {
     it('should execute command and display it by default', () => {
-      const command = new Command('echo', ['TTY'], {}, outputFormatter)
+      const command = new Command('echo', ['TTY'], {}, outputFormatterStub)
 
       const stub = sandbox.stub(child_process, 'spawnSync')
 
       command.tty()
       expect(stub.called).to.be.true
-
-      expect(outputStub.withArgs(sinon.match('echo TTY')).calledOnce).to.be.true
+      expect(
+        outputFormatterStub.start.withArgs(sinon.match('echo TTY')).calledOnce,
+      ).to.be.true
     })
   })
 
@@ -103,7 +103,7 @@ describe('Command Tests', () => {
         'command',
         ['that', 'returns', 'json'],
         {},
-        outputFormatter,
+        outputFormatterStub,
       )
 
       const stub = sandbox
@@ -122,7 +122,7 @@ describe('Command Tests', () => {
         'command',
         ['that', 'returns', 'json'],
         {},
-        outputFormatter,
+        outputFormatterStub,
       )
 
       const stub = sandbox
@@ -145,7 +145,7 @@ describe('Command Tests', () => {
         'command',
         ['that', 'returns', 'lines'],
         {},
-        outputFormatter,
+        outputFormatterStub,
       )
     })
 

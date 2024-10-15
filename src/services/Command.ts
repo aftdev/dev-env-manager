@@ -98,15 +98,10 @@ export default class Command {
       return
     }
 
-    if (!this.outputFormatter) {
-      return
-    }
-
-    this.outputFormatter
-      .output(
-        chalkTemplate`{magentaBright.bold › Executing:} {white.dim ${this.commandString}}`,
-      )
-      .separator('magentaBright.dim', OutputFormatter.ICONS.titleSeparator)
+    this.outputFormatter?.start(
+      chalkTemplate`{reset.dim ${this.commandString}}`,
+      'Executing',
+    )
   }
 
   /**

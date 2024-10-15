@@ -38,7 +38,10 @@ export function stubOutputFormatter(
 ) {
   const outputFormatter = container.resolve('outputFormatter')
 
-  return sandbox.stub(outputFormatter, 'output').returnsThis()
+  return {
+    log: sandbox.stub(outputFormatter, 'log').returnsThis(),
+    error: sandbox.stub(outputFormatter, 'error').returnsThis(),
+  }
 }
 
 let currentEnquirerPromptStub: (

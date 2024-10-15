@@ -1,123 +1,128 @@
 import { expect } from 'chai'
+import { ConsolaInstance } from 'consola'
 import { beforeEach, afterEach, describe, it } from 'mocha'
-import sinon, { SinonSandbox, SinonStubbedMember } from 'sinon'
-import stripAnsi from 'strip-ansi'
+import sinon, { SinonSandbox, SinonSpy } from 'sinon'
 import OutputFormatter from '#services/OutputFormatter.js'
+import consolaFactory from '#src/factories/consolaFactory'
 
 describe('Outputformatter', () => {
   let sandbox: SinonSandbox
   let outputFormatter: OutputFormatter
-  let outStub: SinonStubbedMember<typeof process.stdout.write>
+  let consola: ConsolaInstance
+  let consolaSpy: SinonSpy
 
   beforeEach(() => {
     sandbox = sinon.createSandbox()
-    outStub = sandbox.stub(process.stdout, 'write')
 
-    outputFormatter = new OutputFormatter()
+    consolaSpy = sinon.spy()
+    consola = consolaFactory()
+    consola.mockTypes(() => consolaSpy)
+
+    outputFormatter = new OutputFormatter(consola)
   })
 
   afterEach(() => {
     sandbox.restore()
   })
 
-  it(`should output messages properly`, () => {
-    outputFormatter.output('test')
-    expect(outStub.withArgs(sinon.match('test')).callCount).to.be.equal(1)
+  it(`should log messages properly`, () => {
+    outputFormatter.log('test')
+    expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
   })
 
-  const data: Array<[string & keyof OutputFormatter, string]> = [
-    ['title', 'red'],
-    ['subtitle', 'green'],
+  const data: Array<keyof Pick<OutputFormatter, 'title' | 'subtitle'>> = [
+    'title',
+    'subtitle',
   ]
 
-  data.forEach(([functionName, color]) => {
+  data.forEach((functionName) => {
     it(`should display ${functionName} messages properly`, () => {
-      outputFormatter[functionName]('test ', color)
-      expect(outStub.withArgs(sinon.match('test')).callCount).to.be.equal(1)
+      // Without box
+      outputFormatter[functionName]('test')
+      expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
+      expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+
+      // With box
+      consolaSpy.resetHistory()
+      outputFormatter[functionName]('test', { title: 'With box' })
+      expect(
+        consolaSpy.withArgs(sinon.match('With box')).callCount,
+      ).to.be.equal(1)
+      expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
+      expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+
+      // Custom color
+      consolaSpy.resetHistory()
+      outputFormatter[functionName]('test', {
+        title: 'With box',
+        color: 'green',
+      })
+      expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
+      expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+      expect(
+        consolaSpy.withArgs(sinon.match('\x1B[32m')).callCount,
+      ).to.be.equal(2)
     })
   })
 
-  it('should properly display custom messages with / without custom titles', () => {
-    const styles: Array<keyof OutputFormatter> = [
-      'success',
-      'warning',
-      'error',
-      'info',
-    ]
-
-    styles.forEach((style) => {
+  const styles: Array<
+    keyof Pick<
+      OutputFormatter,
+      'success' | 'warning' | 'error' | 'info' | 'start'
+    >
+  > = ['success', 'warning', 'error', 'info']
+  styles.forEach((style) => {
+    it(`should properly display ${style} messages with / without custom titles`, () => {
       outputFormatter[style]('Custom Message')
       expect(
-        outStub.lastCall,
-        'Should display line with custom title and icon',
+        consolaSpy.lastCall,
+        'Should display line with custom title',
       ).to.match(/Custom Message/)
 
       outputFormatter[style]('with custom title', 'Custom Title')
 
-      expect(outStub.lastCall, 'Should display line with custom title and icon')
-        .to.match(/Custom Title:/)
+      expect(consolaSpy.lastCall, 'Should display line with custom title')
+        .to.match(/Custom Title/)
         .and.to.match(/with custom title/)
     })
   })
 
-  it('should display custom lines properly', () => {
-    outputFormatter.line('This is my custom line', 'green', 'Test', 'X')
+  it('show start log message', () => {
+    outputFormatter.start('Start Message', 'Title')
 
-    expect(outStub.lastCall, 'Should display line with custom title and icon')
-      .to.match(/X Test:/)
+    expect(consolaSpy.withArgs(sinon.match(/Title/)).callCount).to.be.equal(1)
+    expect(
+      consolaSpy.withArgs(sinon.match(/Start Message/)).callCount,
+    ).to.be.equal(1)
+    expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+
+    consolaSpy.resetHistory()
+    outputFormatter.start('Start Message')
+    expect(
+      consolaSpy.withArgs(sinon.match(/Start Message/)).callCount,
+    ).to.be.equal(1)
+    expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+  })
+
+  it('should display custom lines properly', () => {
+    outputFormatter.log('This is my custom line', {
+      color: 'green',
+      title: 'Title',
+    })
+
+    expect(consolaSpy.lastCall, 'Should display line with custom title')
+      .to.match(/Title/)
       .and.to.match(/This is my custom line/)
 
-    outputFormatter.line('This is my custom line without title or icon')
-
-    expect(
-      outStub.lastCall,
-      'Should display line without title and icons',
-    ).to.match(/This is my custom line without title or icon/)
+    outputFormatter.log('This is my custom line without title')
+    expect(consolaSpy.lastCall, 'Should display line without title').to.match(
+      /This is my custom line without title/,
+    )
   })
 
   it('should display new lines', () => {
-    outputFormatter.newLine().output('hello')
-    expect(outStub.firstCall.firstArg).to.equal('\n')
-    expect(outStub.secondCall.firstArg).to.equal('hello\n')
-  })
-
-  it('should render error', () => {
-    const errorString = 'Error String'
-    outputFormatter.renderError(errorString)
-
-    expect(outStub.lastCall)
-      .to.match(/Error:/)
-      .and.to.match(/Error String/)
-
-    sandbox.restore()
-    let messages: Array<string> = []
-    outStub = sandbox
-      .stub(process.stdout, 'write')
-      .callsFake((str): boolean => {
-        messages.push(str as string)
-        return true
-      })
-
-    const error = new Error('First line')
-    outputFormatter.renderError(error)
-
-    let formattedMessage = stripAnsi(messages.join(''))
-    expect(formattedMessage)
-      .to.match(/Error: First line\n/)
-      .to.match(/Stack:/)
-
-    messages = []
-    const multilineError = new Error('First line \n second line \n third line')
-    outputFormatter.renderError(multilineError)
-
-    formattedMessage = stripAnsi(messages.join(''))
-    expect(formattedMessage)
-      .to.match(/Error: First line\n/)
-      .to.match(/\nsecond line/)
-      .to.match(/Stack:/)
-  })
-
-  it('should return empty string if error is empty', () => {
-    expect(outputFormatter.renderError('')).to.be.empty
+    outputFormatter.newLine().log('hello')
+    expect(consolaSpy.firstCall.firstArg).to.equal('')
+    expect(consolaSpy.secondCall.firstArg).to.match(/hello/)
   })
 })

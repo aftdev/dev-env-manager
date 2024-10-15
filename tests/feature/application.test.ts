@@ -38,7 +38,7 @@ describe('Applications Feature Tests', () => {
 
     it('should gather defaults and project commands', () => {
       const outputFormatter = container.resolve('outputFormatter')
-      const stub = sandbox.stub(outputFormatter, 'output')
+      const stub = sandbox.stub(outputFormatter, 'log')
 
       application.run(['project1_command_a'])
       expect(
@@ -114,27 +114,33 @@ describe('Applications Feature Tests', () => {
 
     it('should throw if not bootstrapped', async () => {
       const outputFormatter = container.resolve('outputFormatter')
-      const stub = sandbox.stub(outputFormatter, 'output').returnsThis()
+      const stub = sandbox.stub(outputFormatter, 'error').returnsThis()
 
       const status = await application.run([])
       expect(status).to.equal(1)
-      expect(stub.calledWith(sinon.match('Application not bootstrapped'))).to.be
-        .true
+      expect(
+        stub.calledWith(
+          sinon.match.has('message', 'Application not bootstrapped'),
+        ),
+      ).to.be.true
     })
 
     it('should capture errors in commands', async () => {
       const outputFormatter = container.resolve('outputFormatter')
-      const stub = sandbox.stub(outputFormatter, 'output').returnsThis()
+      const warnStub = sandbox.stub(outputFormatter, 'warning').returnsThis()
+      const errorStub = sandbox.stub(outputFormatter, 'error').returnsThis()
 
       try {
         await application.bootstrap()
         expect.fail('should have thrown an error')
       } catch {
         expect(
-          stub.calledWith(
+          warnStub.calledWith(
             sinon.match('Not all command files could be bootstrapped'),
           ),
         ).to.be.true
+
+        expect(errorStub.called).to.be.true
       }
     })
   })

@@ -30,10 +30,9 @@ export default class Application {
   /**
    * Bootstrap the application.
    */
-  public async bootstrap() {
+  public async bootstrap(): Promise<boolean> {
     // Change current working directory and register path in container.
     process.chdir(this.projectPath)
-
     try {
       // Load each commands
       const commands = await this.fetchProjectCommands()
@@ -46,11 +45,11 @@ export default class Application {
 
       this.bootstrapped = true
     } catch (err) {
-      const outputFormatter = this.container.resolve('outputFormatter')
-
-      outputFormatter.error('Not all command files could be bootstrapped')
-      throw err
+      const output = this.container.resolve('outputFormatter')
+      output.warning('Not all command files could be bootstrapped')
+      output.error(err)
     }
+    return this.bootstrapped
   }
 
   /**
@@ -75,8 +74,9 @@ export default class Application {
       // This allow us to wait for any commands to be over and catch any errors.
       await cli.parseAsync(args, { from: 'user' })
       return 0
-    } catch (e) {
-      this.container.resolve('outputFormatter').renderError(e)
+    } catch (error) {
+      const output = this.container.resolve('outputFormatter')
+      output.error(error)
       return 1
     }
   }

@@ -1,6 +1,6 @@
 name: Dev Env Manager
 commands_dirs:
-  default: ./commands
+  default: ./playground
 package_managers:
   node:
     manager: 'yarn'

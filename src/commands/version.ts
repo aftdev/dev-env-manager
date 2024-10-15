@@ -1,5 +1,4 @@
 import fs from 'fs'
-import chalkTemplate from 'chalk-template'
 import type { DevCommandInitializer } from './index.js'
 
 /**
@@ -17,7 +16,7 @@ const initCommands: DevCommandInitializer = ({
         fs.readFileSync(`${rootPath}/../package.json`, 'utf8'),
       )
 
-      outputFormatter.output(chalkTemplate`Version: {green ${version}}`)
+      outputFormatter.log(version, { title: 'Version', color: 'green' })
 
       // @ts-expect-error: calling commander private functions :|
       return cli._exit(0, 'commander.version', version)

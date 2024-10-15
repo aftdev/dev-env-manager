@@ -285,7 +285,8 @@ different directory and use that directory in your `dev-env-config.yml` file.
 - `environmentManager`: manager to fetch all your envs from
 - `composer`: execute composer scripts
 - `node`: execute npm, yarn or pnpm commands (depending on the configuration)
-- `outputFormatter`: helpers to style output
+- [consola](https://github.com/unjs/consola/): Elegant Console Logger for
+  Node.js and Browser
 - `commandExecuter`: execute commands
 - `enquirer`: create cli prompts with
   [enquirer](https://github.com/enquirer/enquirer)

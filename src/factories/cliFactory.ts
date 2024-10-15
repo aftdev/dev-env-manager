@@ -1,5 +1,6 @@
 import chalk from 'chalk'
 import { Command } from 'commander'
+import { ConsolaInstance } from 'consola'
 import type { Provider } from 'nconf'
 import type PackageManagerScript from '#services/PackageManagerScript.js'
 
@@ -9,16 +10,25 @@ import type PackageManagerScript from '#services/PackageManagerScript.js'
 export default function (
   configuration: Provider,
   packageManagerScripts: PackageManagerScript,
+  consola: ConsolaInstance,
 ) {
   return new Command()
     .name('dev')
     .description(configuration.get('name'))
+    .option('-d, --debug', 'Show debug information')
     .enablePositionalOptions()
     .passThroughOptions()
     .showSuggestionAfterError()
     .configureHelp({
       sortOptions: true,
       sortSubcommands: true,
+    })
+    .hook('preAction', (thisCommand) => {
+      const { debug = false } = thisCommand.opts()
+      if (debug) {
+        consola.level = 999
+      }
+      consola.wrapAll()
     })
     .addHelpText('after', ({ command: cli }) => {
       const allScripts = packageManagerScripts.getScripts()

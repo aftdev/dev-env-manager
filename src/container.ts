@@ -10,7 +10,6 @@ import {
 } from 'awilix'
 import type { LoadModulesOptions } from 'awilix/lib/load-modules.js'
 import Application from './Application.js'
-import OutputFormatter from './services/OutputFormatter.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -50,7 +49,6 @@ export default async function (projectPath: string): Promise<AwilixContainer> {
     projectPath: asValue(projectPath),
     rootPath: asValue(__dirname),
     application: asClass(Application).singleton(),
-    outputFormatter: asClass(OutputFormatter),
   })
 
   return container

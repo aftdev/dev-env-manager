@@ -136,24 +136,27 @@ describe('Environment command tests', () => {
       .returns(['a', 'b', 'c'])
 
     const outputFormatter = container.resolve('outputFormatter')
-    const outputStub = sandbox.stub(outputFormatter, 'output').returnsThis()
+    const errorStub = sandbox.stub(outputFormatter, 'error').returnsThis()
 
     const exitCode = await application.run(['connect'])
 
     expect(exitCode).to.equal(1)
-    expect(outputStub.withArgs(sinon.match('No targets found')).called).to.be
-      .true
+    expect(
+      errorStub.withArgs(sinon.match.has('message', 'No targets found')).called,
+    ).to.be.true
 
     const exitCodeWithInvalid = await application.run([
       'connect',
       'invalidcontainer',
     ])
     expect(exitCodeWithInvalid).to.equal(1)
-    expect(outputStub.withArgs(sinon.match('Invalid target')).called).to.be.true
+    expect(
+      errorStub.withArgs(sinon.match.has('message', 'Invalid target')).called,
+    ).to.be.true
   })
 
   it('should setup environment', () => {
-    sandbox.stub(container.resolve('outputFormatter'), 'output').returnsThis()
+    sandbox.stub(container.resolve('outputFormatter'), 'log').returnsThis()
     const dockerComposeStub = sandbox
       .stub(dockerCompose, 'command')
       .returns(sandbox.createStubInstance(Command))

@@ -1,5 +1,5 @@
 import { RESOLVER, Lifetime } from 'awilix'
-import type OutputFormatter from './OutputFormatter.js'
+import OutputFormatter from './OutputFormatter'
 import Command, { CommandArgs, CommandOptions } from '#services/Command.js'
 
 export type ExecutionType = Extract<

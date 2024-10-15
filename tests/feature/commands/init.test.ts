@@ -3,7 +3,11 @@ import { AwilixContainer } from 'awilix'
 import { expect } from 'chai'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox } from 'sinon'
-import { default as createTestContainer, stubEnquirer } from '../testHelpers.js'
+import {
+  default as createTestContainer,
+  stubEnquirer,
+  stubOutputFormatter,
+} from '../testHelpers.js'
 import Application from '#src/Application.js'
 
 describe('Init command tests', () => {
@@ -19,7 +23,7 @@ describe('Init command tests', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox()
-    sandbox.stub(container.resolve('outputFormatter'), 'output').returnsThis()
+    stubOutputFormatter(container, sandbox)
   })
 
   afterEach(() => {

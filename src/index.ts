@@ -20,7 +20,11 @@ export default async function () {
 
   // Fetch and bootstrap the application.
   const application = container.resolve('application')
-  await application.bootstrap()
+  const bootstrapped = await application.bootstrap()
+  // If we could not bootstrap the application we return exit code 1
+  if (!bootstrapped) {
+    return 1
+  }
 
   // Run Application.
   const [, , ...args] = process.argv

@@ -20,7 +20,8 @@ describe('Version command tests', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox()
-    stubs.output = sandbox.stub(container.resolve('outputFormatter'), 'output')
+    const formatter = container.resolve('outputFormatter')
+    stubs.log = sandbox.stub(formatter, 'log')
     stubs.process = sandbox.stub(process, 'exit').throws({
       name: 'Fake Exit',
     })
@@ -34,7 +35,8 @@ describe('Version command tests', () => {
     application.run(['--version'])
 
     expect(
-      stubs.output.withArgs(sinon.match('Version')).calledOnce,
+      stubs.log.withArgs(sinon.match.any, { title: 'Version', color: 'green' })
+        .calledOnce,
       'should display',
     ).to.be.true
   })
