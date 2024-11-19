@@ -72,7 +72,7 @@ export default class OutputFormatter {
       title,
       color,
       date,
-    }).separator(color)
+    }).separator(`${color}.dim`)
   }
 
   /**
@@ -149,6 +149,6 @@ export default class OutputFormatter {
       type: 'start',
       color: 'magenta',
       date: true,
-    }).separator('magenta')
+    }).separator('magenta.dim')
   }
 }

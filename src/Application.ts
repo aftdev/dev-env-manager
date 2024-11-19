@@ -71,7 +71,7 @@ export default class Application {
 
       // Execute command.
       // Always use ASYNC as some sub commands could be async.
-      // This allow us to wait for any commands to be over and catch any errors.
+      // This allows us to wait for any commands to be over and catch any errors.
       await cli.parseAsync(args, { from: 'user' })
       return 0
     } catch (error) {

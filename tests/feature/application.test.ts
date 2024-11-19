@@ -64,8 +64,6 @@ describe('Applications Feature Tests', () => {
 
       application.run([])
 
-      expect(outputStub.calledWith(sinon.match('Package manager commands:'))).to
-        .be.true
       expect(
         outputStub.calledWith(sinon.match('script a')),
         'Should find script a command',
