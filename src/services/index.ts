@@ -1,6 +1,5 @@
 import type { AwilixContainer } from 'awilix'
 import type { Command } from 'commander'
-import type { ConsolaInstance } from 'consola'
 import type Enquirer from 'enquirer'
 import type { Provider as Nconf } from 'nconf'
 import type CommandExecuter from './CommandExecuter.js'
@@ -33,7 +32,7 @@ export type RegisteredServices = {
   /**
    * Helper class to output messages
    */
-  consola: ConsolaInstance
+  outputFormatter: OutputFormatter
   /**
    * Manager to fetch all your envs from
    */
@@ -84,5 +83,4 @@ export type RegisteredServices = {
    * Docker Compose helper
    */
   dockerCompose: DockerCompose
-  outputFormatter: OutputFormatter
 }
