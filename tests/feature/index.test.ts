@@ -7,6 +7,7 @@ import runApp from '#src/index.js'
 describe('Index Feature Tests', () => {
   let sandbox: SinonSandbox
   let stdoutStub: SinonStub
+  let stderrStub: SinonStub
 
   const oldCwd = process.cwd()
 
@@ -15,6 +16,7 @@ describe('Index Feature Tests', () => {
     sandbox = sinon.createSandbox()
     sandbox.stub(process, 'argv').value(['a', 'b'])
     stdoutStub = sandbox.stub(process.stdout, 'write').callsFake(() => true)
+    stderrStub = sandbox.stub(process.stderr, 'write').callsFake(() => true)
   })
 
   afterEach(() => {
@@ -34,6 +36,18 @@ describe('Index Feature Tests', () => {
 
     expect(
       stdoutStub.withArgs(sinon.match('Command line utilities')).calledOnce,
+    ).to.be.true
+  })
+
+  it('should return exit code 1 if bootstrap fails', async () => {
+    process.chdir('./tests/feature/files/invalid')
+    const exitCode = await runApp()
+
+    expect(exitCode).to.be.eq(1)
+    expect(
+      stderrStub.withArgs(
+        sinon.match('Not all command files could be bootstrapped'),
+      ).calledOnce,
     ).to.be.true
   })
 })
