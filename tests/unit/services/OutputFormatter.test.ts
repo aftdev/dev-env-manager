@@ -39,7 +39,6 @@ describe('Outputformatter', () => {
     it.only(`should display ${functionName} messages properly`, () => {
       // Without box
       outputFormatter[functionName]('test')
-      console.log(consolaSpy.getCalls())
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
       expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
 
@@ -58,6 +57,8 @@ describe('Outputformatter', () => {
         title: 'With box',
         color: 'green',
       })
+
+      console.log(consolaSpy.getCalls())
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
       expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
       expect(
