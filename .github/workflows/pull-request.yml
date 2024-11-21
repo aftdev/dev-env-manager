@@ -26,6 +26,8 @@ jobs:
           fetch-depth: 0
       - name: Setup node
         uses: actions/setup-node@v4
+        env:
+          YARN_ENABLE_HARDENED_MODE: ${{ matrix.node == '22' && '1' || '0' }}
         with:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
