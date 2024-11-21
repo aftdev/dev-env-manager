@@ -36,12 +36,11 @@ describe('Outputformatter', () => {
   ]
 
   data.forEach((functionName) => {
-    // eslint-disable-next-line mocha/no-exclusive-tests
-    it.only(`should display ${functionName} messages properly`, () => {
+    it(`should display ${functionName} messages properly`, () => {
       // Without box
       outputFormatter[functionName]('test')
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
-      expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+      expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
 
       // With box
       consolaSpy.resetHistory()
@@ -50,7 +49,7 @@ describe('Outputformatter', () => {
         consolaSpy.withArgs(sinon.match('With box')).callCount,
       ).to.be.equal(1)
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
-      expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+      expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
 
       // Custom color
       consolaSpy.resetHistory()
@@ -59,12 +58,10 @@ describe('Outputformatter', () => {
         color: 'green',
       })
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
-      expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+      expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
       expect(
         consolaSpy.withArgs(sinon.match('\x1B[32m')).callCount,
       ).to.be.equal(2)
-
-      console.log(consolaSpy.getCalls())
     })
   })
 
@@ -97,14 +94,14 @@ describe('Outputformatter', () => {
     expect(
       consolaSpy.withArgs(sinon.match(/Start Message/)).callCount,
     ).to.be.equal(1)
-    expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+    expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
 
     consolaSpy.resetHistory()
     outputFormatter.start('Start Message')
     expect(
       consolaSpy.withArgs(sinon.match(/Start Message/)).callCount,
     ).to.be.equal(1)
-    expect(consolaSpy.withArgs(sinon.match('─────')).callCount).to.be.equal(1)
+    expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
   })
 
   it('should display custom lines properly', () => {
