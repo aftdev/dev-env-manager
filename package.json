@@ -81,7 +81,6 @@
     "mocha": "^10.8.2",
     "prettier": "^3.3.3",
     "sinon": "^19.0.2",
-    "strip-ansi": "^7.1.0",
     "ts-mocha": "^10.0.0",
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
@@ -103,5 +102,5 @@
     "release": "changeset publish",
     "changelog": "changeset add"
   },
-  "packageManager": "yarn@4.5.0"
+  "packageManager": "yarn@4.5.1"
 }

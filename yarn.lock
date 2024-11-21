@@ -56,7 +56,6 @@ __metadata:
     prettier: "npm:^3.3.3"
     puka: "npm:^1.0.1"
     sinon: "npm:^19.0.2"
-    strip-ansi: "npm:^7.1.0"
     ts-mocha: "npm:^10.0.0"
     tsc-alias: "npm:^1.8.10"
     tsconfig-paths: "npm:^4.2.0"
