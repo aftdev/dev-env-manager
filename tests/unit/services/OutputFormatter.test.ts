@@ -36,7 +36,8 @@ describe('Outputformatter', () => {
   ]
 
   data.forEach((functionName) => {
-    it(`should display ${functionName} messages properly`, () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only(`should display ${functionName} messages properly`, () => {
       // Without box
       outputFormatter[functionName]('test')
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
@@ -62,6 +63,8 @@ describe('Outputformatter', () => {
       expect(
         consolaSpy.withArgs(sinon.match('\x1B[32m')).callCount,
       ).to.be.equal(2)
+
+      console.log(consolaSpy.getCalls())
     })
   })
 

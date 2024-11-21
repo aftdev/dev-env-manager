@@ -98,7 +98,7 @@
     "test": "ts-mocha",
     "test-all": "ts-mocha --paths --reporter=dot --recursive './tests/**/*.test.ts'",
     "coverage": "c8 --reporter=html --reporter=text --reporter=html yarn test-all",
-    "ci:coverage": "c8 --check-coverage --reporter=none yarn test-all",
+    "ci:coverage": "c8 --check-coverage --reporter=none yarn test-all --reporter=spec --no-colors",
     "release": "changeset publish",
     "changelog": "changeset add"
   },
