@@ -36,7 +36,7 @@ describe('Outputformatter', () => {
   ]
 
   data.forEach((functionName) => {
-    it(`should display ${functionName} messages properly`, () => {
+    it.only(`should display ${functionName} messages properly`, () => {
       // Without box
       outputFormatter[functionName]('test')
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)

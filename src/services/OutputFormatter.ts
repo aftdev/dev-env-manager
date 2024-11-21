@@ -79,7 +79,9 @@ export default class OutputFormatter {
    * Output a separator.
    */
   separator(color = 'dim', width: number = process.stdout.columns) {
-    const separator = '─'.repeat(width || 1)
+    // eslint-disable-next-line no-console
+    console.log(process.stdout.columns)
+    const separator = '─'.repeat(width > 0 ? width : 1)
 
     return this.log(chalk`{${color} ${separator}}`)
   }
