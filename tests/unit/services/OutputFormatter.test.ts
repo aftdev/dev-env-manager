@@ -1,4 +1,5 @@
 import { expect } from 'chai'
+import chalk from 'chalk'
 import { ConsolaInstance } from 'consola'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox, SinonSpy } from 'sinon'
@@ -11,7 +12,11 @@ describe('Outputformatter', () => {
   let consola: ConsolaInstance
   let consolaSpy: SinonSpy
 
+  const originalChalkLevel = chalk.level
+
   beforeEach(() => {
+    // Force Chalk color even in ci environments that don't support it
+    chalk.level = 3
     sandbox = sinon.createSandbox()
 
     consolaSpy = sinon.spy()
@@ -23,6 +28,7 @@ describe('Outputformatter', () => {
 
   afterEach(() => {
     sandbox.restore()
+    chalk.level = originalChalkLevel
   })
 
   it(`should log messages properly`, () => {
@@ -32,11 +38,11 @@ describe('Outputformatter', () => {
 
   const data: Array<keyof Pick<OutputFormatter, 'title' | 'subtitle'>> = [
     'title',
-    //'subtitle',
+    'subtitle',
   ]
 
   data.forEach((functionName) => {
-    it.only(`should display ${functionName} messages properly`, () => {
+    it(`should display ${functionName} messages properly`, () => {
       // Without box
       outputFormatter[functionName]('test')
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
@@ -52,13 +58,13 @@ describe('Outputformatter', () => {
       expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
 
       // Custom color
+      // Force chalk to use color even in ci environments that don't support it
       consolaSpy.resetHistory()
       outputFormatter[functionName]('test', {
         title: 'With box',
         color: 'green',
       })
 
-      console.log(consolaSpy.getCalls())
       expect(consolaSpy.withArgs(sinon.match('test')).callCount).to.be.equal(1)
       expect(consolaSpy.withArgs(sinon.match('─')).callCount).to.be.equal(1)
       expect(
