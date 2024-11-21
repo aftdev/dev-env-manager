@@ -14,19 +14,15 @@ export default function (
   return new Command()
     .name('dev')
     .description(configuration.get('name'))
-    .option('-d, --debug', 'Show debug information')
+    .option('-d, --debug', 'Show debug information', () => {
+      consola.level = 999
+    })
     .enablePositionalOptions()
     .passThroughOptions()
     .showSuggestionAfterError()
     .configureHelp({
       sortOptions: true,
       sortSubcommands: true,
-    })
-    .hook('preAction', (thisCommand) => {
-      const { debug = false } = thisCommand.opts()
-      if (debug) {
-        consola.level = 999
-      }
     })
     .addHelpText('after', ({ command: cli }) => {
       const allScripts = packageManagerScripts.getScripts()

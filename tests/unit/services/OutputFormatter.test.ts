@@ -68,9 +68,9 @@ describe('Outputformatter', () => {
   const styles: Array<
     keyof Pick<
       OutputFormatter,
-      'success' | 'warning' | 'error' | 'info' | 'start'
+      'success' | 'warning' | 'error' | 'info' | 'start' | 'debug'
     >
-  > = ['success', 'warning', 'error', 'info']
+  > = ['success', 'warning', 'error', 'info', 'debug']
   styles.forEach((style) => {
     it(`should properly display ${style} messages with / without custom titles`, () => {
       outputFormatter[style]('Custom Message')

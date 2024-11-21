@@ -24,7 +24,7 @@ describe('Applications Feature Tests', () => {
     let application: Application
     let container: AwilixContainer
 
-    before(async () => {
+    beforeEach(async () => {
       container = await createTestContainer('project1')
       application = container.resolve('application')
       await application.bootstrap()
@@ -73,6 +73,26 @@ describe('Applications Feature Tests', () => {
         'Should find scriptB command',
       ).to.be.true
     })
+
+    describe('debug mode', () => {
+      let writeStub: sinon.SinonStub
+
+      beforeEach(() => {
+        writeStub = sandbox.stub(process.stdout, 'write').callsFake(() => true)
+      })
+
+      it('display debug messages in debug mode', async () => {
+        application.run(['--debug', 'debug_test'])
+
+        expect(writeStub.calledWith(sinon.match('Debug message'))).to.be.true
+      })
+
+      it('ignores debug messages', () => {
+        application.run(['debug_test'])
+
+        expect(writeStub.calledWith(sinon.match('Debug message'))).to.be.false
+      })
+    })
   })
 
   describe('Project 2', () => {
@@ -96,8 +116,7 @@ describe('Applications Feature Tests', () => {
       application.run([])
       expect(outputStub.calledWith(sinon.match('Command line utilities'))).to.be
         .true
-      expect(outputStub.calledWith(sinon.match('Package manager commands:'))).to
-        .be.false
+      expect(outputStub.calledWith(sinon.match('commands:'))).to.be.false
     })
   })
 
