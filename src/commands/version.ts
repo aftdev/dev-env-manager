@@ -12,14 +12,15 @@ const initCommands: DevCommandInitializer = ({
   cli
     .option('-V, --version', 'Output the current version')
     .on('option:version', () => {
+      outputFormatter.debug(process.version, 'Node version')
+
       const { version } = JSON.parse(
         fs.readFileSync(`${rootPath}/../package.json`, 'utf8'),
       )
+      outputFormatter.success(version, 'Version')
 
-      outputFormatter.log(version, { title: 'Version', color: 'green' })
-
-      // @ts-expect-error: calling commander private functions :|
-      return cli._exit(0, 'commander.version', version)
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(0)
     })
 }
 
