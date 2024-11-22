@@ -6,10 +6,10 @@ import AbstractEnvironment from '#services/Environment/AbstractEnvironment.js'
  */
 const initCommands: DevCommandInitializer = ({
   cli,
-  outputFormatter,
   environmentManager,
   node,
   composer,
+  outputFormatter,
   enquirer,
 }) => {
   /**
@@ -123,19 +123,17 @@ const initCommands: DevCommandInitializer = ({
       .description('Initial setup')
       .action(() => {
         // Environments
-        outputFormatter.newLine().subtitle('Build and start environments')
+        outputFormatter.title('Build and start environments', {
+          title: 'Setup',
+        })
         executeOnEnabledEnvs('setup', { setup: true })
 
-        // Package Managers
-        // Composer
         if (composer.isEnabled()) {
-          outputFormatter.newLine().subtitle('Composer')
           composer.execute(['install'])
         }
 
         // packages.json (npm / yarn / pnpm)
         if (node.isEnabled()) {
-          outputFormatter.newLine().subtitle('\nNode')
           node.execute(['install'])
         }
       })

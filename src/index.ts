@@ -8,7 +8,7 @@ export * from '#src/services/index.js'
 export * from '#src/commands/index.js'
 
 export default async function () {
-  // Get closest dir that have the config file.
+  // Get the closest dir that have the config file.
   let path = process.cwd()
   const configPath = findup(Application.CONFIG_FILE)
   if (configPath) {
@@ -20,7 +20,12 @@ export default async function () {
 
   // Fetch and bootstrap the application.
   const application = container.resolve('application')
-  await application.bootstrap()
+  const bootstrapped = await application.bootstrap()
+
+  // If we could not bootstrap the application we return exit code 1
+  if (!bootstrapped) {
+    return 1
+  }
 
   // Run Application.
   const [, , ...args] = process.argv

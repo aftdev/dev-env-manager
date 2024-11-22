@@ -1,20 +1,19 @@
 import child_process from 'child_process'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
-import sinon, { SinonSandbox, SinonStub } from 'sinon'
+import sinon, { SinonSandbox, SinonStubbedInstance } from 'sinon'
 import CommandExecuter from '#services/CommandExecuter.js'
 import OutputFormatter from '#services/OutputFormatter.js'
 
 describe('CommandExecuter Tests', () => {
   let sandbox: SinonSandbox
-  let outputFormatter: OutputFormatter
-  let outputStub: SinonStub<[value: string], OutputFormatter>
+  let outputFormatterStub: SinonStubbedInstance<OutputFormatter>
 
   beforeEach(() => {
     sandbox = sinon.createSandbox()
 
-    outputFormatter = new OutputFormatter()
-    outputStub = sandbox.stub(outputFormatter, 'output').returnsThis()
+    outputFormatterStub = sinon.createStubInstance(OutputFormatter)
+    outputFormatterStub.start.returnsThis()
   })
 
   afterEach(() => {
@@ -23,7 +22,7 @@ describe('CommandExecuter Tests', () => {
   })
 
   it('should execute command properly', () => {
-    const executer = new CommandExecuter(outputFormatter)
+    const executer = new CommandExecuter(outputFormatterStub)
 
     sandbox
       .stub(child_process, 'execSync')
@@ -38,13 +37,17 @@ describe('CommandExecuter Tests', () => {
       executer.execute('with exception - should throw')
     }).to.throw()
 
-    expect(outputStub.calledWith(sinon.match('echo TEST'))).to.be.true
-    expect(outputStub.calledWith(sinon.match('with exception - should throw')))
-      .to.be.true
+    expect(outputFormatterStub.start.calledWith(sinon.match('echo TEST'))).to.be
+      .true
+    expect(
+      outputFormatterStub.start.calledWith(
+        sinon.match('with exception - should throw'),
+      ),
+    ).to.be.true
   })
 
   it('should execute command in the background (no output)', () => {
-    const executer = new CommandExecuter(outputFormatter)
+    const executer = new CommandExecuter(outputFormatterStub)
 
     const stub = sandbox
       .stub(child_process, 'execSync')
@@ -53,11 +56,11 @@ describe('CommandExecuter Tests', () => {
     executer.backgroundExecute('test command', ['ps', '--services'])
 
     expect(stub.calledWith('test command ps --services')).to.be.true
-    expect(outputStub.called).to.be.false
+    expect(outputFormatterStub.start.called).to.be.false
   })
 
   it('should open tty subcommand', () => {
-    const executer = new CommandExecuter(outputFormatter)
+    const executer = new CommandExecuter(outputFormatterStub)
 
     const stub = sandbox
       .stub(child_process, 'spawnSync')
@@ -70,6 +73,8 @@ describe('CommandExecuter Tests', () => {
       stub.calledWith('ssh with --options', [], sinon.match({ shell: true })),
     ).to.be.true
 
-    expect(outputStub.calledWith(sinon.match('ssh with --options'))).to.be.true
+    expect(
+      outputFormatterStub.start.calledWith(sinon.match('ssh with --options')),
+    ).to.be.true
   })
 })

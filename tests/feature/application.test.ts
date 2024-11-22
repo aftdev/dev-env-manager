@@ -24,7 +24,7 @@ describe('Applications Feature Tests', () => {
     let application: Application
     let container: AwilixContainer
 
-    before(async () => {
+    beforeEach(async () => {
       container = await createTestContainer('project1')
       application = container.resolve('application')
       await application.bootstrap()
@@ -38,7 +38,7 @@ describe('Applications Feature Tests', () => {
 
     it('should gather defaults and project commands', () => {
       const outputFormatter = container.resolve('outputFormatter')
-      const stub = sandbox.stub(outputFormatter, 'output')
+      const stub = sandbox.stub(outputFormatter, 'log')
 
       application.run(['project1_command_a'])
       expect(
@@ -64,8 +64,6 @@ describe('Applications Feature Tests', () => {
 
       application.run([])
 
-      expect(outputStub.calledWith(sinon.match('Package manager commands:'))).to
-        .be.true
       expect(
         outputStub.calledWith(sinon.match('script a')),
         'Should find script a command',
@@ -74,6 +72,26 @@ describe('Applications Feature Tests', () => {
         outputStub.calledWith(sinon.match('scriptB')),
         'Should find scriptB command',
       ).to.be.true
+    })
+
+    describe('debug mode', () => {
+      let writeStub: sinon.SinonStub
+
+      beforeEach(() => {
+        writeStub = sandbox.stub(process.stdout, 'write').callsFake(() => true)
+      })
+
+      it('display debug messages in debug mode', async () => {
+        application.run(['--debug', 'debug_test'])
+
+        expect(writeStub.calledWith(sinon.match('Debug message'))).to.be.true
+      })
+
+      it('ignores debug messages', () => {
+        application.run(['debug_test'])
+
+        expect(writeStub.calledWith(sinon.match('Debug message'))).to.be.false
+      })
     })
   })
 
@@ -98,8 +116,7 @@ describe('Applications Feature Tests', () => {
       application.run([])
       expect(outputStub.calledWith(sinon.match('Command line utilities'))).to.be
         .true
-      expect(outputStub.calledWith(sinon.match('Package manager commands:'))).to
-        .be.false
+      expect(outputStub.calledWith(sinon.match('commands:'))).to.be.false
     })
   })
 
@@ -114,27 +131,33 @@ describe('Applications Feature Tests', () => {
 
     it('should throw if not bootstrapped', async () => {
       const outputFormatter = container.resolve('outputFormatter')
-      const stub = sandbox.stub(outputFormatter, 'output').returnsThis()
+      const stub = sandbox.stub(outputFormatter, 'error').returnsThis()
 
       const status = await application.run([])
       expect(status).to.equal(1)
-      expect(stub.calledWith(sinon.match('Application not bootstrapped'))).to.be
-        .true
+      expect(
+        stub.calledWith(
+          sinon.match.has('message', 'Application not bootstrapped'),
+        ),
+      ).to.be.true
     })
 
     it('should capture errors in commands', async () => {
       const outputFormatter = container.resolve('outputFormatter')
-      const stub = sandbox.stub(outputFormatter, 'output').returnsThis()
+      const warnStub = sandbox.stub(outputFormatter, 'warning').returnsThis()
+      const errorStub = sandbox.stub(outputFormatter, 'error').returnsThis()
 
       try {
         await application.bootstrap()
         expect.fail('should have thrown an error')
       } catch {
         expect(
-          stub.calledWith(
+          warnStub.calledWith(
             sinon.match('Not all command files could be bootstrapped'),
           ),
         ).to.be.true
+
+        expect(errorStub.called).to.be.true
       }
     })
   })

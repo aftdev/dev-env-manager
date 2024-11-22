@@ -1,155 +1,154 @@
 import { RESOLVER, Lifetime } from 'awilix'
+import { ForegroundColorName as ColorName } from 'chalk'
 import chalk from 'chalk-template'
-import extractStack from 'extract-stack'
+import { ConsolaInstance, LogType, InputLogObject } from 'consola'
+
+type LineOptions = {
+  type?: LogType
+  color?: ColorName | string
+  title?: string
+  date?: boolean
+}
 
 export default class OutputFormatter {
   static [RESOLVER] = {
     lifetime: Lifetime.SCOPED,
   }
 
-  static ICONS = {
-    info: 'ℹ',
-    success: '✔',
-    warning: '⚠',
-    error: '✖',
-    separator: '─',
-    titleSeparator: '−',
-    dash: '╌',
-  }
-
-  constructor(private out = process.stdout) {}
+  constructor(private consola: ConsolaInstance) {}
 
   /**
-   * Output a string.
+   * Build a line to be outputted to the console
    */
-  output(value: string): OutputFormatter {
-    this.out.write(`${value}\n`)
+  buildLine(
+    text: string,
+    { color = 'reset', title }: Pick<LineOptions, 'color' | 'title'> = {},
+  ): string {
+    const titleBox = title ? chalk`{inverse  ${title} }` : ''
+    const content = `${titleBox} ${text}`.trim()
+    return chalk`{${color} ${content}}`
+  }
+
+  /**
+   * Log a line to the console
+   */
+  log(
+    text: string,
+    { type = 'log', color = 'reset', title, date }: LineOptions = {},
+  ): OutputFormatter {
+    const coloredText = this.buildLine(text, { color, title })
+
+    const options: InputLogObject = {}
+    if (date) {
+      options['date'] = new Date()
+    }
+
+    this.consola.withDefaults(options)[type](coloredText)
     return this
   }
 
   /**
-   * Output a title.
+   * Output a title with a separator.
    */
-  title(text: string, color = 'green') {
-    return this.separator(color, OutputFormatter.ICONS.titleSeparator)
-      .output(chalk`{${color}.bold ${text}}`)
-      .separator(color, OutputFormatter.ICONS.titleSeparator)
+  title(
+    text: string,
+    { color, title, date = true }: Omit<LineOptions, 'type'> = {},
+  ) {
+    this.log(text, {
+      title,
+      date,
+      color,
+    }).separator(color)
   }
 
   /**
-   * Output a subtitle.
+   * Output a subtitle with a separator.
    */
-  subtitle(text: string, color = 'yellow') {
-    return this.output(chalk`{${color} ${text}}`).separator(
+  subtitle(
+    text: string,
+    { color = 'dim', title, date = false }: Omit<LineOptions, 'type'> = {},
+  ) {
+    return this.log(text, {
+      title,
       color,
-      OutputFormatter.ICONS.dash,
-    )
+      date,
+    }).separator(`${color}.dim`)
   }
 
   /**
    * Output a separator.
    */
-  separator(
-    color = 'white.dim',
-    type: string = OutputFormatter.ICONS.separator,
-  ) {
-    const separator = type.repeat(process.stdout.columns)
+  separator(color = 'dim', width: number = process.stdout.columns) {
+    const separator = '─'.repeat(width > 0 ? width : 1)
 
-    return this.output(chalk`{${color} ${separator}}`)
+    return this.log(chalk`{${color} ${separator}}`)
   }
 
   /**
    * Output a new line.
    */
-  newLine() {
-    return this.output('')
-  }
-
-  /**
-   * Output a colored line with optional title and icon.
-   */
-  line(text: string, color = 'white', title = '', icon = '') {
-    let lineTitle = `${icon || ''} ${title || ''}`.trim()
-    lineTitle = lineTitle ? chalk`{bold ${lineTitle}: }` : ''
-
-    return this.output(chalk`{${color} ${lineTitle}${text}}`)
+  newLine(): OutputFormatter {
+    this.log('')
+    return this
   }
 
   /**
    * Output a success message.
    */
   success(text: string, title?: string) {
-    return this.line(
-      text,
-      'green',
-      title || 'Success',
-      OutputFormatter.ICONS.success,
-    )
+    return this.log(text, {
+      type: 'success',
+      title: title,
+      color: 'green',
+    })
   }
 
   /**
    * Output a warning message.
    */
   warning(text: string, title?: string) {
-    return this.line(
-      text,
-      'yellow',
-      title || 'Warning',
-      OutputFormatter.ICONS.warning,
-    )
+    return this.log(text, {
+      type: 'warn',
+      color: 'yellow',
+      title: title,
+    })
   }
 
   /**
    * Output an error message.
    */
-  error(text: string, title?: string) {
-    return this.line(text, 'red', title || 'Error', OutputFormatter.ICONS.error)
+  error(text: string | Error, title?: string) {
+    if (text instanceof Error) {
+      this.consola.error(text)
+    } else {
+      this.log(text, { type: 'error', title: title, color: 'red' })
+    }
+    return this
   }
 
   /**
    * Output an information message.
    */
   info(text: string, title?: string) {
-    return this.line(text, 'blue', title || 'Info', OutputFormatter.ICONS.error)
+    return this.log(text, { type: 'info', title: title, color: 'blue' })
   }
 
-  /**.
-   * Output nicely formatter message from Error object.
-   *
-   * Only display the error stack if the error has been triggered by the
-   * main process (and not a child_process)
+  /**
+   * Output a debug message
    */
-  renderError(error: string | Error) {
-    const message = error instanceof Error ? error.message : error
-    const name = error instanceof Error ? error.name : undefined
+  debug(text: string, title?: string) {
+    return this.log(text, { type: 'debug', title: title, color: 'dim' })
+  }
 
-    if (!message) {
-      return ''
-    }
-
-    const messages = message.split(/\r?\n/).map((message) => message.trim())
-
-    const errorTitle = messages.shift() || ''
-    this.error(errorTitle, name)
-
-    // Multiline error messages.
-    const redColor = 'red'
-    const whiteColor = 'white.dim'
-
-    if (messages.length) {
-      this.separator(redColor, OutputFormatter.ICONS.dash)
-        .line(messages.join('\n'), redColor)
-        .newLine()
-    }
-
-    // Stack
-    const stack = extractStack(error)
-    if (stack) {
-      this.line('Stack:', whiteColor)
-        .separator(whiteColor, OutputFormatter.ICONS.dash)
-        .line(stack, whiteColor)
-        .separator(whiteColor, OutputFormatter.ICONS.dash)
-        .newLine()
-    }
+  /**
+   * Output start with a separator
+   */
+  start(text: string, title?: string) {
+    return this.log(text, {
+      title,
+      type: 'start',
+      color: 'magenta',
+      date: true,
+    }).separator('magenta.dim')
   }
 }
