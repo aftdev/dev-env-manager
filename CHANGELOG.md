@@ -1,5 +1,19 @@
 # @aftdev/dev-env-manager
 
+## 4.0.0
+
+### Major Changes
+
+- [#193](https://github.com/aftdev/dev-env-manager/pull/193)
+  [`5375792`](https://github.com/aftdev/dev-env-manager/commit/5375792be87caa1341203f5602170898682d4b8e)
+  Thanks [@cgaube](https://github.com/cgaube)! - Upgrading major packages to the
+  latest versions
+
+- [#195](https://github.com/aftdev/dev-env-manager/pull/195)
+  [`5a83fb1`](https://github.com/aftdev/dev-env-manager/commit/5a83fb1a177384651c78ccfcde59366ba7a3573e)
+  Thanks [@cgaube](https://github.com/cgaube)! - Use consola instead of
+  console.log
+
 ## 3.1.1
 
 ### Patch Changes
