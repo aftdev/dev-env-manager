@@ -2,10 +2,10 @@ import { createContainer } from 'awilix'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import sinon from 'sinon'
-import type CommandExecuter from '#services/CommandExecuter.js'
-import AbstractEnvironment from '#services/Environment/AbstractEnvironment.js'
-import Vagrant from '#services/Environment/Vagrant.js'
-import EnvironmentManager from '#services/EnvironmentManager.js'
+import type CommandExecuter from '#services/CommandExecuter'
+import AbstractEnvironment from '#services/Environment/AbstractEnvironment'
+import Vagrant from '#services/Environment/Vagrant'
+import EnvironmentManager from '#services/EnvironmentManager'
 
 describe('Environment Manager Tests', () => {
   const stubContainer = () => {

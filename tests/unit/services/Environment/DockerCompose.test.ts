@@ -2,9 +2,9 @@ import fs from 'fs'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox, SinonStubbedInstance } from 'sinon'
-import Command, { CommandArgs } from '#services/Command.js'
-import CommandExecuter from '#services/CommandExecuter.js'
-import DockerCompose from '#services/Environment/DockerCompose.js'
+import Command, { CommandArgs } from '#services/Command'
+import CommandExecuter from '#services/CommandExecuter'
+import DockerCompose from '#services/Environment/DockerCompose'
 
 describe('DockerCompose Env unit tests', () => {
   let sandbox: SinonSandbox

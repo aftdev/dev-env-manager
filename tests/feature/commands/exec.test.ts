@@ -3,12 +3,12 @@ import { AwilixContainer } from 'awilix'
 import { expect } from 'chai'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonMock, SinonSandbox } from 'sinon'
+import Application from '#src/Application'
 import {
   default as createTestContainer,
   stubOutputFormatter,
   stubEnquirer,
-} from '../testHelpers.js'
-import Application from '#src/Application.js'
+} from '#tests/feature/testHelpers'
 
 describe('Exec command tests', () => {
   let sandbox: SinonSandbox

@@ -2,9 +2,9 @@ import fs from 'fs'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox, SinonStubbedInstance } from 'sinon'
-import Command, { CommandArgs } from '#services/Command.js'
-import CommandExecuter from '#services/CommandExecuter.js'
-import Vagrant from '#services/Environment/Vagrant.js'
+import Command, { CommandArgs } from '#services/Command'
+import CommandExecuter from '#services/CommandExecuter'
+import Vagrant from '#services/Environment/Vagrant'
 
 describe('Vagrant Env unit tests', () => {
   let sandbox: SinonSandbox

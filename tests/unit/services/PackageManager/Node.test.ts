@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox, SinonStubbedInstance } from 'sinon'
-import EnvManager from '#services/EnvironmentManager.js'
-import Npm from '#services/PackageManager/Npm.js'
-import Pnpm from '#services/PackageManager/Pnpm.js'
-import Yarn from '#services/PackageManager/Yarn.js'
+import EnvManager from '#services/EnvironmentManager'
+import Npm from '#services/PackageManager/Npm'
+import Pnpm from '#services/PackageManager/Pnpm'
+import Yarn from '#services/PackageManager/Yarn'
 
 describe('Node Package Managers unit tests', () => {
   let sandbox: SinonSandbox
