@@ -1,5 +1,5 @@
 import fs from 'fs'
-import type { DevCommandInitializer } from './index.js'
+import type { DevCommandInitializer } from '#src/types'
 
 /**
  * Display version information.

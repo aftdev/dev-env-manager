@@ -2,8 +2,8 @@ import child_process from 'child_process'
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox, SinonStubbedInstance } from 'sinon'
-import CommandExecuter from '#services/CommandExecuter.js'
-import OutputFormatter from '#services/OutputFormatter.js'
+import CommandExecuter from '#services/CommandExecuter'
+import OutputFormatter from '#services/OutputFormatter'
 
 describe('CommandExecuter Tests', () => {
   let sandbox: SinonSandbox

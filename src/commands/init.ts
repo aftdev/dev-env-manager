@@ -1,7 +1,6 @@
 import fs from 'fs'
 import yaml from 'yaml'
-import type { DevCommandInitializer } from './index.js'
-import Application from '#src/Application.js'
+import type { DevCommandInitializer } from '#src/types'
 
 /**
  * Initialization related commands.
@@ -10,13 +9,16 @@ const initCommands: DevCommandInitializer = ({
   cli,
   outputFormatter,
   enquirer,
+  application,
 }) => {
+  const configFile = application.configFiles().at(-1)
+
   cli
     .command('init')
     .enablePositionalOptions()
-    .description(`Create ${Application.CONFIG_FILE} file for your project`)
+    .description(`Create ${configFile} file for your project`)
     .action(async () => {
-      const configFilePath = `./${Application.CONFIG_FILE}`
+      const configFilePath = `./${configFile}`
 
       if (fs.existsSync(configFilePath)) {
         throw new Error('Config file already exists')
@@ -46,7 +48,7 @@ const initCommands: DevCommandInitializer = ({
 
       fs.writeFileSync(configFilePath, yamlStr)
 
-      outputFormatter.success(`${Application.CONFIG_FILE} file created`)
+      outputFormatter.success(`${configFile} file created`)
     })
 }
 

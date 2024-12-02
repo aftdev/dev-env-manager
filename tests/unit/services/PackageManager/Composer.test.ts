@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox } from 'sinon'
-import EnvManager from '../../../../src/services/EnvironmentManager.js'
-import Composer from '../../../../src/services/PackageManager/Composer.js'
+import EnvManager from '#src/services/EnvironmentManager'
+import Composer from '#src/services/PackageManager/Composer'
 
 describe('Composer unit tests', () => {
   let sandbox: SinonSandbox

@@ -2,10 +2,10 @@ import type { AwilixContainer } from 'awilix'
 import { expect } from 'chai'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox } from 'sinon'
-import Command from '#services/Command.js'
-import DockerCompose from '#services/Environment/DockerCompose.js'
-import Application from '#src/Application.js'
-import { default as createTestContainer } from '#tests/feature/testHelpers.js'
+import Command from '#services/Command'
+import DockerCompose from '#services/Environment/DockerCompose'
+import Application from '#src/Application'
+import { default as createTestContainer } from '#tests/feature/testHelpers'
 
 describe('Environment Feature Tests', () => {
   let sandbox: SinonSandbox

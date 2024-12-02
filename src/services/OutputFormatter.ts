@@ -54,7 +54,7 @@ export default class OutputFormatter {
     text: string,
     { color, title, date = true }: Omit<LineOptions, 'type'> = {},
   ) {
-    this.log(text, {
+    return this.log(text, {
       title,
       date,
       color,

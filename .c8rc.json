@@ -4,5 +4,6 @@
   "useSpawnWrap": true,
   "lines": 100,
   "branches": "96",
-  "statements": "100"
+  "statements": "100",
+  "exclude": ["src/cli.ts"]
 }

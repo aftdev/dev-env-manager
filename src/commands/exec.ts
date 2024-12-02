@@ -1,5 +1,5 @@
 import chalkTemplate from 'chalk-template'
-import type { DevCommandInitializer } from './index.js'
+import type { DevCommandInitializer } from '#src/types'
 
 /**
  * Fallback command using commander event system.

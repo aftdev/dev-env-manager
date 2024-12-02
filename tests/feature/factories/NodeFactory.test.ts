@@ -1,11 +1,11 @@
 import { AwilixContainer } from 'awilix'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import nodeFactory from '../../../src/factories/nodeFactory.js'
-import Npm from '../../../src/services/PackageManager/Npm.js'
-import Pnpm from '../../../src/services/PackageManager/Pnpm.js'
-import Yarn from '../../../src/services/PackageManager/Yarn.js'
-import { default as createTestContainer } from '../testHelpers.js'
+import nodeFactory from '#src/factories/nodeFactory'
+import Npm from '#src/services/PackageManager/Npm'
+import Pnpm from '#src/services/PackageManager/Pnpm'
+import Yarn from '#src/services/PackageManager/Yarn'
+import { default as createTestContainer } from '#tests/feature/testHelpers'
 
 describe('Node Manager feature tests', () => {
   let container: AwilixContainer

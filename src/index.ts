@@ -1,11 +1,10 @@
 import { dirname } from 'path'
 import process from 'process'
 import findup from 'findup-sync'
-import Application from './Application.js'
-import createContainer from './container.js'
+import Application from '#src/Application'
+import createContainer from '#src/container'
 
-export * from '#src/services/index.js'
-export * from '#src/commands/index.js'
+export * from '#src/types'
 
 export default async function () {
   // Get the closest dir that have the config file.

@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox } from 'sinon'
-import CommandExecuter from '#services/CommandExecuter.js'
-import Local from '#services/Environment/Local.js'
+import CommandExecuter from '#services/CommandExecuter'
+import Local from '#services/Environment/Local'
 
 describe('Local Env unit tests', () => {
   let sandbox: SinonSandbox

@@ -9,6 +9,7 @@ import {
   FunctionReturning,
 } from 'awilix'
 import fg from 'fast-glob'
+import defaultCommands from '#src/commands/index'
 
 export default class Application {
   static [RESOLVER] = {
@@ -38,10 +39,12 @@ export default class Application {
       const commands = await this.fetchProjectCommands()
 
       // Use container to load all command modules.
-      commands.forEach((module: FunctionReturning<unknown>) => {
-        // For typescript and type-hinting, we use the proxy mode.
-        this.container.build(asFunction(module).proxy())
-      })
+      commands
+        .concat(defaultCommands)
+        .forEach((module: FunctionReturning<unknown>) => {
+          // For typescript and type-hinting, we use the proxy mode.
+          this.container.build(asFunction(module).proxy())
+        })
 
       this.bootstrapped = true
     } catch (err) {
@@ -83,25 +86,22 @@ export default class Application {
     }
   }
 
+  public configFiles(): string[] {
+    return [Application.CONFIG_FILE, Application.CONFIG_FILE_OVERRIDE]
+  }
+
   /**
    * Fetch all the commands for current project.
    */
   private async fetchProjectCommands(): Promise<FunctionReturning<unknown>[]> {
     const commandsFiles = []
 
-    // From our folder.
-    const defaultCommands = fg.sync(
-      `${this.rootPath}/commands/**/${Application.EXT_GLOB}`,
-    )
-
     // From project folders.
     const configuration = this.container.resolve('configuration')
     const projectCommandsDirs = configuration.get('commands_dirs')
     const projectCommands = this.getCommandsFromProjectDirs(projectCommandsDirs)
 
-    const commands = [...projectCommands, ...defaultCommands].map((d) =>
-      resolve(d),
-    )
+    const commands = [...projectCommands].map((d) => resolve(d))
 
     for (const file of commands) {
       const { default: module } = await import(file)

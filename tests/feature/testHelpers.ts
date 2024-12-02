@@ -2,7 +2,7 @@ import { resolve } from 'path'
 import type { AwilixContainer } from 'awilix'
 import Enquirer from 'enquirer'
 import sinon, { SinonSandbox } from 'sinon'
-import createContainer from '../../src/container.js'
+import createContainer from '#src/container'
 
 // Init path before any files can change current path.
 const testPath = resolve('./tests/feature/files')

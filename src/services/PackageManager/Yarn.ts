@@ -1,4 +1,4 @@
-import Npm from './Npm.js'
+import Npm from '#services/PackageManager/Npm'
 
 /**
  * Yarn Service.

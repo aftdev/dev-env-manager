@@ -3,12 +3,12 @@ import { AwilixContainer } from 'awilix'
 import { expect } from 'chai'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonMock, SinonSandbox } from 'sinon'
+import Application from '#src/Application'
 import {
   default as createTestContainer,
   stubOutputFormatter,
   stubEnquirer,
-} from '../testHelpers.js'
-import Application from '#src/Application.js'
+} from '#tests/feature/testHelpers'
 
 describe('Exec command tests', () => {
   let sandbox: SinonSandbox
@@ -37,7 +37,7 @@ describe('Exec command tests', () => {
     childProcessMock.expects('execSync').never()
     childProcessMock
       .expects('execSync')
-      .withArgs('docker-compose exec phpContainer php')
+      .withArgs('docker compose exec phpContainer php')
       .once()
 
     await application.run(['php'])
@@ -53,7 +53,7 @@ describe('Exec command tests', () => {
     childProcessMock.expects('execSync').withArgs("npm run 'script a'").once()
     childProcessMock
       .expects('execSync')
-      .withArgs('docker-compose run phpContainer php composer.phar composerA')
+      .withArgs('docker compose run phpContainer php composer.phar composerA')
       .once()
 
     application.run(['script a'])
@@ -63,7 +63,7 @@ describe('Exec command tests', () => {
   it('should show a prompt when script is in several managers', async () => {
     childProcessMock
       .expects('execSync')
-      .withArgs('docker-compose run phpContainer php composer.phar scriptB')
+      .withArgs('docker compose run phpContainer php composer.phar scriptB')
       .once()
       .callsFake(() => true)
 

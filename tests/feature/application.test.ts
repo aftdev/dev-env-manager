@@ -2,11 +2,11 @@ import { AwilixContainer } from 'awilix'
 import { expect } from 'chai'
 import { before, beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox } from 'sinon'
-import Application from '#src/Application.js'
+import Application from '#src/Application'
 import {
   default as createTestContainer,
   stubCliOutput,
-} from '#tests/feature/testHelpers.js'
+} from '#tests/feature/testHelpers'
 
 describe('Applications Feature Tests', () => {
   let sandbox: SinonSandbox

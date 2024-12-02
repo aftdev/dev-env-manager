@@ -1,7 +1,7 @@
 import fs from 'fs'
-import type { CommandArgs } from '#services/Command.js'
-import Command from '#services/Command.js'
-import AbstractEnvironment from '#services/Environment/AbstractEnvironment.js'
+import type { CommandArgs } from '#services/Command'
+import Command from '#services/Command'
+import AbstractEnvironment from '#services/Environment/AbstractEnvironment'
 
 export type VagrantExecuteOptions = {
   machine?: string

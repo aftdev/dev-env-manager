@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import { ConsolaInstance } from 'consola'
 import type { Provider } from 'nconf'
-import type PackageManagerScript from '#services/PackageManagerScript.js'
+import type PackageManagerScript from '#services/PackageManagerScript'
 
 /**
  * Create and configure the main "commander" cli.

@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import { ConsolaInstance } from 'consola'
 import { beforeEach, afterEach, describe, it } from 'mocha'
 import sinon, { SinonSandbox, SinonSpy } from 'sinon'
-import OutputFormatter from '#services/OutputFormatter.js'
+import OutputFormatter from '#services/OutputFormatter'
 import consolaFactory from '#src/factories/consolaFactory'
 
 describe('Outputformatter', () => {

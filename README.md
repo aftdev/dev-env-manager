@@ -247,7 +247,15 @@ commands_dirs:
 
 ```js
 // @file ./commands/my-command.js
-export default ({ cli }) => {
+
+/**
+ * @typedef {import('@aftdev/dev-env-manager').DevCommandInitializer} DevCommandInitializer
+ */
+
+/**
+ * @type {DevCommandInitializer}
+ */
+export default ({ cli, ...otherServices }) => {
   cli
     .command('your-command-name')
     .description('This is my really cool command')
@@ -261,7 +269,10 @@ export default ({ cli }) => {
 // @file ./commands/my-command.ts
 import type { DevCommandInitializer } from '@aftdev/dev-env-manager'
 
-const commandsInitializer: DevCommandInitializer = ({ cli }) => {
+const commandsInitializer: DevCommandInitializer = ({
+  cli,
+  ...otherServices
+}) => {
   cli
     .command('your-command-name')
     .description('This is my really cool command')
