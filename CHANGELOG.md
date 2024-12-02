@@ -1,5 +1,13 @@
 # @aftdev/dev-env-manager
 
+## 4.1.0
+
+### Minor Changes
+
+- [#196](https://github.com/aftdev/dev-env-manager/pull/196)
+  [`f2852cd`](https://github.com/aftdev/dev-env-manager/commit/f2852cdd56e1c5cf5473387ee01c87d3cc0090d8)
+  Thanks [@cgaube](https://github.com/cgaube)! - Use tsup for bundling
+
 ## 4.0.0
 
 ### Major Changes
