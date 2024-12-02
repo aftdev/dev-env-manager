@@ -1,4 +1,4 @@
-import CommandExecuter from '#services/CommandExecuter.js'
+import CommandExecuter from '#services/CommandExecuter'
 
 export type EnvironmentOptions = object
 

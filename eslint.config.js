@@ -70,6 +70,14 @@ export default tsEslint.config(
         },
       ],
       'import/no-named-as-default-member': 'off',
+      'import/extensions': [
+        'error',
+        'never',
+        {
+          ts: 'never',
+          js: 'never',
+        },
+      ],
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_' },
@@ -78,6 +86,12 @@ export default tsEslint.config(
       'mocha/no-identical-title': 'off',
       'mocha/no-setup-in-describe': 'off',
       'n/no-missing-import': 'off', // Disabled because we are using typescript
+      'n/hashbang': [
+        'error',
+        {
+          additionalExecutables: ['src/dev.ts'],
+        },
+      ],
     },
   },
   {

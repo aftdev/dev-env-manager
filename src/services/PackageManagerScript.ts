@@ -1,4 +1,4 @@
-import AbstractPackageManager from './PackageManager/AbstractPackageManager.js'
+import AbstractPackageManager from '#services/PackageManager/AbstractPackageManager'
 
 /**
  * Helper for scripts commands coming from package managers.

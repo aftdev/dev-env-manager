@@ -1,9 +1,9 @@
 import type { Provider } from 'nconf'
-import type AbstractPackageManager from '#services/PackageManager/AbstractPackageManager.js'
-import Npm from '#services/PackageManager/Npm.js'
-import Pnpm from '#services/PackageManager/Pnpm.js'
-import Yarn from '#services/PackageManager/Yarn.js'
-import type EnvironmentManager from '#src/services/EnvironmentManager.js'
+import type AbstractPackageManager from '#services/PackageManager/AbstractPackageManager'
+import Npm from '#services/PackageManager/Npm'
+import Pnpm from '#services/PackageManager/Pnpm'
+import Yarn from '#services/PackageManager/Yarn'
+import type EnvironmentManager from '#src/services/EnvironmentManager'
 
 /**.
  * Factory to create and return the node package manager

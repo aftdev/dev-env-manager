@@ -1,5 +1,5 @@
-import type { DevCommandInitializer } from './index.js'
-import AbstractEnvironment from '#services/Environment/AbstractEnvironment.js'
+import AbstractEnvironment from '#services/Environment/AbstractEnvironment'
+import type { DevCommandInitializer } from '#src/types'
 
 /**
  * Add commands to setup / start / stop / environments.

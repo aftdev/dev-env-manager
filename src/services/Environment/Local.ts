@@ -1,4 +1,4 @@
-import AbstractEnvironment from './AbstractEnvironment.js'
+import AbstractEnvironment from '#services/Environment/AbstractEnvironment'
 
 /**
  */

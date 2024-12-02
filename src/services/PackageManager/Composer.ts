@@ -1,4 +1,4 @@
-import AbstractPackageManager from './AbstractPackageManager.js'
+import AbstractPackageManager from '#services/PackageManager/AbstractPackageManager'
 
 /**
  * Composer (Php Package Manager).

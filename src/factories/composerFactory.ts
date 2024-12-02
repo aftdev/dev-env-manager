@@ -1,5 +1,5 @@
-import EnvironmentManager from '#services/EnvironmentManager.js'
-import Composer from '#services/PackageManager/Composer.js'
+import EnvironmentManager from '#services/EnvironmentManager'
+import Composer from '#services/PackageManager/Composer'
 
 /**
  * Factory to create Composer service.

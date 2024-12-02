@@ -1,7 +1,7 @@
 import type { AwilixContainer } from 'awilix'
 import type { Provider } from 'nconf'
-import AbstractPackageManager from '#services/PackageManager/AbstractPackageManager.js'
-import PackageManagerScripts from '#services/PackageManagerScript.js'
+import AbstractPackageManager from '#services/PackageManager/AbstractPackageManager'
+import PackageManagerScripts from '#services/PackageManagerScript'
 
 type Config = {
   auto_discover?: boolean

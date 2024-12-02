@@ -1,6 +1,6 @@
 import type { AwilixContainer } from 'awilix'
 import type { Provider } from 'nconf'
-import EnvironmentManager from '#services/EnvironmentManager.js'
+import EnvironmentManager from '#services/EnvironmentManager'
 
 /**
  * Factory to create and return environment manager.

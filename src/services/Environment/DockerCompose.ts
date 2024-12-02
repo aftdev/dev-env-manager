@@ -1,10 +1,10 @@
-import type { CommandArgs } from '#services/Command.js'
-import Command from '#services/Command.js'
-import CommandExecuter from '#services/CommandExecuter.js'
+import type { CommandArgs } from '#services/Command'
+import Command from '#services/Command'
+import CommandExecuter from '#services/CommandExecuter'
 import AbstractEnvironment, {
   EnvironmentOptions,
-} from '#services/Environment/AbstractEnvironment.js'
-import FileConfigArgs from '#services/FileConfigArgs.js'
+} from '#services/Environment/AbstractEnvironment'
+import FileConfigArgs from '#services/FileConfigArgs'
 
 export interface DockerComposeEnvOptions extends EnvironmentOptions {
   config_files: Array<string>

@@ -1,13 +1,13 @@
 import type { AwilixContainer } from 'awilix'
-import type { CommandArgs } from '#services/Command.js'
+import type { CommandArgs } from '#services/Command'
 import AbstractEnvironment, {
   EnvironmentOptions,
-} from '#services/Environment/AbstractEnvironment.js'
+} from '#services/Environment/AbstractEnvironment'
 import DockerCompose, {
   DockerComposeEnvOptions,
-} from '#services/Environment/DockerCompose.js'
-import Local from '#services/Environment/Local.js'
-import Vagrant from '#services/Environment/Vagrant.js'
+} from '#services/Environment/DockerCompose'
+import Local from '#services/Environment/Local'
+import Vagrant from '#services/Environment/Vagrant'
 
 export type CommandOptions = Record<string, unknown>
 export interface EnvironmentConfiguration {

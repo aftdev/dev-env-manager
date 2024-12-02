@@ -2,7 +2,7 @@ import child_process from 'child_process'
 import chalkTemplate from 'chalk-template'
 // @ts-expect-error: puka does not have types
 import { sh, unquoted } from 'puka'
-import OutputFormatter from '#services/OutputFormatter.js'
+import OutputFormatter from '#services/OutputFormatter'
 
 export type CommandOptions = {
   displayCommand?: boolean

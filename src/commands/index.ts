@@ -1,3 +1,13 @@
-import type { RegisteredServices } from '#src/services/index.js'
+import environmentCommands from '#src/commands/environment'
+import execCommands from '#src/commands/exec'
+import initCommands from '#src/commands/init'
+import versionCommands from '#src/commands/version'
 
-export type DevCommandInitializer = (args: RegisteredServices) => void
+const commands = [
+  environmentCommands,
+  execCommands,
+  initCommands,
+  versionCommands,
+]
+
+export default commands

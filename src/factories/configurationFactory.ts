@@ -1,8 +1,8 @@
 import nconf, { Provider } from 'nconf'
 // @ts-expect-error: nconf has not type def
 import nconfYaml from 'nconf-yaml'
-import Application from '#src/Application.js'
-import defaultConfig from '#src/config.js'
+import Application from '#src/Application'
+import defaultConfig from '#src/config'
 
 /**
  * Generate the configuration nconf object.
