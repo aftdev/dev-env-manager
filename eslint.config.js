@@ -89,7 +89,7 @@ export default tsEslint.config(
       'n/hashbang': [
         'error',
         {
-          additionalExecutables: ['src/dev.ts'],
+          additionalExecutables: ['src/cli.ts'],
         },
       ],
     },

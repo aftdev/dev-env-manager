@@ -27,7 +27,7 @@ export type DockerComposeConnectOptions = {
  * Docker composer goodies.
  */
 export default class DockerCompose extends AbstractEnvironment {
-  static COMMAND = 'docker-compose'
+  static COMMAND = 'docker compose'
   static CONFIG_ARGUMENT = '--file'
   static CONFIG_FILE = 'docker-compose.yml'
 
