@@ -13,7 +13,7 @@
     "node": ">=18.0"
   },
   "bin": {
-    "dev": "./dist/dev.js"
+    "dev": "./dist/cli.js"
   },
   "author": "Christophe G",
   "repository": {
